@@ -647,7 +647,7 @@ namespace BeltsPack.Views
             this.nastro.SetTrattamentoSigla(this.nastro.Trattamento);
         }
 
-        private async void DiBa_Click(object sender, RoutedEventArgs e)
+        private void DiBa_Click(object sender, RoutedEventArgs e)
         {
             // Creo la classe distinta
             DiBa distinta = new DiBa(this.nastro, this.bordo, this.tazza, this.prodotto);
