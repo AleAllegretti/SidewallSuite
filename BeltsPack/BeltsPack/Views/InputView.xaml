@@ -22,7 +22,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="0.01*"/>
             <RowDefinition Height="1*" />
-            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.01*"/>
             <RowDefinition Height="1*" />
             <RowDefinition Height="0.01*"/>
             <RowDefinition Height="1*" />
@@ -46,7 +46,7 @@
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
                 <Setter Property="Margin" Value="0 0 16 0" />
-                <Setter Property="Width" Value="100" />
+                <Setter Property="Width" Value="110" />
             </Style>
 
             <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
@@ -56,7 +56,7 @@
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
                 <Setter Property="Margin" Value="0 0 16 0" />
-                <Setter Property="Width" Value="100" />
+                <Setter Property="Width" Value="110" />
                 <Setter Property="Cursor" Value="Hand" />
             </Style>
 
@@ -90,50 +90,81 @@
                 </Grid.ColumnDefinitions>
 
                 <!--Label anagrafica-->
-                <StackPanel Margin="20,20,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+                <StackPanel Margin="12,20,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
                     <TextBlock FontSize="20" >
-                    Anagrafica
+                    Generale
                     </TextBlock>
                 </StackPanel>
 
                 <!--Cliente-->
                 <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top">
-                    <Label  Margin="15,0,0,0" Width="130"  Content="Cliente" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBox  Margin="20,0,0,0" HorizontalAlignment="Left" ToolTip="Inserisci nome cliente" Name ="TBNomeCliente"  
+                    <Label  Margin="10,0,0,0" Width="130"  Content="Cliente" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox  Margin="15,0,0,0" HorizontalAlignment="Left" ToolTip="Inserisci nome cliente" Name ="TBNomeCliente"  
                               TextChanged="TBNomeCliente_TextChanged" Text="{Binding cliente, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
-                <!-- Anagrafica-->
+                <!-- Numero di commessa-->
                 <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="N° Commessa" HorizontalAlignment="Left" Margin="36,0,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="Inserisci numero di commessa" Name="TBCodiceArtiolo"  
                              Margin="40,0,0,0" TextChanged="TBCodiceArtiolo_TextChanged" Text="{Binding commessa, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
-                <!--Label trasporto-->
-                <StackPanel Margin="20,20,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Grid.ColumnSpan="2">
-                    <TextBlock FontSize="20">
-                    Tipologia trasporto
-                    </TextBlock>
+                <!--Tipologia trasporto-->
+                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="2" VerticalAlignment="Top" >
+                    <Label Content="Trasporto" HorizontalAlignment="Left" Margin="14,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Configurazione nastro" Name="TipologiaTrasporto" FontSize="14.5"  
+                               SelectedValuePath="Content" Margin="20,0,0,0" 
+                               SelectedValue="{Binding tipologiaTrasporto, Mode=TwoWay}" SelectionChanged="TipologiaTrasporto_SelectionChanged">
+                        <ComboBoxItem>Camion</ComboBoxItem>
+                        <ComboBoxItem>Nave standard</ComboBoxItem>
+                        <ComboBoxItem>Aereo</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
 
-                <!--Trasporto via camion-->
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" Grid.ColumnSpan="2">
-                    <Image x:Name="imageCamion"  HorizontalAlignment="Left" Height="31" VerticalAlignment="Top" Margin="36,15,0,0" Width="62" Stretch="Fill" Source="/Assets/Images/Icona_Camion.png" />
-                    <RadioButton Cursor="Hand" GroupName="trasporto" x:Name="radioButtonCamion" Content="" HorizontalAlignment="Left" Margin="58,10,0,0" VerticalAlignment="Top"/>
+                <!--Tipologia prodotto-->
+                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" >
+                    <Label Content="Tipologia prodotto" HorizontalAlignment="Left" Margin="14,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Configurazione nastro" Name="TipologiaNastro" FontSize="14.5"  
+                               SelectedValuePath="Content" Margin="20,0,0,0" SelectionChanged="TipologiaNastro_SelectionChanged" 
+                               DropDownOpened="TipologiaNastro_DropDownOpened" SelectedValue="{Binding tipologiaProdotto, Mode=TwoWay}">
+                        <ComboBoxItem>Nastro liscio</ComboBoxItem>
+                        <ComboBoxItem>Bordi e tazze</ComboBoxItem>
+                        <ComboBoxItem>Solo tazze</ComboBoxItem>
+                        <ComboBoxItem>Solo bordi</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
 
-                <!--Trasporto via nave-->
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="4" Margin="0,15,0,0" VerticalAlignment="Top">
-                    <Image x:Name="imageNave"  HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="52" Stretch="Fill" Source="/Assets/Images/Icona_Nave.png" Margin="70,0,0,0" />
-                    <RadioButton Cursor="Hand" GroupName="trasporto" x:Name="radioButtonNave" Grid.Column="1" Grid.Row="2" Content="" HorizontalAlignment="Left" Margin="86,0,0,0" VerticalAlignment="Top"/>
+                <!--Aperto / chiuso-->
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Aperto / Chiuso" HorizontalAlignment="Left" Margin="34,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" ToolTip="Imposta se il nastro è aperto o chiuso" Name="ComboAperto"  
+                              SelectedValuePath="Content" Margin="40,0,0,0" SelectionChanged="ComboAperto_SelectionChanged"
+                              SelectedValue="{Binding apertoChiuso, Mode=TwoWay}">
+                        <ComboBoxItem >Aperto</ComboBoxItem>
+                        <ComboBoxItem >Chiuso</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
 
-                <!--Trasporto via aereo-->
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="5" Margin="0,15,0,0" VerticalAlignment="Top">
-                    <Image x:Name="imageAereo"  HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Stretch="Fill" Source="/Assets/Images/Icona_Aereo.png" Margin="70,0,0,0"/>
-                    <RadioButton Cursor="Hand" GroupName="trasporto" x:Name="radioButtonAereo" Grid.Column="1" Grid.Row="2" Content="" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top"/>
+                <!--N° tazze x fila-->
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="N° tazze x fila" HorizontalAlignment="Left" Margin="34,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" ToolTip="Imposta se il nastro è aperto o chiuso" Name="ComboNTazzexFila"  
+                              SelectedValuePath="Content" Margin="40,0,0,0" 
+                              SelectedValue="{Binding ntazzeXFila, Mode=TwoWay}" SelectionChanged="ComboNTazzexFila_SelectionChanged">
+                        <ComboBoxItem >1</ComboBoxItem>
+                        <ComboBoxItem >2</ComboBoxItem>
+                        <ComboBoxItem >3</ComboBoxItem>
+                        <ComboBoxItem >4</ComboBoxItem>
+                        <ComboBoxItem >5</ComboBoxItem>
+                        <ComboBoxItem >6</ComboBoxItem>
+                        <ComboBoxItem >7</ComboBoxItem>
+                        <ComboBoxItem >8</ComboBoxItem>
+                        <ComboBoxItem >9</ComboBoxItem>
+                        <ComboBoxItem >10</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
+
             </Grid>
         </StackPanel>
 
@@ -162,36 +193,39 @@
                 </Grid.ColumnDefinitions>
 
                 <!--Titolo-->
-                <StackPanel Margin="20,20,0,0" Orientation="Vertical" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" >
+                <StackPanel Margin="14,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
                     <TextBlock FontSize="20">
-                    Generale
+                    Nastro base
                     </TextBlock>
                 </StackPanel>
 
-                <!--Tipologia prodotto-->
-                <StackPanel Orientation="Vertical"  Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" >
-                    <Label Content="Tipologia" HorizontalAlignment="Left" Margin="15,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Configurazione nastro" Name="TipologiaNastro" FontSize="14.5"  
-                               SelectedValuePath="Content" Margin="20,0,0,0" SelectionChanged="TipologiaNastro_SelectionChanged" 
-                               DropDownOpened="TipologiaNastro_DropDownOpened" SelectedValue="{Binding tipologiaProdotto, Mode=TwoWay}">
-                        <ComboBoxItem>Nastro liscio</ComboBoxItem>
-                        <ComboBoxItem>Bordi e tazze</ComboBoxItem>
-                        <ComboBoxItem>Solo tazze</ComboBoxItem>
-                        <ComboBoxItem>Solo bordi</ComboBoxItem>
+                <!--Nastro base-->
+                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Tipo" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left" ToolTip="Tiplogia nastro base" Name="ComboStrutturaNastro"  
+                               SelectedValuePath="Content" Margin="15,0,0,0" 
+                               SelectedValue="{Binding tipologiaNastro, Mode=TwoWay}" SelectionChanged="ComboStrutturaNastro_SelectionChanged" >
+                        <ComboBoxItem >TEXRIGID</ComboBoxItem>
+                        <ComboBoxItem >TEXTER</ComboBoxItem>
+                        <ComboBoxItem >XE</ComboBoxItem>
+                        <ComboBoxItem >CROSSRIGID</ComboBoxItem>
+                        <ComboBoxItem >CROSSBEL-O</ComboBoxItem>
+                        <ComboBoxItem >EP</ComboBoxItem>
+                        <ComboBoxItem >EP-FLAT</ComboBoxItem>
+                        <ComboBoxItem >EPBRK</ComboBoxItem>
+                        <ComboBoxItem >NON CODIFICATO</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
 
-                <!--Aperto / chiuso-->
+                <!--Classe nastro-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Aperto / Chiuso" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox HorizontalAlignment="Left" ToolTip="Imposta se il nastro è aperto o chiuso" Name="ComboAperto"  
-                              SelectedValuePath="Content" Margin="40,0,0,0" SelectionChanged="ComboAperto_SelectionChanged"
-                              SelectedValue="{Binding apertoChiuso, Mode=TwoWay}">
-                        <ComboBoxItem >Aperto</ComboBoxItem>
-                        <ComboBoxItem >Chiuso</ComboBoxItem>
+                    <Label  Content="Classe nastro" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox SelectedValue="{Binding classeNastro, Mode=TwoWay}" HorizontalAlignment="Left" ToolTip="Classe nastro base" Name="ComboClasseNastro" 
+                               Margin="40,0,0,0" SelectionChanged="ComboClasseNastro_SelectionChanged">
+
                     </ComboBox>
                 </StackPanel>
-
+                
                 <!--Lunghezza-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top" >
                     <Label  Content="Lunghezza" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
@@ -208,11 +242,12 @@
                               Text="{Binding larghezzaNastro, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
-                <!--Trattamento-->
+                <!--Trattamento nastro-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Trattamento (*)" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <Label  Content="Trattamento" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left" ToolTip="Imposta la qualità del materiale" Name="ComboQuality"  
-                              SelectedValuePath="Content" Margin="40,0,0,0" SelectionChanged="ComboQuality_SelectionChanged"
+                              SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoNastro, Mode=TwoWay}"
+                              SelectionChanged="ComboQuality_SelectionChanged"
                              >
                         <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
                         <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
@@ -224,12 +259,12 @@
                     </ComboBox>
                 </StackPanel>
 
+                
             </Grid>
         </StackPanel>
 
         <!--Separatore-->
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
-            <Label Name="labelNotaDiba" Content="(*) necessario solo per offerta" HorizontalAlignment="Left" FontSize="12"/>
             <Border Margin="0,0,0,0" BorderThickness="0.5" BorderBrush="LightGray" VerticalAlignment="Center"/>
         </StackPanel>
         
@@ -250,39 +285,11 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Margin="20,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock FontSize="20" >
-                        Tazze
-                    </TextBlock>
-                </StackPanel>
-
-                <!--Forma tazze-->
-                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label Name="labelFormaTazze" Content="Forma tazze" HorizontalAlignment="Left" Margin="15,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" 
-                               Name="ComboFormaTazze"  Margin="20,0,0,0" SelectionChanged="ComboFormaTazze_SelectionChanged"
-                               SelectedValue="{Binding formaTazza, Mode=TwoWay}">
-                        <ComboBoxItem>TC</ComboBoxItem>
-                        <ComboBoxItem>T</ComboBoxItem>
-                        <ComboBoxItem>TB</ComboBoxItem>
-                        <ComboBoxItem>C</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-
-                <!--Altezza tazze-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label Name="labelAltTazze" Content="Altezza tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" md:HintAssist.Hint="[mm]" 
-                               SelectedValue="{Binding altezzaTazza, Mode=TwoWay}"
-                               Name="ComboAltezzaTazze"  Margin="40,0,0,0" SelectionChanged="ComboAltezzaTazze_SelectionChanged"  >
-                    </ComboBox>
-                </StackPanel>
-
                 <!--Presenza fix-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Fix" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Fix" HorizontalAlignment="Left" Margin="15,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" Name="ComboFix"  
-                               Margin="40,0,0,0" SelectionChanged="ComboFix_SelectionChanged" 
+                               Margin="15,0,0,0" SelectionChanged="ComboFix_SelectionChanged" 
                                SelectedValue="{Binding presenzaFix, Mode=TwoWay}">
                         <ComboBoxItem>Si</ComboBoxItem>
                         <ComboBoxItem>No</ComboBoxItem>
@@ -290,7 +297,7 @@
                 </StackPanel>
 
                 <!--Presenza blinkers-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="Blinkers" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze"  
                                SelectedValue="{Binding presenzaBlinkers, Mode=TwoWay}" Name="ComboBlk"  Margin="40,0,0,0" 
@@ -301,7 +308,7 @@
                 </StackPanel>
 
                 <!--Passo con fix-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="Passo con fix" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze"  
                                SelectedValue="{Binding passoFix, Mode=TwoWay}" Name="ComboPassoFix"  Margin="40,0,0,0" SelectionChanged="ComboPassoFix_SelectionChanged" >
@@ -310,11 +317,35 @@
                 </StackPanel>
 
                 <!--Passo senza fix-->
-                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top" >
+                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top" >
                     <Label  Content="Passo" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="PassoSenzaFix"   
                              Margin="40,0,0,0"  md:HintAssist.Hint="[mm]" TextChanged="PassoSenzaFix_TextChanged"
                              Text="{Binding passonoFix, Mode=TwoWay}"></TextBox>
+                </StackPanel>
+
+                <!--Trattamento tazze-->
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Trattamento" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" ToolTip="Imposta la qualità del materiale" Name="ComboQualityTazze"  
+                              SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoTazza, Mode=TwoWay}" 
+                              SelectionChanged="ComboQualityTazze_SelectionChanged" >
+                        <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
+                        <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
+                        <ComboBoxItem >HR 130</ComboBoxItem>
+                        <ComboBoxItem >HR 150</ComboBoxItem>
+                        <ComboBoxItem >OR Oil Resistant</ComboBoxItem>
+                        <ComboBoxItem >FRK Self-Extinguish</ComboBoxItem>
+                        <ComboBoxItem >ORK Oil Res. and Self-Ext.</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <!--Spazio tazze file multiple-->
+                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top" >
+                    <Label  Content="Spazio tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="SpazioTazzeFileMultiple"   
+                             Margin="40,0,0,0"  md:HintAssist.Hint="[mm]"
+                             Text="{Binding spazioTazzeFileMultiple, Mode=TwoWay}" TextChanged="SpazioTazzeFileMultiple_TextChanged"></TextBox>
                 </StackPanel>
             </Grid>
         </StackPanel>
@@ -341,56 +372,23 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Margin="20,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock FontSize="20">
-                    Nastro base
-                    </TextBlock>
-                </StackPanel>
-
-                <!--Nastro base-->
-                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Tipo" HorizontalAlignment="Left" Margin="15,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left" ToolTip="Tiplogia nastro base" Name="ComboStrutturaNastro"  
-                               SelectedValuePath="Content" Margin="20,0,0,0" 
-                               SelectedValue="{Binding tipologiaNastro, Mode=TwoWay}" SelectionChanged="ComboStrutturaNastro_SelectionChanged" >
-                        <ComboBoxItem >TEXRIGID</ComboBoxItem>
-                        <ComboBoxItem >TEXTER</ComboBoxItem>
-                        <ComboBoxItem >XE</ComboBoxItem>
-                        <ComboBoxItem >CROSSRIGID</ComboBoxItem>
-                        <ComboBoxItem >CROSSBEL-O</ComboBoxItem>
-                        <ComboBoxItem >EP</ComboBoxItem>
-                        <ComboBoxItem >EP-FLAT</ComboBoxItem>
-                        <ComboBoxItem >EPBRK</ComboBoxItem>
-                        <ComboBoxItem >NON CODIFICATO</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-
-                <!--Classe nastro-->
-                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Classe nastro" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox SelectedValue="{Binding classeNastro, Mode=TwoWay}" HorizontalAlignment="Left" ToolTip="Classe nastro base" Name="ComboClasseNastro" 
-                               Margin="40,0,0,0" SelectionChanged="ComboClasseNastro_SelectionChanged">
-
-                    </ComboBox>
-                </StackPanel>
-
-                <StackPanel Margin="40,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
+                <StackPanel Margin="14,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
                     <TextBlock FontSize="20">
                     Bordi
                     </TextBlock>
                 </StackPanel>
 
                 <!--Altezza bordo-->
-                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top">
-                    <Label Name="labelAltBordi"  Content="Altezza bordo" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox HorizontalAlignment="Left"  Margin="40,0,0,0"  md:HintAssist.Hint="[mm]" ToolTip="Imposta altezza del bordo"  
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top">
+                    <Label Name="labelAltBordi"  Content="Altezza bordo" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left"  Margin="15,0,0,0"  md:HintAssist.Hint="[mm]" ToolTip="Imposta altezza del bordo"  
                               SelectedValue="{Binding altezzaBordo, Mode=TwoWay}" Name="ComboAltezzaBordi" SelectionChanged="ComboAltezzaBordi_SelectionChanged"  DropDownOpened="ComboAltezzaBordi_DropDownOpened" >
 
                     </ComboBox>
                 </StackPanel>
 
                 <!--Altezza bordo-->
-                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="3" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1" VerticalAlignment="Top">
                     <Label   Content="Base bordo" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left"  Margin="40,0,0,0"  md:HintAssist.Hint="[mm]" ToolTip="Scegli la base del bordo"  
                               SelectedValue="{Binding baseBordo, Mode=TwoWay}" Name="ComboBaseBordi" SelectionChanged="ComboBaseBordi_SelectionChanged" >
@@ -399,7 +397,7 @@
                 </StackPanel>
 
                 <!--Pista laterale-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Name="labelPistaLat"  Content="Pista laterale" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <TextBox  HorizontalAlignment="Left" ToolTip="Imposta larghezza pista laterale" Name="TBPistaLaterale"  
                               md:HintAssist.Hint="[mm]"
@@ -407,10 +405,12 @@
                               Text="{Binding pistaLaterale, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Trattamento (*)" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                <!--Trattamento bordi-->
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Trattamento" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left" ToolTip="Imposta la qualità del materiale" Name="ComboQualityBordo"  
-                              SelectedValuePath="Content" Margin="40,0,0,0" SelectionChanged="ComboQualityBordo_SelectionChanged" >
+                              SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoBordo, Mode=TwoWay}"
+                              SelectionChanged="ComboQualityBordo_SelectionChanged" >
                         <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
                         <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
                         <ComboBoxItem >HR 130</ComboBoxItem>
@@ -420,7 +420,34 @@
                         <ComboBoxItem >ORK Oil Res. and Self-Ext.</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
-                
+
+                <StackPanel Margin="36,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center">
+                    <TextBlock FontSize="20" >
+                        Tazze
+                    </TextBlock>
+                </StackPanel>
+
+                <!--Forma tazze-->
+                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label Name="labelFormaTazze" Content="Forma tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" 
+                               Name="ComboFormaTazze"  Margin="40,0,0,0" SelectionChanged="ComboFormaTazze_SelectionChanged"
+                               SelectedValue="{Binding formaTazza, Mode=TwoWay}">
+                        <ComboBoxItem>TC</ComboBoxItem>
+                        <ComboBoxItem>T</ComboBoxItem>
+                        <ComboBoxItem>TB</ComboBoxItem>
+                        <ComboBoxItem>C</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <!--Altezza tazze-->
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label Name="labelAltTazze" Content="Altezza tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" md:HintAssist.Hint="[mm]" 
+                               SelectedValue="{Binding altezzaTazza, Mode=TwoWay}"
+                               Name="ComboAltezzaTazze"  Margin="40,0,0,0" SelectionChanged="ComboAltezzaTazze_SelectionChanged"  >
+                    </ComboBox>
+                </StackPanel>
             </Grid>
         </StackPanel>
 

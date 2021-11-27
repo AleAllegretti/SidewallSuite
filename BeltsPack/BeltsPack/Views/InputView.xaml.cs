@@ -23,10 +23,16 @@ namespace BeltsPack.Views
         Bordo bordo = new Bordo();
         Tazza tazza = new Tazza();
         CassaInFerro cassaInFerro = new CassaInFerro();
+        public string trattamentoNastro { get; set; }
+        public string trattamentoBordo { get; set; }
+        public string trattamentoTazza { get; set; }
+        public string tipologiaTrasporto { get; set; }
         public string formaTazza { get; set; }
         public string presenzaFix { get; set; }
         public string presenzaBlinkers { get; set; }
         public string tipologiaNastro { get; set; }
+        public int ntazzeXFila { get; set; }
+        public int spazioTazzeFileMultiple { get; set; }
         public int lunghezzaNastro { get; set; }
         public int larghezzaNastro { get; set; }
         public string cliente { get; set; }
@@ -50,25 +56,21 @@ namespace BeltsPack.Views
             // Assegno le grandezze nel caso in cui l'imballo sia stato copiato
             this.cliente = this.prodotto.Cliente;
             this.commessa = this.prodotto.Codice;
-            if (prodotto.TipologiaTrasporto == "Nave standard")
-            {
-                this.radioButtonNave.IsChecked = true;
-            }
-            else if (prodotto.TipologiaTrasporto == "Camion")
-            {
-                this.radioButtonCamion.IsChecked = true;
-            }
-            else
-            {
-                this.radioButtonAereo.IsChecked = true;
-            }
+            this.tipologiaTrasporto = this.prodotto.TipologiaTrasporto;
             this.tipologiaProdotto = this.prodotto.Tipologia;
             this.apertoChiuso = this.prodotto.Aperto;
             this.lunghezzaNastro = this.prodotto.LunghezzaNastro;
             this.larghezzaNastro = this.prodotto.LarghezzaNastro;
+            this.trattamentoNastro = this.prodotto.TrattamentoNastro;
+            this.trattamentoBordo = this.prodotto.TrattamentoBordo;
+            this.trattamentoTazza = this.prodotto.TrattamentoTazze;
+            this.ntazzeXFila = this.prodotto.NumeroTazzexFila;
+            this.spazioTazzeFileMultiple = prodotto.SpazioFile;
+
             // Riempio il menù a tendina dell'altezza dei bordi
             this.ComboAltezzaBordi.ItemsSource = this.bordo.ListaAltezzeBordi().ToArray();
             this.altezzaBordo = this.prodotto.AltezzaBordo;
+
             // Riempio il combo con tutte le altezze disponibili in base a quella tazza
             if (!String.IsNullOrEmpty(this.tazza.Forma))
             {
@@ -423,7 +425,7 @@ namespace BeltsPack.Views
             }
 
             // Check se il tipo di trasporto è stato specificato
-            if (this.radioButtonCamion.IsChecked.Value == true || this.radioButtonNave.IsChecked.Value == true || this.radioButtonAereo.IsChecked.Value == true || formfilled == false)
+            if (this.tipologiaTrasporto != "" || formfilled == false)
             {
                 formfilled = true;
             }
@@ -436,20 +438,6 @@ namespace BeltsPack.Views
 
             if (formfilled == true)
             {
-                // Registra la tipologia di trasporto
-                if (this.radioButtonCamion.IsChecked.Value == true)
-                {
-                    prodotto.TipologiaTrasporto = "Camion";
-                }
-                else if (this.radioButtonNave.IsChecked.Value == true)
-                {
-                    prodotto.TipologiaTrasporto = "Nave standard";
-                }
-                else
-                {
-                    prodotto.TipologiaTrasporto = "Aereo";
-                }
-
                 // Larghezza utile
                 this.nastro.SetLarghezzautile(this.bordo.Larghezza, this.prodotto.PistaLaterale);
                 // Caratteristiche nastro
@@ -649,87 +637,7 @@ namespace BeltsPack.Views
 
         private void DiBa_Click(object sender, RoutedEventArgs e)
         {
-            // Creo la classe distinta
-            DiBa distinta = new DiBa(this.nastro, this.bordo, this.tazza, this.prodotto);
-
-            // Larghezza utile
-            this.nastro.SetLarghezzautile(this.bordo.Larghezza, this.prodotto.PistaLaterale);
-            // Caratteristiche nastro
-            this.nastro.SetCaratterisitche();
-
-            // Codice Nastro
-            distinta.SearchCodnastro(this.nastro.Tipo, this.nastro.Classe, this.nastro.Larghezza, this.nastro.SiglaTrattamento);
-            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo bordi")
-            {
-                // Lunghezza bordo
-                this.bordo.SetLunghezzaTotaleBordo(this.nastro.Lunghezza);
-
-                // Codice Bordo
-                distinta.searchCodBordo(this.bordo.Altezza, this.bordo.Larghezza, this.nastro.SiglaTrattamento);
-
-                // Raspatura bordo
-                distinta.searchCodRaspaturaBordo("RAB", this.bordo.Altezza, this.bordo.SiglaTrattamento);
-
-                // Attrezzaggio bordo
-                distinta.SearchCodAttAppBor("ATR", "LAV", bordo.Altezza);
-
-                // Applicazione bordo
-                distinta.SearchCodAttAppBor("APB", "LAV", bordo.Altezza);
-
-            }
-            if (this.prodotto.Tipologia == "Solo tazze" | this.prodotto.Tipologia == "Bordi e tazze")
-            {
-                // Calcolo il numero e di tazze totali
-                this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo);
-                // Lunghezza delle tazze
-                this.tazza.SetLunghezzaTotale(this.nastro.LarghezzaUtile);
-                // Caratteristiche
-                this.tazza.CarattersticheTazza();
-                // Raspatura tazze
-                distinta.searchCodRaspaturaTazze("RAT", this.tazza.Altezza, this.bordo.Trattamento, this.tazza.Forma);
-
-                // Applicazione tazze
-                distinta.searchCodApplicazioneTazze("LAV", "APT", "APT", this.tazza.Altezza, this.tazza.Forma);
-            }
-            if (this.prodotto.Tipologia == "Solo tazze" | this.prodotto.Tipologia == "Bordi e tazze" || this.prodotto.Tipologia == "Solo bordi")
-            {
-                // Preparazione nastro
-                distinta.SearchCodPrepNastro("NAS", "LAV", this.bordo.Altezza);
-            }
-            if (this.prodotto.Tipologia == "Bordi e tazze")
-            {
-                if (this.presenzaFix == "Si")
-                {
-                    // Fix
-                    distinta.SearchCodFix("FIX", "LAV", this.bordo.Altezza);
-                }
-                
-                if (this.presenzaBlinkers == "Si")
-                {
-                    // Blk
-                    distinta.SearchCodBlk("LIS", "LIS", this.bordo.Altezza, this.bordo.SiglaTrattamento);
-                    // Applicazione blinkers
-                    distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
-                }
-                
-            }
-
-            // Giunzione
-            if (this.nastro.Aperto == false)
-            {
-                // Codice giunzione
-                distinta.SearchCodGiunzione("GIU-OFF");
-            }
-
-            // Prodotto finito
-            distinta.SearchCodProdotto(this.bordo.Altezza, this.prodotto.Tipologia);
-            // Imballo
-            distinta.SearchCodImballo(this.nastro.Lunghezza);
-            // Trasporto
-            distinta.SearchCodTrasporto("Trasporto");
-
-            // Crea CSV
-            distinta.creaCSV();
+            
         }
 
         private void ComboQualityBordo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -739,6 +647,40 @@ namespace BeltsPack.Views
 
             // Determino la sigla del trattamento
             this.bordo.SetTrattamentoSigla(this.bordo.Trattamento);
+        }
+
+        private void TipologiaTrasporto_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.prodotto.TipologiaTrasporto = this.tipologiaTrasporto;
+        }
+
+        private void ComboNTazzexFila_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.tazza.NumeroFile = this.ntazzeXFila;
+
+            // Se ho solo una fila singola disabilito il textbox per lo spazio tra le varie file
+            if (this.tazza.NumeroFile == 1)
+            {
+                this.SpazioTazzeFileMultiple.IsEnabled = false;
+            }
+            else
+            {
+                this.SpazioTazzeFileMultiple.IsEnabled = true;
+            }
+        }
+
+        private void SpazioTazzeFileMultiple_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.spazioTazzeFileMultiple = this.tazza.SpazioFileMultiple;
+        }
+
+        private void ComboQualityTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Assegno il trattamento del nastro
+            this.tazza.Trattamento = this.ComboQualityTazze.SelectedValue.ToString();
+
+            // Determino la sigla del trattamento
+            this.tazza.SetTrattamentoSigla(this.tazza.Trattamento);
         }
     }
 }

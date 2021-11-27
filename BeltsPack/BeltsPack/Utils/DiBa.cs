@@ -704,24 +704,47 @@ namespace BeltsPack.Utils
         public async void creaCSV()
         {
             // Path salvataggio csv
-            var csvPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\DiBa.csv";
-
-            // Scrivo il csv
-            using (var streaWriter = new StreamWriter(csvPath))
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + this._prodotto.Cliente + "_" + this._prodotto.Codice ;
+            try
             {
-                var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+                // Se la directory non esiste la creo
+                if (!Directory.Exists(path))
                 {
-                    Delimiter = ";"
-                };
-
-                using (var csvWriter = new CsvWriter(streaWriter, csvConfig))
-                {
-                    var nastro = GetNastri(this._nastro, this._bordo, this._tazza, this._prodotto);
-                    csvWriter.Context.RegisterClassMap<NastriInfoMap>();
-                    csvWriter.WriteRecords(nastro);
+                    Directory.CreateDirectory(path);
                 }
-                   
             }
+            catch
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione della cartella di salvataggio.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+            }
+
+            // Path di salvataggio del CSV
+            var csvPath = path + "\\Distinta.csv";
+
+            try
+            {
+                // Scrivo il csv
+                using (var streaWriter = new StreamWriter(csvPath))
+                {
+                    var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+                    {
+                        Delimiter = ";"
+                    };
+
+                    using (var csvWriter = new CsvWriter(streaWriter, csvConfig))
+                    {
+                        var nastro = GetNastri(this._nastro, this._bordo, this._tazza, this._prodotto);
+                        csvWriter.Context.RegisterClassMap<NastriInfoMap>();
+                        csvWriter.WriteRecords(nastro);
+                    }
+
+                }
+            }
+            catch
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+            }
+            
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)

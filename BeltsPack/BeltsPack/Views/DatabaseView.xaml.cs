@@ -74,9 +74,9 @@ namespace BeltsPack.Views
             workBook.Worksheets[0].SetColumnWidth(1, 11);
 
             // Stile dell'intestazione
-            workBook.Worksheets[0].Range["A1:AH1"].CellStyle.Font.Bold = true;
-            workBook.Worksheets[0].Range["A1:AH1"].CellStyle.Color = System.Drawing.Color.LightGray;
-            workBook.Worksheets[0].Range["A1:AH1"].CellStyle.Font.Size = 10;
+            workBook.Worksheets[0].Range["A1:AV1"].CellStyle.Font.Bold = true;
+            workBook.Worksheets[0].Range["A1:AV1"].CellStyle.Color = System.Drawing.Color.LightGray;
+            workBook.Worksheets[0].Range["A1:AV1"].CellStyle.Font.Size = 10;
             
             // Impostazioni del saving dialog
             SaveFileDialog sfd = new SaveFileDialog
@@ -613,6 +613,12 @@ namespace BeltsPack.Views
                     prodotto.LarghezzaBordo = Convert.ToInt32(dataRow["BaseBordo"].ToString());
                     prodotto.ClasseNastro = Convert.ToInt32(dataRow["ClasseNastro"].ToString());
                     prodotto.FormaTazze = dataRow["FormaTazze"].ToString();
+                    prodotto.NumeroTazzexFila = Convert.ToInt32(dataRow["NumeroTazzexFila"].ToString());
+                    prodotto.SpazioFile = Convert.ToInt32(dataRow["SpazioFile"].ToString());
+                    prodotto.TrattamentoNastro = dataRow["TrattamentoNastro"].ToString();
+                    prodotto.TrattamentoBordo = dataRow["TrattamentoBordo"].ToString();
+                    prodotto.TrattamentoTazze = dataRow["TrattamentoTazze"].ToString();
+
 
                     // Inizializza il risultato del dialog
                     ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Sei sicuro di voler copiare l'imballo della commessa " + codice + " ?", ConfirmDialog.ButtonConf.YES_NO);
@@ -624,7 +630,12 @@ namespace BeltsPack.Views
                 }
                catch
                 {
-                    await DialogsHelper.ShowMessageDialog("Non è stato possibile copiare l'imballo, se l'errore persiste contattare l'assistenza.");
+                    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("L'imballo selezionato appartiene ad una versione vecchia del programma e non tutti i campi verranno compilati. \nVuoi comunque procedere?", ConfirmDialog.ButtonConf.YES_NO);
+                    // Naviga al menù principale o resta sulla pagina
+                    if (confirmed.ToString() == "Yes")
+                    {
+                        this.NavigationService.Navigate(new InputView(prodotto));
+                    }
                 }              
             }
             else

@@ -10,6 +10,14 @@ namespace BeltsPack.Models
 {
     public class Tazza
     {
+        // Sigla trattamento
+        public string SiglaTrattamento { get; set; }
+        // Trattamento
+        public string Trattamento { get; set; }
+        // Spazio tra file
+        public int SpazioFileMultiple { get; set; }
+        // Numero tazze x fila
+        public int NumeroFile { get; set; }
         // Codice Applicazione
         public string CodiceApplicazione { get; set; }
         // Descrizione Applicazione
@@ -109,5 +117,19 @@ namespace BeltsPack.Models
             // Peso in kg
             this.PesoTotale = (this.Peso * this.LunghezzaTotale * 0.001);
         }
-	}
+        public void SetTrattamentoSigla(string key)
+        {
+            IDictionary<string, string> siglaTrattamento = new Dictionary<string, string>();
+            siglaTrattamento.Add("AY Abrasion Resistant", "AY"); //adding a key/value using the Add() method
+            siglaTrattamento.Add("AW Extra Abr. Resistant", "AW");
+            siglaTrattamento.Add("HR 130", "HR");
+            siglaTrattamento.Add("HR 150", "MX");
+            siglaTrattamento.Add("OR Oil Resistant", "OR");
+            siglaTrattamento.Add("FRK Self-Extinguish", "FRK");
+            siglaTrattamento.Add("ORK Oil Res. and Self-Ext.", "ORK");
+
+            // Determino la sigla del trattamento
+            this.SiglaTrattamento = siglaTrattamento[key];
+        }
+    }
 }

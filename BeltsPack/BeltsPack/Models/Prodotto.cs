@@ -59,6 +59,16 @@ namespace BeltsPack.Models
 	}
     public class Prodotto
     {
+		// Numero tazze per fila
+		public int NumeroTazzexFila { get; set; }
+		// Spazio tra file di tazze
+		public int SpazioFile { get; set; }
+		// Trattamento nastro
+		public string TrattamentoNastro { get; set; }
+		// Trattamento bordo
+		public string TrattamentoBordo { get; set; }
+		// Trattamento tazze
+		public string TrattamentoTazze { get; set; }
 		// Codice Trasporto
 		public string CodiceTrasporto { get; set; }
 		// Descrizione Trasporto
