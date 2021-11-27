@@ -1,0 +1,207 @@
+﻿<UserControl x:Class="BeltsPack.Views.Dialogs.DialogSummary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BeltsPack.Views.Dialogs"
+             mc:Ignorable="d" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sf="http://schemas.syncfusion.com/wpf">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <!--Titolo-->
+        <StackPanel Margin="0,5,0,5" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2">
+            <Label FontWeight="DemiBold" FontSize="18" HorizontalAlignment="Center">
+                Riepilogo imballo
+            </Label>
+        </StackPanel>
+
+        <!--Cliente-->
+        <StackPanel Margin="20,0,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3">
+            <Label FontSize="16" FontWeight="Light">
+                Cliente
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Person" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding cliente, Mode=TwoWay}" IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Numero offerta-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="4">
+            <Label FontSize="16" FontWeight="Light">
+                Commessa
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Hashtag" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding Ncommessa, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
+        <!--Lunghezza cassa-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="5">
+            <Label FontSize="16" FontWeight="Light">
+                Lunghezza cassa [mm]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             CharacterCasing="Upper" Text="{Binding lunghezzaCassa, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Altezza cassa-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="6">
+            <Label FontSize="16" FontWeight="Light">
+                Altezza cassa [mm]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding altezzaCassa, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Larghezza cassa-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="7">
+            <Label FontSize="16" FontWeight="Light">
+                Larghezza cassa [mm]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding larghezzaCassa, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Peso imballo-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="8">
+            <Label FontSize="16" FontWeight="Light">
+                Peso imballo [kg]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding pesoImballo, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Peso lordo-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="9">
+            <Label FontSize="16" FontWeight="Light">
+                Peso lordo [kg]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding pesoNastro, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Costo imballo-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="10">
+            <Label FontSize="16" FontWeight="Light">
+                Costo imballo [€]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                             Text="{Binding costoImballo, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
+        <!--Conferma-->
+        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="11">
+            <Button Background="#40EE93" Content="Chiudi" x:Name="BtnClose" Click="BtnClose_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>

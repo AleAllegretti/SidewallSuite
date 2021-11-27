@@ -1,0 +1,316 @@
+﻿<Page x:Class="BeltsPack.Views.ReportProduzioneView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BeltsPack.ViewModels"
+      xmlns:ut="clr-namespace:BeltsPack.Utils"
+      xmlns:sf="http://schemas.syncfusion.com/wpf"
+      mc:Ignorable="d" 
+      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+      KeepAlive="True"
+
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Page.Resources>
+
+        <Style TargetType="sf:GridHeaderCellControl" x:Key="headerStyle">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="LightGray" />
+        </Style>
+
+        <ut:NameToColor x:Key="NameToColor" />
+        
+        <!-- Template for the selected images -->
+        <DataTemplate x:Key="SelectedImageTemplate">
+            <Button Click="OnRemoveImageClick"
+                    Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="Black"
+                    Height="50" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Close" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <Image Source="{Binding Path=.Fullpath}" VerticalAlignment="Center" MaxWidth="50"></Image>
+                    <TextBlock Text="{Binding Path=.FancyName}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+        
+    </Page.Resources>
+
+    
+    <Grid Margin="20,20,20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="0.01*" />
+            <RowDefinition Height="0.7*" />
+            <RowDefinition Height="0.01*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="0.01*" />
+            <RowDefinition Height="0.7*" />
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.Resources >
+
+            <Style TargetType="TextBox"  BasedOn="{StaticResource MaterialDesignTextBoxBase}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                <Setter Property="Margin" Value="0 0 16 0" />
+                <Setter Property="Width" Value="160" />
+            </Style>
+
+            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                <Setter Property="Margin" Value="0 0 16 0" />
+                <Setter Property="Width" Value="160" />
+            </Style>
+
+            <Style TargetType="Label" BasedOn="{StaticResource MaterialDesignLabel}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Light" />
+                <Setter Property="Margin" Value="0 0 0 0" />
+            </Style>
+
+        </Grid.Resources>
+
+        <!--Titolo-->
+        <StackPanel Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="3" >
+            <Label Margin="20,0,0,0" FontSize="20"  Content="Imballi da controllare"  />
+        </StackPanel>
+        
+        <StackPanel Height="130" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Vertical" VerticalAlignment="Top" Margin="0,0,0,0" HorizontalAlignment="Left">
+            <sf:SfDataGrid HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="20,0,0,0" Height="95"
+                  x:Name="DatabaseTotale" AutoGenerateColumns="True" IsReadOnly="True" ItemsSource="{Binding}"
+                  AlternationCount="2" ColumnSizer="Auto" AllowFiltering="True" AllowTriStateSorting="True" AllowSorting="False" 
+                           ShowSortNumbers="True" SummaryCalculationMode="OnDemandGroupSummary" 
+                HeaderStyle="{StaticResource headerStyle}" Cursor="Hand"
+                           RowSelectionBrush="LightGray">
+                <sf:SfDataGrid.SortColumnDescriptions>
+                    <sf:SortColumnDescription ColumnName="DataConsegnaCassa" SortDirection="Descending" />
+                </sf:SfDataGrid.SortColumnDescriptions>
+                <sf:SfDataGrid.Columns>
+                    <sf:GridCheckBoxSelectorColumn MappingName="SelectorColumn"
+                                                Width="30"/>
+                </sf:SfDataGrid.Columns>
+
+                <sf:SfDataGrid.CellStyle>
+                    <Style TargetType="sf:GridCell">
+                        <Setter Property="Background" Value="{Binding Stato, Converter = {StaticResource NameToColor}}" />
+                    </Style>
+                </sf:SfDataGrid.CellStyle>
+
+            </sf:SfDataGrid>
+
+            <TextBlock Margin="0,0,0,0" x:Name="Avviso" Text="NON CI SONO IMBALLI DA CONTROLLARE" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Visibility="Collapsed">
+
+            </TextBlock>
+        </StackPanel>
+
+        <!--Separatore-->
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6">
+            <Border Margin="0,0,0,0" BorderThickness="0.5" BorderBrush="LightGray" VerticalAlignment="Center"/>
+        </StackPanel>
+        
+        <!-- Altezza cassa-->
+        <StackPanel VerticalAlignment="Center" Orientation="Vertical" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <!--Titolo-->
+                <StackPanel Margin="20,0,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" >
+                    <TextBlock FontSize="20" FontWeight="Light">
+                    Dimensioni cassa reale
+                    </TextBlock>
+                </StackPanel>
+                
+                <!--Altezza cassa-->
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+                    <Label FontWeight="Bold" Width="200" x:Name="AltCassa" Content="Altezza" HorizontalAlignment="Left" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                    <TextBox HorizontalAlignment="Left" ToolTip="Inserisci altezza della cassa reale" Name ="TBAltezzaCassa"  Width="150" md:HintAssist.Hint="[mm]" Margin="20,0,0,0" TextChanged="TBAltezzaCassa_TextChanged" ></TextBox>
+                </StackPanel>
+                
+                <!--Larghezza cassa-->
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+                    <Label FontWeight="Bold" x:Name="LarghCassa" Content="Larghezza" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Center"/>
+                    <TextBox HorizontalAlignment="Left" ToolTip="Inserisci larghezza della cassa reale" Name="TBLarghezzaCassa"  Width="150" md:HintAssist.Hint="[mm]" Margin="76,0,0,0" TextChanged="TBLarghezzaCassa_TextChanged" ></TextBox>
+                </StackPanel>
+                
+                <!--Lunghezza cassa-->
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical">
+                    <Label FontWeight="Bold" x:Name="LunghCassa" Content="Lunghezza" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Center"/>
+                    <TextBox HorizontalAlignment="Left" ToolTip="Inserisci lunghezza della cassa reale" Name="TBLunghezzaCassa"  Width="150" md:HintAssist.Hint="[mm]" Margin="76,0,0,0" TextChanged="TBLunghezzaCassa_TextChanged" ></TextBox>
+                </StackPanel>
+                
+            </Grid>
+        </StackPanel>
+        
+        <!--Separatore-->
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="6">
+            <Border Margin="0,0,0,0" BorderThickness="0.5" BorderBrush="LightGray" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Center" Orientation="Vertical" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <!--Titolo-->
+                <StackPanel Margin="20,0,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock FontSize="20" FontWeight="Light">
+                    Foto imballo finito
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Foto cassa-->
+                <StackPanel Margin="0,10,0,0" VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Button HorizontalAlignment="Center"  ToolTip="Carica foto foto dell'imballo" Name="ConfermaSelezione" Margin="20,0,0,0" Height="80" 
+                        Width="80" Click="ConfermaSelezione_Click" Background="#F6F6F6">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <md:PackIcon Foreground="#7C67FF" Margin="0,0,0,0" Kind="InsertPhoto" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Allega foto" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
+                        TextWrapping="Wrap" TextAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="(Max 2 foto)" FontWeight="Light" Margin="26,10,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="35,0,0,0" Orientation="Vertical">
+                        <ItemsControl ItemsSource="{Binding reportProduzione.AttachedImages}" ItemTemplate="{StaticResource SelectedImageTemplate}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        
+        <!--Separatore-->
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6">
+            <Border Margin="0,0,0,0" BorderThickness="0.5" BorderBrush="LightGray" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Center" Orientation="Vertical" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <!--Titolo-->
+                <StackPanel Margin="20,0,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock FontSize="20" FontWeight="Light">
+                    Conformità
+                    </TextBlock>
+                </StackPanel>
+                
+                <!--Conformità imballo-->
+                <StackPanel Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+                    <Label FontWeight="Bold" Width="150" x:Name="Conformita" Content="Conformità imballo" HorizontalAlignment="Left" Margin="16,10,0,0" VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Cursor="Hand" x:Name="Conforme" Margin="22,5,60,15" Foreground="Green" Checked="Conforme_Checked">Conforme</CheckBox>
+                        <CheckBox Cursor="Hand" x:Name="NonConforme" Margin="15,5,0,15" Foreground="Red" Checked="NonConforme_Checked">Non Conforme</CheckBox>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>
+
+        <!--Separatore-->
+        <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="6">
+            <Border Margin="0,0,0,0" BorderThickness="0.5" BorderBrush="LightGray" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Center" Orientation="Vertical" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <!--Titolo-->
+                <StackPanel Margin="20,0,0,0" Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock FontSize="20" FontWeight="Light">
+                    Note imballo completo
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Note post produzione-->
+                <StackPanel  Margin="0,0,0,0" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+                    <Label FontWeight="Bold" Width="150" x:Name="NoteProd" Content="Note" HorizontalAlignment="Left" Margin="15,10,0,0" VerticalAlignment="Top"/>
+                    <Border Margin="20,0,20,0" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
+                        <TextBox Width="1000" BorderThickness="0" x:Name="TBNote" Height="60"  Margin="20,0,20,0" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
+                    </Border>
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>
+        <!-- Conferma report-->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,0"
+                    Grid.Row="8" Grid.Column="2" Grid.RowSpan="2" >
+            <Button ToolTip="Genera report finale" Name="Mostradocumentazione" Margin="20,20,40,20" Height="80" Width="80" Click="Mostradocumentazione_Click"
+                    Background="#40EE93">
+                <StackPanel Orientation="Vertical">
+                    <md:PackIcon Foreground="Green" Kind="Done" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Crea report" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
+                            TextWrapping="Wrap" TextAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Page>

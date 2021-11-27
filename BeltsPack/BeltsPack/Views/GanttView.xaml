@@ -1,0 +1,54 @@
+﻿<Page x:Class="BeltsPack.Views.GanttView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BeltsPack.Views"
+      xmlns:vm="clr-namespace:BeltsPack.ViewModels"
+        mc:Ignorable="d" 
+       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+      xmlns:sf="http://schemas.syncfusion.com/wpf" >
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <!--Titolo-->
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2"
+                Margin="0,20,0,0"
+                Text="Timing imballi in lavorazione" FontSize="18" FontWeight="DemiBold">
+            </TextBlock>
+
+        </StackPanel>
+        <!--Gantt chart-->
+        <DockPanel Grid.Row="1">
+            <sf:GanttControl Grid.Row="1" x:Name="Gantt"  
+                    ItemsSource="{Binding TaskCollection}"  
+                    ShowBaseline="True" GridWidth="428" ChartWidth="Auto"
+                             Margin="40,40,40,40">
+
+                <sf:GanttControl.DataContext>
+                    <vm:GanttViewModel></vm:GanttViewModel>
+                </sf:GanttControl.DataContext>
+
+            </sf:GanttControl>
+        </DockPanel>
+
+    </Grid>
+</Page>

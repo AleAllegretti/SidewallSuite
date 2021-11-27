@@ -1,0 +1,27 @@
+﻿<root>
+  
+  <username name="maurizio" password="morinat">
+    <dbconnectionstring>Data Source = Server1; Initial Catalog=DBSidewall; User ID=ProgrammaImballi; Password=morinat</dbconnectionstring>
+  </username>
+
+  <username name="alice" password="morinat">
+    <dbconnectionstring>Data Source = Server1; Initial Catalog=DBSidewall; User ID=ProgrammaImballi; Password=morinat</dbconnectionstring>
+  </username>
+
+  <username name="miriam" password="morinat">
+    <dbconnectionstring>Data Source = Server1; Initial Catalog=DBSidewall; User ID=ProgrammaImballi; Password=morinat</dbconnectionstring>
+  </username>
+
+  <username name="piersilvio" password="morinat">
+    <dbconnectionstring>Data Source = Server1; Initial Catalog=DBSidewall; User ID=ProgrammaImballi; Password=morinat</dbconnectionstring>
+  </username>
+
+  <username name="produzione" password="morinat">
+    <dbconnectionstring>Server = Server1; Initial Catalog=DBSidewall; User ID=ProgrammaImballi; Password=morinat</dbconnectionstring>
+  </username>
+  
+  <username name="admin" password="admin">
+    <dbconnectionstring>Server=DELLALE\SQLEXPRESS; Database=DBSidewall; Trusted_Connection=True</dbconnectionstring>
+  </username>
+  
+</root>

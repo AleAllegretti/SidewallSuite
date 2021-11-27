@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="BeltsPack.Views.Dialogs.RegistrationDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BeltsPack.Views.Dialogs"
+             xmlns:ut="clr-namespace:BeltsPack.Utils"
+             xmlns:vm="clr-namespace:BeltsPack.ViewModels"
+             mc:Ignorable="d" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sf="http://schemas.syncfusion.com/wpf">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <!--Icona-->
+        <StackPanel Margin="0,0,0,0" Width="300"  Grid.Row="1">
+            <md:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="40" Foreground="LightGray" Kind="Person"   />
+        </StackPanel>
+        
+        <!--Titolo-->
+        <StackPanel Margin="0,10,0,0" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2">
+            <Label FontWeight="DemiBold" FontSize="18" HorizontalAlignment="Center">
+               Member Login
+            </Label>
+        </StackPanel>
+        
+        <!--Username-->
+        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3">
+            <Label FontSize="16" FontWeight="Light">
+                Username
+            </Label>
+            
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Person" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" md:HintAssist.Hint="Username" Text="{Binding username}">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
+        <!--Password-->
+        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="4">
+            <Label FontSize="16" FontWeight="Light">
+                Password
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+            CornerRadius="5" Background="#F3F3F3">
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Person" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <PasswordBox Margin="10,0,0,0" VerticalAlignment="Center" BorderThickness="0" Background="#F3F3F3" BorderBrush="#F3F3F3" Width="250" md:HintAssist.Hint="Password" x:Name="Password"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--Conferma-->
+        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5">
+            <Button Background="IndianRed" Content="Conferma" x:Name="BtnConferma" Click="BtnConferma_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

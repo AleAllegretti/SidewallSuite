@@ -1,0 +1,244 @@
+﻿<Page x:Class="BeltsPack.Views.AccessoriCasseFerro"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sf="http://schemas.syncfusion.com/wpf" 
+      xmlns:local="clr-namespace:BeltsPack.Views"
+      mc:Ignorable="d" 
+     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Grid>
+        <Grid.Resources >
+
+            <Style TargetType="Label" BasedOn="{StaticResource MaterialDesignLabel}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="0 0 16 0" />
+                <Setter Property="Width" Value="200" />
+            </Style>
+
+            <Style TargetType="Image" >
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="40" />
+            </Style>
+
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="0.4*"/>
+        </Grid.RowDefinitions>
+
+        <!--Intestazione-->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" >
+            <TextBlock Margin="0,10,0,0" FontSize="22" FontWeight="DemiBold">
+                SELEZIONARE ACCESSORI CASSA
+            </TextBlock>
+        </StackPanel>
+        
+        <!--Diagonali ad incrocio-->
+        <md:Card Margin="60,40,60,0" Grid.Row="1" Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,10,0,0" Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
+                    Diagonali ad incrocio
+                    </TextBlock>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Image x:Name="imageIncrocio"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform" Source="/Assets/Images/Incroci2.png" />
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox Cursor="Hand" x:Name="DiagonaliIncrocio" HorizontalAlignment="Center"></CheckBox>
+                </StackPanel>
+                
+            </Grid>
+        </md:Card>
+
+        <!--Tamponatura laterale-->
+        <md:Card Margin="60,40,60,0" Grid.Row="1" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,10,0,0"  Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
+                    Tamponatura laterale
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Image x:Name="imagereteLaterale"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform"  Source="/Assets/Images/ReteLaterale.png" />
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox x:Name="TamponaturaConRete" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
+                </StackPanel>
+
+            </Grid>
+        </md:Card>
+
+        <!--Verniciatura-->
+        <md:Card Margin="60,40,60,0" Grid.Row="1" Grid.Column="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,10,0,0"  Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
+                    Verniciatura
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <md:PackIcon Kind="FormatPaint" Foreground="DimGray" Width="100" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox x:Name="Verniciatura" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
+                </StackPanel>
+
+            </Grid>
+        </md:Card>
+
+        <!--Fondo in lamiera-->
+        <md:Card Margin="60,60,60,20" Grid.Row="2" Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,10,0,0"  Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
+                    Fondo in lamiera
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Image x:Name="imageFondoLamiera"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform"  Source="/Assets/Images/FondoLamiera.png" />
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox x:Name="FondoInLamiera" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
+                </StackPanel>
+
+            </Grid>
+        </md:Card>
+
+        <!--Solo ritti-->
+        <md:Card x:Name="CardRitti" Margin="60,60,60,20" Grid.Row="2" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,10,0,0"  Grid.Row="0" Orientation="Vertical">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light">
+                    Cassa solo ritti
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" FontSize="11" FontWeight="Light">
+                    (solo per casse con lunghezza minore di 6 [m])
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Image x:Name="imagesoloritti"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform"  Source="/Assets/Images/SoloRitti.png" />
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox x:Name="SoloRitti" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
+                </StackPanel>
+
+            </Grid>
+        </md:Card>
+
+        
+        <!--Selezione logo-->
+        <md:Card Margin="60,60,60,20" Grid.Row="2" Grid.Column="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Margin="0,10,0,0"  Grid.Row="0" Grid.ColumnSpan="2">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
+                    Personalizzazione
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,20">
+                    <RadioButton Cursor="Hand" x:Name="RadioSidewall" GroupName="Personalizzazione" Margin="6,0,0,7" Checked="RadioSidewall_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Sidewall" FontSize="15" FontWeight="DemiBold"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Cursor="Hand" x:Name="RadioSig" GroupName="Personalizzazione" Margin="6,0,0,7" Checked="RadioSig_Checked">
+                        <TextBlock Text="SIG" FontSize="15" FontWeight="DemiBold" />
+                    </RadioButton>
+
+                    <RadioButton Cursor="Hand" x:Name="RadioPersonalizzato" GroupName="Personalizzazione" Margin="6,0,0,7" Checked="RadioPersonalizzato_Checked">
+                        <TextBlock Text="Personalizzato" FontSize="15" FontWeight="DemiBold"/>
+                    </RadioButton>
+
+                    <RadioButton Cursor="Hand" x:Name="RadioAnonimo" GroupName="Personalizzazione" Margin="6,0,0,7" Checked="RadioAnonimo_Checked">
+                        <TextBlock Text="Anonimo" FontSize="15" FontWeight="DemiBold" />
+                    </RadioButton>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Grid.RowSpan="2">
+                    <Image x:Name="logo" Stretch="Uniform"/>
+                </StackPanel>
+            </Grid>
+        </md:Card>
+
+        <!--Bottone avanti-->
+        <StackPanel HorizontalAlignment="Right"  Margin="15,0,60,0" Grid.Column="2" Grid.Row="3">
+            <Button Background="#F6F6F6" ToolTip="Crea documentazione in pdf" Name="Creadocumentazione" Height="100" Width="100" Click="Calcola_Click">
+                <StackPanel Orientation="Vertical">
+                    <md:PackIcon Kind="EyeOutline" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock FontSize="16" Text="Mostra imballo" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,0,0" 
+                            TextWrapping="Wrap" TextAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Page>

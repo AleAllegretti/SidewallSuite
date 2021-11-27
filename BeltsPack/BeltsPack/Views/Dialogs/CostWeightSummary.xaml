@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="BeltsPack.Views.Dialogs.CostWeightSummary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BeltsPack.Views.Dialogs"
+             xmlns:ut="clr-namespace:BeltsPack.Utils"
+             xmlns:vm="clr-namespace:BeltsPack.ViewModels"
+             mc:Ignorable="d" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sf="http://schemas.syncfusion.com/wpf" >
+
+    
+    <UserControl.Resources>
+
+        <!--Stile dell'header-->
+        <Style TargetType="sf:GridHeaderCellControl" x:Key="headerStyle">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="LightGray" />
+        </Style>
+        
+        <!--Formatta la riga in base al contenuto-->
+        <ut:RowFormatting x:Key="RowFormatting" />
+        
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Titolo-->
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2"
+                Margin="0,20,0,20"
+                Text="Costo e peso materiale" FontSize="18" FontWeight="DemiBold">
+        </TextBlock>
+        
+        <!--Griglia-->
+        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2">
+
+            <sf:SfDataGrid Width="1090" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10"
+                  x:Name="gridelencomateriale" AutoGenerateColumns="True" IsReadOnly="True" ItemsSource="{Binding DistintaBase}"
+                  AlternationCount="2" ColumnSizer="Star" AllowFiltering="True" AllowTriStateSorting="True" AllowSorting="False" 
+                           ShowSortNumbers="True" SummaryCalculationMode="OnDemandGroupSummary" 
+                HeaderStyle="{StaticResource headerStyle}" FontSize="16"
+                           RowSelectionBrush="LightGray" >
+
+                <sf:SfDataGrid.CellStyle>
+                    <Style TargetType="sf:GridCell">
+                        <Setter Property="Background" Value="{Binding NomeMateriale, Converter = {StaticResource RowFormatting}}" />
+                    </Style>
+                </sf:SfDataGrid.CellStyle>
+                
+            </sf:SfDataGrid>
+
+        </DockPanel>
+
+        <!--Bottoni-->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button ToolTip="Esporta database in Excel" Name="EsportaExcel" Margin="20,30,40,20" Height="25" Width="160" Click="EsportaExcel_Click">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="FileExcel" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Esporta in Excel" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,0,0" 
+                                TextWrapping="Wrap" TextAlignment="Center" />
+                </StackPanel>
+            </Button>
+
+            <Button ToolTip="Chiudi finestra" Name="Chiudi" Margin="20,30,40,20" Height="25" Width="160" Click="Chiudi_Click">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon x:Name="Close" Kind="Close" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Chiudi" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,0,0" 
+                                TextWrapping="Wrap" TextAlignment="Center" />
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

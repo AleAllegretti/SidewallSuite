@@ -1,0 +1,205 @@
+﻿<Window x:Class="BeltsPack.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BeltsPack"
+        xmlns:views="clr-namespace:BeltsPack.Views"
+        xmlns:models="clr-namespace:BeltsPack.Models"
+        mc:Ignorable="d"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="MainWindow" WindowStartupLocation="CenterScreen" WindowStyle="None" WindowState="Maximized"
+        ResizeMode="CanResize" MinHeight="720" MinWidth="1080" MouseDown="Window_MouseDown" >
+
+    <Window.Resources>
+
+        <!-- Animazione del menù laterale -->
+        <Storyboard x:Key="MenuOpen">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="180" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="180" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="MenuClose">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="180" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="180" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <md:DialogHost Identifier="MainDialogHost">
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="0.21*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Griglia in alto -->
+            <Grid  VerticalAlignment="Stretch" Cursor="SizeAll" Background="#FFD1D1D1" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,0,0,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.4*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+
+                <Button ToolTip="Chiudi programma" x:Name="ButtonCloseWindow" Width="60" Height="40" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="4" Click="ButtonCloseWindow_Click">
+                    <md:PackIcon  Foreground="Black" Kind="Close" Width="22" RenderTransformOrigin="1.227,0.583" />
+                </Button>
+
+                <Button ToolTip="Massimizza finestra" x:Name="ButtonMaximizeWindow" Width="60" Height="40" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="3" Click="ButtonMaximizeWindow_Click" Visibility="Collapsed">
+                    <md:PackIcon  Foreground="Black" Kind="WindowMaximize" Width="22" RenderTransformOrigin="1.227,0.583" />
+                </Button>
+                <Button ToolTip="Dimensioni stadard" x:Name="ButtonRestoreWindow" Width="60" Height="40" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="3" Click="ButtonRestoreWindow_Click" Visibility="Visible">
+                    <md:PackIcon  Foreground="Black" Kind="WindowRestore" Width="22" RenderTransformOrigin="1.227,0.583" />
+                </Button>
+
+                <Button ToolTip="Riduci ad icona" x:Name="ButtonMinimizeWindow" Width="60" Height="40" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="2" Click="ButtonMinimizeWindow_Click">
+                    <md:PackIcon  Foreground="Black" Kind="WindowMinimize" Width="22" RenderTransformOrigin="1.227,0.583" />
+                </Button>
+
+                <Image x:Name="image" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="153" Grid.Column="0" Stretch="Fill" Source="/Assets/Images/LOGO_SIDEWALL.png"/>
+
+                <Label Content="{Binding _nomeutente}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="White" FontWeight="Light" FontSize="13" Grid.Column="0" Grid.ColumnSpan="5"/>
+            </Grid>
+
+            <!-- Griglia menù laterale -->
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="1">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="46*"/>
+                    <ColumnDefinition Width="99*"/>
+                </Grid.ColumnDefinitions>
+
+                <DockPanel >
+                    <Grid Grid.Column="0" x:Name="GridMenu" MinHeight="657" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,0,0,-11"  Background="#FFFF1F1F" Width="180" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="450"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Height="44" Background="#FFFF1F1F">
+                            <Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
+                                <md:PackIcon  Foreground="#FFD1D1D1" Kind="ArrowLeft" Width="50" />
+                            </Button>
+                            
+                            <Button x:Name="ButtonOpenMenu" Width="120" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Click="ButtonOpenMenu_Click">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-30,0,0,0">
+                                    <Label Content="MENU'" FontSize="18" FontWeight="Light" Foreground="White"/>
+                                </StackPanel>
+                            </Button>
+                            
+                        </Grid>
+
+                        <ListView x:Name="Lista" Margin="3" ToolTip="Ritorna nella home" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="WhiteSmoke">
+                            <ListViewItem Height="60" Cursor="Hand" x:Name="Home" Selected="Home_Selected">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="ViewDashboard" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem x:Name="Database" ToolTip="Database totale" Height="60" Selected="ListViewItem_Selected_1" Cursor="Hand" >
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Database" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Database" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem ToolTip="Programmazione imballi" Height="60" Cursor="Hand" Selected="ListViewItem_Selected_2" >
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="ChartGantt" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Programmazione" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem x:Name="Produzione" ToolTip="Produzione" Height="60" Cursor="Hand" Selected="ListViewItem_Selected_3" >
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Hammer" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Produzione" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem ToolTip="Impostazioni software" Height="60" Cursor="Hand" x:Name="Impostazioni" Selected="Impostazioni_Selected">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Tools" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Impostazioni" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem ToolTip="Login" Height="60" Cursor="Hand" x:Name="Login" Selected="Login_Selected">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="login" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Login" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem ToolTip="Informazioni sul software" Height="60" Cursor="Hand" x:Name="About" Selected="About_Selected">
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="About" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="About" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+
+                    </Grid>
+
+                </DockPanel>
+
+                <Frame Grid.Column="1" x:Name="_mainFrame" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2" />
+
+            </Grid>
+
+            <Grid x:Name="GridBottom" Grid.Row="2" Cursor="SizeAll" Background="#FFD1D1D1" VerticalAlignment="Stretch" Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.13*"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Logo A-Squared-->
+                <StackPanel Margin="5,0,0,0"  Grid.Column="0" VerticalAlignment="Center">
+                    <Image x:Name="LogoASquared" HorizontalAlignment="Left"  Stretch="Fill"  Source="/Assets/Images/ASquaredLogo.png" Height="16" Width="24"/>
+                </StackPanel>
+
+                <!--Nome programma-->
+                <StackPanel  Grid.Column="1" VerticalAlignment="Center" >
+                    <Label FontSize="14" Grid.Column="1" HorizontalAlignment="Center" Foreground="WhiteSmoke" VerticalAlignment="Center">SIDEWALL - CALCOLO IMBALLI NASTRI TRASPORTATORI</Label>
+                </StackPanel>
+
+                <!--Versione-->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" >
+                    <Label Content="{Binding currentVersion}" FontSize="14" Foreground="WhiteSmoke" VerticalAlignment="Center"/>
+                </StackPanel>
+
+
+            </Grid>
+        </Grid>
+    </md:DialogHost>
+</Window>  

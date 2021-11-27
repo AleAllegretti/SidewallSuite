@@ -1,0 +1,250 @@
+﻿<Page x:Class="BeltsPack.Views.OutputView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BeltsPack.Views"
+             mc:Ignorable="d" 
+       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="390"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.Resources >
+
+            <Style TargetType="TextBox"  BasedOn="{StaticResource MaterialDesignTextBoxBase}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Background" Value="#F3F3F3" />
+                <Setter Property="Margin" Value="0 0 16 0" />
+                <Setter Property="Width" Value="160" />
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+
+            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                <Setter Property="Margin" Value="0 0 16 0" />
+                <Setter Property="Width" Value="160" />
+            </Style>
+
+            <Style TargetType="Label" BasedOn="{StaticResource MaterialDesignLabel}">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Light" />
+                <Setter Property="Margin" Value="0 0 0 0" />
+                <Setter Property="Width" Value="250" />
+            </Style>
+
+        </Grid.Resources>
+
+        <!--Pesi e costi-->
+        <DockPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Grid.RowSpan="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Titolo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                            <Label FontWeight="Light" FontSize="20" Content="Pesi e costi" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
+                        </StackPanel>
+
+                        <!--Peso imballo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+                            <Label FontWeight="Bold" x:Name="labelPesoImballo" Content="Peso imballo [kg]" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBPesoImballo" Width="160" Margin="20,0,0,0"></TextBox>
+                        </StackPanel>
+
+                        <!--Prezzo imballo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+                            <Label FontWeight="Bold" x:Name="labelCostoImballo" Content="Costo imballo [€]" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBCostoImballo" Width="160" Margin="0,0,0,0"></TextBox>
+                        </StackPanel>
+
+                        <!--Peso nastro-->
+                        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0">
+                            <Label FontWeight="Bold" Content="Peso nastro [kg]" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBPesoNastro" Width="160" Margin="20,0,0,0"></TextBox>
+                        </StackPanel>
+
+                        <!--Peso totale-->
+                        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+                            <Label FontWeight="Bold" Content="Peso totale [kg]" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBPesoTotale" Width="160" Margin="0,0,0,0"></TextBox>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Titolo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                            <Label FontWeight="Light" FontSize="20" Content="Dimensioni" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top"/>
+                        </StackPanel>
+
+                        <!--Larghezza imballo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
+                            <Label FontWeight="Bold" x:Name="labelLarghezzaImballo"  Content="Larghezza pedana [mm]" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBLarghezzaImballo"  Margin="20,0,0,0"></TextBox>
+                        </StackPanel>
+
+                        <!--Lunghezza imballo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+                            <Label FontWeight="Bold" x:Name="labelLunghezzaImballo"  Content="Lunghezza pedana [mm]" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBLunghezzaImballo"  Margin="0,0,0,0"></TextBox>
+                        </StackPanel>
+
+                        <!--Tipologia imballo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0">
+                            <Label FontWeight="Bold" x:Name="labelTipologiaImballo" Content="Tipologia imballo" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBTipologiaImballo"  Margin="20,0,0,0" ></TextBox>
+                        </StackPanel>
+
+                        <!--Altezza imballo-->
+                        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+                            <Label FontWeight="Bold" x:Name="labelAltezzaImballo"  Content="Altezza imballo [mm]" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TBAltezzaImballo"  Margin="0,0,0,0"></TextBox>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="200"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <!--Note produzione-->
+                        <StackPanel Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical">
+                            <Label HorizontalAlignment="Left" FontWeight="Bold" x:Name="labelNote"  Content="Note produzione" Margin="20,0,0,0" Grid.Row="0" VerticalAlignment="Top"/>
+                            <Border Margin="20,0,0,0" BorderThickness="1" BorderBrush="LightGray" MaxWidth="380" CornerRadius="5" Grid.Row="1" HorizontalAlignment="Stretch">
+                                <TextBox IsReadOnly="False" Background="{DynamicResource MaterialDesignPaper}" BorderThickness="0" x:Name="TBNote" Width="190" Height="60"  
+                                     Margin="20,0,0,0" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
+                            </Border>
+                        </StackPanel>
+                        
+                        <Button Grid.Column="0" Grid.Row="2" Background="#40EE93" Name="buttonSalvaDb" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="120,0,0,0" Width="100" Height="100" Click="buttonSalvaDb_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <md:PackIcon Kind="ContentSave" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <TextBlock FontSize="16" Text="Salva" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
+                            TextWrapping="Wrap" TextAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        
+                    </Grid>
+                </StackPanel>
+
+            </Grid>
+        </DockPanel>
+  
+        <!--Schema 2D-->
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <!--Schema 2D-->
+            <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Quota verticale-->
+                    <Canvas Grid.Column="0">
+                        <Label x:Name="LabelQuotaVerticale" Visibility="Visible" RenderTransformOrigin="15.271,1.241" Canvas.Left="0" Canvas.Top="169" Content="{Binding Path=QuotaImballoVerticale, UpdateSourceTrigger=Default}"/>
+                        <Line  x:Name="QuotaVerticale" X1="100" Y1="30" X2="100" Y2="350" Margin="0,0,0,0" StrokeThickness="2" Grid.Column="0" Stroke="Black" Visibility="Visible"></Line>
+                    </Canvas>
+
+                    <!--Plot-->
+                    <lvc:CartesianChart x:Name="SchemaBobina" Height="320" Width="350" Margin="120,20,0,0" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Visible">
+                        <lvc:CartesianChart.Series>
+                            <lvc:ScatterSeries Title="Series A"  Values="{Binding NastroImballato}" MaxPointShapeDiameter="6" />
+                        </lvc:CartesianChart.Series>
+                    </lvc:CartesianChart>
+
+                    <!--Quota orizzontale-->
+                    <Canvas Grid.Row="1">
+                        <Label Visibility="Visible" x:Name="LabelQuotaOrizzontale" RenderTransformOrigin="15.271,1.241" Canvas.Left="257" Canvas.Top="24" Content="{Binding Path=QuotaImballoOrizzontale, UpdateSourceTrigger=Default}"/>
+                        <Line  x:Name="QuotaOrizzontale" X1="140" Y1="20" X2="435" Y2="20" Margin="10,0,0,0" StrokeThickness="2" Grid.Column="0" Stroke="Black" Visibility="Visible"></Line>
+                    </Canvas>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        
+        <!-- Immagine anteprima imballo-->
+        <DockPanel Margin="0,0,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image x:Name="imagePack" Source="/Assets/Images/Imballo_bobina.png" MaxWidth="300"  />
+        </DockPanel>
+        
+<!--Salva button-->
+        <StackPanel HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" VerticalAlignment="Center">
+           
+        </StackPanel>
+
+    </Grid>
+</Page>
