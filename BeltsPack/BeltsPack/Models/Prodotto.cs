@@ -61,6 +61,8 @@ namespace BeltsPack.Models
 	}
     public class Prodotto
     {
+		// Email cliente
+		public string EmailCliente { get; set; }
 		// Codice commissioni
 		public string CodiceCommissioni { get; set; }
 		// Descrizione commissioni
@@ -228,7 +230,7 @@ namespace BeltsPack.Models
 				this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
 				this.TipoConsegna = reader.GetValue(reader.GetOrdinal("Cd_DOPorto")).ToString();
 				this.Destinazione = reader.GetValue(reader.GetOrdinal("Localita")).ToString();
-
+				this.EmailCliente = reader.GetValue(reader.GetOrdinal("Email")).ToString();
 				break;
 			}
 		}

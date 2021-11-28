@@ -22,6 +22,7 @@ namespace BeltsPack.Utils
         private CassaInFerro _cassaInFerro;
         private int _numeroConfigurazione;
         private Imballi _imballi;
+        private PdfUtils PdfUtils = new PdfUtils();
 
         // Variabili
         bool[] StatoCodici = new bool[15];
@@ -798,6 +799,9 @@ namespace BeltsPack.Utils
             {
                 this.createTXTTrasporto(path);
             }
+
+            // Creo la TDS
+            this.PdfUtils.FillSchedaTDS(this._prodotto, path, this._nastro);
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)

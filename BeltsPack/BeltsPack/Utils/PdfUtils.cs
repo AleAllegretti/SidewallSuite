@@ -25,6 +25,7 @@ namespace BeltsPack.Utils
         private static readonly string RESOURCE_NAME_SCHEDA_PRODUZIONE_LEGNO = "Scheda_Tecnica_Produzione_Legno_Mod.pdf";
         private static readonly string RESOURCE_NAME_SCHEDA_PALADINI = "Scheda_Tecnica_Paladini3.pdf";
         private static readonly string RESOURCE_NAME_SCHEDA_POSTPRODUZIONE = "Scheda_Tecnica_PostProduzione_Mod.pdf";
+        private static readonly string RESOURCE_NAME_TDS_BORDI_E_TAZZE_TC = "Sidewalls_Cleats_TC.pdf";
         public string SAVING_PATH;
         private static string GetFullPath(string localPdfName)
         {
@@ -118,6 +119,97 @@ namespace BeltsPack.Utils
             }
         }
 
+        public string FillSchedaTDS(Prodotto prodotto, string path, Nastro nastro)
+        {
+            // Carica il template
+            string pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE_TC;
+            PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
+            PdfLoadedForm loadedForm = loadedDocument.Form;
+            PdfLoadedTextBoxField ClienteField = loadedForm.Fields[0] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField CommessaField = loadedForm.Fields[1] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField MailField = loadedForm.Fields[2] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField DistributoreField = loadedForm.Fields[3] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField WidthField = loadedForm.Fields[4] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField LengthField = loadedForm.Fields[5] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[6] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[7] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[8] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[9] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField SidewallHeightField = loadedForm.Fields[10] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[11] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[12] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField PitchField = loadedForm.Fields[13] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[14] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[15] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField OperationalTemperatureField = loadedForm.Fields[16] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField QuantityField = loadedForm.Fields[17] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField NotesField = loadedForm.Fields[18] as PdfLoadedTextBoxField;
+            PdfLoadedRadioButtonListField OilPresenceCombo = loadedForm.Fields[19] as PdfLoadedRadioButtonListField;
+            PdfLoadedRadioButtonListField EndlessClosedCombo = loadedForm.Fields[20] as PdfLoadedRadioButtonListField;
+            PdfLoadedRadioButtonListField FixPresenceCombo = loadedForm.Fields[21] as PdfLoadedRadioButtonListField;
+            PdfLoadedRadioButtonListField BlkPresenceCombo = loadedForm.Fields[22] as PdfLoadedRadioButtonListField;
+
+            // Riempie la scheda pdf
+            ClienteField.Text = prodotto.Cliente;
+            CommessaField.Text = prodotto.Codice;
+            MailField.Text = prodotto.EmailCliente;
+            WidthField.Text = prodotto.LarghezzaNastro.ToString();
+            LengthField.Text = prodotto.LunghezzaNastro.ToString();
+            FreeLatSpaceField.Text = prodotto.PistaLaterale.ToString();
+            SidewallWidthField.Text = prodotto.LarghezzaBordo.ToString();
+            UsefulWidthField.Text = nastro.LarghezzaUtile.ToString();
+            BaseBeltField.Text = nastro.Tipo;
+            SidewallHeightField.Text = prodotto.AltezzaBordo.ToString();
+            RubberQualityField.Text = nastro.Trattamento;
+            CleatsHeightField.Text = prodotto.AltezzaTazze.ToString();
+            PitchField.Text = prodotto.PassoTazze.ToString();
+            if (nastro.SiglaTrattamento == "OR")
+            {
+                OilPresenceCombo.Value = "Scelta2";
+            }
+            else
+            {
+                OilPresenceCombo.Value = "Scelta1";
+            }
+
+            if (nastro.Aperto)
+            {
+                EndlessClosedCombo.SelectedValue = "Scelta2";
+            }
+            else
+            {
+                EndlessClosedCombo.SelectedValue = "Scelta1";
+            }
+
+            if (prodotto.PresenzaFix == "Si")
+            {
+                FixPresenceCombo.SelectedValue = "Scelta3";
+            }
+            else
+            {
+                FixPresenceCombo.SelectedValue = "Scelta1";
+            }
+
+            if (nastro.Aperto)
+            {
+                BlkPresenceCombo.SelectedValue = "Scelta1";
+            }
+            else
+            {
+                BlkPresenceCombo.SelectedValue = "Scelta4";
+            }
+
+            // Impostazioni del saving dialog
+            string FileName;
+            // Nome del file
+            FileName = "TDS" + "_" + prodotto.Cliente + "_" + prodotto.Codice + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".pdf";
+            // Rende il documento read-only
+            loadedDocument.Form.Flatten = false;
+            // Salva il file
+            loadedDocument.Save(path + "\\" + FileName);
+            // Output
+            return path + "\\" + FileName;
+        }
         public string FillSchedaPaladini(ProdottoSelezionato prodottoSelezionato, string selectedPath)
         {
             // Carica il template

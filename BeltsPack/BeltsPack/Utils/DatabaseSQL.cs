@@ -381,7 +381,7 @@ namespace BeltsPack.Utils
         }
         public SqlCommand ClienteSearchCommand(string nomeCliente)
         {
-            return this.CreateCommand("SELECT Descrizione,Provvigione,Agente_Descrizione,Cd_DOPorto,Localita FROM " +
+            return this.CreateCommand("SELECT Descrizione,Provvigione,Agente_Descrizione,Cd_DOPorto,Localita,Email FROM " +
                 TABELLA_CLIENTI +
                 " Where Descrizione LIKE " + "'%" + nomeCliente + "%'");
         }

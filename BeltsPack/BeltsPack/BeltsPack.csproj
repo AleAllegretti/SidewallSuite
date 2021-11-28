@@ -519,6 +519,9 @@
     <Content Include="Assets\Pdf\Scheda_Tecnica_Produzione_Legno_Mod.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Assets\Pdf\Sidewalls_Cleats_C.pdf" />
+    <None Include="Assets\Pdf\Sidewalls_Cleats_T.pdf" />
+    <None Include="Assets\Pdf\Sidewalls_Cleats_TC.pdf" />
     <None Include="BeltsPack_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
