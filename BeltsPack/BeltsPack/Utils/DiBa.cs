@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
+using System.Text;
+using System.Windows;
 using BeltsPack.Models;
 using BeltsPack.Views.Dialogs;
 using CsvHelper;
@@ -17,18 +19,24 @@ namespace BeltsPack.Utils
         private Bordo _bordo;
         private Tazza _tazza;
         private Prodotto _prodotto;
+        private CassaInFerro _cassaInFerro;
+        private int _numeroConfigurazione;
+        private Imballi _imballi;
 
         // Variabili
         bool[] StatoCodici = new bool[15];
         bool allertCodiceMancante;
         IDictionary<int, string> mapCodici = new Dictionary<int, string>();
-        public DiBa(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto)
+        public DiBa(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, CassaInFerro cassaInFerro, int numeroConfigurazione, Imballi imballi)
         {
             // Oggetti che mi servono nella classe
             this._nastro = nastro;
             this._bordo = bordo;
             this._tazza = tazza;
             this._prodotto = prodotto;
+            this._cassaInFerro = cassaInFerro;
+            this._numeroConfigurazione = numeroConfigurazione;
+            this._imballi = imballi;
 
             // Inizializzo le variabili
             allertCodiceMancante = false;
@@ -49,6 +57,7 @@ namespace BeltsPack.Utils
             mapCodici.Add(12, "Articolo nastro sidewall");
             mapCodici.Add(13, "Imballo");
             mapCodici.Add(14, "Trasporto");
+            mapCodici.Add(15, "Commissioni");
 
         }
 
@@ -450,6 +459,29 @@ namespace BeltsPack.Utils
             // Controllo che il codice del nastro sia presente
             this.PresenzaCodice(this._bordo.CodiceApplicazionexBlk, 10);
         }
+        public void SearchCodCommissioni(string nomeAgente, string codice)
+        {
+            // Determino la descrizione in base al nome dell'agente
+            this._prodotto.DescrizioneCommissioni = "Commissioni " + this._prodotto.NomeAgente + " " + this._prodotto.CommissioniAgente + "%";
+
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CommissioniSearchCommand(codice);
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                this._prodotto.CodiceCommissioni = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._prodotto.UMCommissioni = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+
+                break;
+            }
+            // Controllo che il codice del nastro sia presente
+            this.PresenzaCodice(this._prodotto.CodiceCommissioni, 11);
+        }
         public void SearchCodProdotto(int altezza,
                                     string tipologiaProdotto)
         {
@@ -488,11 +520,11 @@ namespace BeltsPack.Utils
         }
         public void SearchCodImballo(int lunghezza)
         {
-            // In base alla tipologia del nastro scelgo il codice opportuno
             string descrizione;
             descrizione = "";
 
-            if (lunghezza > 30)
+            // In base alla tipologia del nastro scelgo il codice opportuno
+            if (this._imballi.Tipologia == "Cassa")
             {
                 descrizione = "Gabbia in ferro";
             }
@@ -668,6 +700,16 @@ namespace BeltsPack.Utils
                     SpazioDiba2 = "",
                     UM = bordo.UMBlk
                 },
+                  new Nastro // Commissioni
+                {
+                    SpazioDiba = "",
+                    Codice = prodotto.CodiceCommissioni,
+                    Descrizione = prodotto.DescrizioneCommissioni,
+                    QuantitaDiba = 1,
+                    SpazioDiba1 = "",
+                    SpazioDiba2 = "",
+                    UM = prodotto.UMCommissioni
+                },
                   new Nastro // Articolo nastro con bordi
                 {
                     SpazioDiba = "",
@@ -744,7 +786,18 @@ namespace BeltsPack.Utils
             {
                 ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
-            
+
+            // Creo le note del nastro
+            this.createTXTNastro(path);
+
+            // Creo le note per l'imballo
+            this.createTXTImballo(path, this._numeroConfigurazione);
+
+            // Creo le note per il trasporto
+            if (this._prodotto.Destinazione != "")
+            {
+                this.createTXTTrasporto(path);
+            }
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)
@@ -769,6 +822,112 @@ namespace BeltsPack.Utils
                     codiciMancanti, ConfirmDialog.ButtonConf.OK_ONLY);
             }
             
+        }
+        public void createTXTNastro(string path)
+        {
+            string fileName = "Caratteristiche_Nastro.txt";
+            path = path + "\\" + fileName;
+            FileInfo fi = new FileInfo(path);
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.     
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
+                // Create a new file     
+                using (StreamWriter sw = fi.CreateText())
+                {
+                    sw.WriteLine("Base Belt type: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
+                        this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
+                    sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza);
+                    sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                    sw.WriteLine("Belt width: " + this._nastro.Larghezza + " [mm]");
+                    sw.WriteLine("Free Lateral Space: " + this._prodotto.PistaLaterale + " [mm]");
+                    sw.WriteLine("Cleats pitch: " + this._tazza.Passo + " [mm]");
+                    if (this._nastro.Aperto)
+                    {
+                        sw.WriteLine("Open belt length: " + this._nastro.Lunghezza + " [mm]");
+                    }
+                    else
+                    {
+                        sw.WriteLine("Endless belt length: " + this._nastro.Lunghezza + " [mm]");
+                    }
+                    
+                }
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del nastro.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        public void createTXTImballo(string path, int numeroConf)
+        {
+            string fileName = "Dimensioni_Imballo.txt";
+            double grossWeight = Math.Round(this._prodotto.PesoTotaleNastro + this._cassaInFerro.PesoFinale[numeroConf]);
+
+            path = path + "\\" + fileName;
+            FileInfo fi = new FileInfo(path);
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.     
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
+                // Create a new file     
+                using (StreamWriter sw = fi.CreateText())
+                {
+                    sw.WriteLine("L: " + this._imballi.Lunghezza[numeroConf] + " [mm]" + "  -  W:" + 
+                        this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
+                        this._imballi.Altezza[numeroConf] + " [mm]");
+                    sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+                }
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        public void createTXTTrasporto(string path)
+        {
+            string fileName = "Trasporto.txt";
+
+            path = path + "\\" + fileName;
+            FileInfo fi = new FileInfo(path);
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.     
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
+                // Create a new file     
+                using (StreamWriter sw = fi.CreateText())
+                {
+                    sw.WriteLine("Destination: " + this._prodotto.Destinazione);
+                    if (this._prodotto.TipoConsegna == "")
+                    {
+                        sw.WriteLine("Incoterms: not specified" );
+                    }
+                    else
+                    {
+                        sw.WriteLine("Incoterms: " + this._prodotto.TipoConsegna);
+                    }
+                    
+                }
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del trasporto.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

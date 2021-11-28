@@ -10,6 +10,10 @@ namespace BeltsPack.Models
 {
     public class Tazza
     {
+        // Sigla tele
+        public string SiglaTele { get; set; }
+        // Presenza tele
+        public string Telata { get; set; }
         // Sigla trattamento
         public string SiglaTrattamento { get; set; }
         // Trattamento

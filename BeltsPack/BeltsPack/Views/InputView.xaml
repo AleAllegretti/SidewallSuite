@@ -27,7 +27,7 @@
             <RowDefinition Height="0.01*"/>
             <RowDefinition Height="1*" />
             <RowDefinition Height="0.01*"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -97,15 +97,17 @@
                 </StackPanel>
 
                 <!--Cliente-->
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top">
-                    <Label  Margin="10,0,0,0" Width="130"  Content="Cliente" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBox  Margin="15,0,0,0" HorizontalAlignment="Left" ToolTip="Inserisci nome cliente" Name ="TBNomeCliente"  
-                              TextChanged="TBNomeCliente_TextChanged" Text="{Binding cliente, Mode=TwoWay}"></TextBox>
-                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top">
+                    <Label Name="labelCliente"  Content="Cliente" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left"  Margin="15,0,0,0" ToolTip="Scegli cliente"  
+                              SelectedValue="{Binding cliente, Mode=TwoWay}" Name="ComboClienti" SelectionChanged="ComboClienti_SelectionChanged" >
 
+                    </ComboBox>
+                </StackPanel>
+                
                 <!-- Numero di commessa-->
                 <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label Width="130"  Content="N° Commessa" HorizontalAlignment="Left" Margin="36,0,0,0" VerticalAlignment="Top"/>
+                    <Label Width="130"  Content="N° Commessa" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="Inserisci numero di commessa" Name="TBCodiceArtiolo"  
                              Margin="40,0,0,0" TextChanged="TBCodiceArtiolo_TextChanged" Text="{Binding commessa, Mode=TwoWay}"></TextBox>
                 </StackPanel>
@@ -285,11 +287,39 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
+                <StackPanel Margin="14,20,0,0"  Orientation="Vertical" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock FontSize="20" >
+                        Tazze
+                    </TextBlock>
+                </StackPanel>
+
+                <!--Forma tazze-->
+                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label Name="labelFormaTazze" Content="Forma tazze" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" 
+                               Name="ComboFormaTazze"  Margin="15,0,0,0" SelectionChanged="ComboFormaTazze_SelectionChanged"
+                               SelectedValue="{Binding formaTazza, Mode=TwoWay}">
+                        <ComboBoxItem>TC</ComboBoxItem>
+                        <ComboBoxItem>T</ComboBoxItem>
+                        <ComboBoxItem>TB</ComboBoxItem>
+                        <ComboBoxItem>C</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <!--Altezza tazze-->
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label Name="labelAltTazze" Content="Altezza tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" md:HintAssist.Hint="[mm]" 
+                               SelectedValue="{Binding altezzaTazza, Mode=TwoWay}"
+                               Name="ComboAltezzaTazze"  Margin="40,0,0,0" SelectionChanged="ComboAltezzaTazze_SelectionChanged"  >
+                    </ComboBox>
+                </StackPanel>
+                
                 <!--Presenza fix-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Fix" HorizontalAlignment="Left" Margin="15,5,0,0" VerticalAlignment="Top"/>
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Fix" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" Name="ComboFix"  
-                               Margin="15,0,0,0" SelectionChanged="ComboFix_SelectionChanged" 
+                               Margin="40,0,0,0" SelectionChanged="ComboFix_SelectionChanged" 
                                SelectedValue="{Binding presenzaFix, Mode=TwoWay}">
                         <ComboBoxItem>Si</ComboBoxItem>
                         <ComboBoxItem>No</ComboBoxItem>
@@ -297,7 +327,7 @@
                 </StackPanel>
 
                 <!--Presenza blinkers-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="Blinkers" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze"  
                                SelectedValue="{Binding presenzaBlinkers, Mode=TwoWay}" Name="ComboBlk"  Margin="40,0,0,0" 
@@ -308,7 +338,7 @@
                 </StackPanel>
 
                 <!--Passo con fix-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="Passo con fix" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze"  
                                SelectedValue="{Binding passoFix, Mode=TwoWay}" Name="ComboPassoFix"  Margin="40,0,0,0" SelectionChanged="ComboPassoFix_SelectionChanged" >
@@ -317,35 +347,11 @@
                 </StackPanel>
 
                 <!--Passo senza fix-->
-                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top" >
+                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top" >
                     <Label  Content="Passo" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="PassoSenzaFix"   
                              Margin="40,0,0,0"  md:HintAssist.Hint="[mm]" TextChanged="PassoSenzaFix_TextChanged"
                              Text="{Binding passonoFix, Mode=TwoWay}"></TextBox>
-                </StackPanel>
-
-                <!--Trattamento tazze-->
-                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label  Content="Trattamento" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox HorizontalAlignment="Left" ToolTip="Imposta la qualità del materiale" Name="ComboQualityTazze"  
-                              SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoTazza, Mode=TwoWay}" 
-                              SelectionChanged="ComboQualityTazze_SelectionChanged" >
-                        <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
-                        <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
-                        <ComboBoxItem >HR 130</ComboBoxItem>
-                        <ComboBoxItem >HR 150</ComboBoxItem>
-                        <ComboBoxItem >OR Oil Resistant</ComboBoxItem>
-                        <ComboBoxItem >FRK Self-Extinguish</ComboBoxItem>
-                        <ComboBoxItem >ORK Oil Res. and Self-Ext.</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-
-                <!--Spazio tazze file multiple-->
-                <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top" >
-                    <Label  Content="Spazio tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="SpazioTazzeFileMultiple"   
-                             Margin="40,0,0,0"  md:HintAssist.Hint="[mm]"
-                             Text="{Binding spazioTazzeFileMultiple, Mode=TwoWay}" TextChanged="SpazioTazzeFileMultiple_TextChanged"></TextBox>
                 </StackPanel>
             </Grid>
         </StackPanel>
@@ -420,34 +426,6 @@
                         <ComboBoxItem >ORK Oil Res. and Self-Ext.</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
-
-                <StackPanel Margin="36,20,0,0"   Orientation="Vertical" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center">
-                    <TextBlock FontSize="20" >
-                        Tazze
-                    </TextBlock>
-                </StackPanel>
-
-                <!--Forma tazze-->
-                <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label Name="labelFormaTazze" Content="Forma tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" 
-                               Name="ComboFormaTazze"  Margin="40,0,0,0" SelectionChanged="ComboFormaTazze_SelectionChanged"
-                               SelectedValue="{Binding formaTazza, Mode=TwoWay}">
-                        <ComboBoxItem>TC</ComboBoxItem>
-                        <ComboBoxItem>T</ComboBoxItem>
-                        <ComboBoxItem>TB</ComboBoxItem>
-                        <ComboBoxItem>C</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-
-                <!--Altezza tazze-->
-                <StackPanel Orientation="Vertical"  Grid.Row="3" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top">
-                    <Label Name="labelAltTazze" Content="Altezza tazze" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" md:HintAssist.Hint="[mm]" 
-                               SelectedValue="{Binding altezzaTazza, Mode=TwoWay}"
-                               Name="ComboAltezzaTazze"  Margin="40,0,0,0" SelectionChanged="ComboAltezzaTazze_SelectionChanged"  >
-                    </ComboBox>
-                </StackPanel>
             </Grid>
         </StackPanel>
 
@@ -455,31 +433,72 @@
         <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6" Orientation="Vertical">
             <Border Margin="0,0,0,0" BorderThickness="0.5" BorderBrush="LightGray" VerticalAlignment="Center"/>
         </StackPanel>
-        
-        <!--Conferma input-->
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="4" Grid.Row="8" Margin="0,20,0,0">
-            <Button   Name="Calcola" Margin="0,0,0,0" Width="80"  Height="80" VerticalAlignment="Bottom" 
-                     Background="#F6F6F6" HorizontalAlignment="Right" Click="Calcola_Click_1"  >
-            <StackPanel Orientation="Vertical">
-                <md:PackIcon Kind="NavigateNext" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock FontSize="16" Text="Avanti" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
-                            TextWrapping="Wrap" TextAlignment="Center" />
-            </StackPanel>
-        </Button>
-        </StackPanel>
 
-        <!--Genera distinta base-->
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="8" Margin="0,20,0,0">
-            <Button   Name="DiBa" Margin="0,0,0,0" Width="80"  Height="80" VerticalAlignment="Bottom" 
-                     Background="#F6F6F6" HorizontalAlignment="Right" Click="DiBa_Click"  >
-                <StackPanel Orientation="Vertical">
-                    <md:PackIcon Kind="Tick" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock FontSize="16" Text="DiBa" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
-                            TextWrapping="Wrap" TextAlignment="Center" />
+        <!--Pannello finale-->
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="4" VerticalAlignment="Center" x:Name="StackConferma">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.4*"/>
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                
+                <!--Conferma input-->
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="5" Grid.Row="8" Margin="0,20,0,0">
+                    <Button   Name="Calcola" Margin="0,0,0,0" Width="80"  Height="80" VerticalAlignment="Bottom" 
+                         Background="#F6F6F6" HorizontalAlignment="Right" Click="Calcola_Click_1"  >
+                        <StackPanel Orientation="Vertical">
+                            <md:PackIcon Kind="NavigateNext" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock FontSize="16" Text="Avanti" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
+                                TextWrapping="Wrap" TextAlignment="Center" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
-            </Button>
-        </StackPanel>
 
+                <!--Tele tazze-->
+                <StackPanel Orientation="Vertical"  Grid.Row="8" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label Name="labelTeleTazze" Content="Tazze telate" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+                    <ComboBox  HorizontalAlignment="Left"  ToolTip="Imposta altezza delle tazze" SelectedValuePath="Content" 
+                                   Name="ComboTeleTazze"  Margin="15,0,0,0" 
+                                   SelectedValue="{Binding tazzeTelate, Mode=TwoWay}" SelectionChanged="ComboTeleTazze_SelectionChanged">
+                        <ComboBoxItem>Si</ComboBoxItem>
+                        <ComboBoxItem>No</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <!--Spazio tazze file multiple-->
+                <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top" >
+                    <Label  Content="Spazio tazze" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="SpazioTazzeFileMultiple"   
+                                 Margin="40,0,0,0"  md:HintAssist.Hint="[mm]"
+                                 Text="{Binding spazioTazzeFileMultiple, Mode=TwoWay}" TextChanged="SpazioTazzeFileMultiple_TextChanged"></TextBox>
+                </StackPanel>
+
+                <!--Trattamento tazze-->
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
+                    <Label  Content="Trattamento" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" ToolTip="Imposta la qualità del materiale" Name="ComboQualityTazze"  
+                              SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoTazza, Mode=TwoWay}" 
+                              SelectionChanged="ComboQualityTazze_SelectionChanged" >
+                        <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
+                        <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
+                        <ComboBoxItem >HR 130</ComboBoxItem>
+                        <ComboBoxItem >HR 150</ComboBoxItem>
+                        <ComboBoxItem >OR Oil Resistant</ComboBoxItem>
+                        <ComboBoxItem >FRK Self-Extinguish</ComboBoxItem>
+                        <ComboBoxItem >ORK Oil Res. and Self-Ext.</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
     </Grid>
 
 

@@ -618,7 +618,7 @@ namespace BeltsPack.Views
                     prodotto.TrattamentoNastro = dataRow["TrattamentoNastro"].ToString();
                     prodotto.TrattamentoBordo = dataRow["TrattamentoBordo"].ToString();
                     prodotto.TrattamentoTazze = dataRow["TrattamentoTazze"].ToString();
-
+                    prodotto.TazzeTelate = dataRow["TazzeTelate"].ToString();
 
                     // Inizializza il risultato del dialog
                     ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Sei sicuro di voler copiare l'imballo della commessa " + codice + " ?", ConfirmDialog.ButtonConf.YES_NO);

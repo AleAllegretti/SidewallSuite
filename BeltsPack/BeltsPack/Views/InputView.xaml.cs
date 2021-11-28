@@ -18,11 +18,13 @@ namespace BeltsPack.Views
     /// </summary>
     public partial class InputView : Page
     {
+        List<string> Clienti = new List<string>();
         Nastro nastro = new Nastro();
         Prodotto prodotto = new Prodotto();
         Bordo bordo = new Bordo();
         Tazza tazza = new Tazza();
         CassaInFerro cassaInFerro = new CassaInFerro();
+        public string tazzeTelate { get; set; }
         public string trattamentoNastro { get; set; }
         public string trattamentoBordo { get; set; }
         public string trattamentoTazza { get; set; }
@@ -65,7 +67,8 @@ namespace BeltsPack.Views
             this.trattamentoBordo = this.prodotto.TrattamentoBordo;
             this.trattamentoTazza = this.prodotto.TrattamentoTazze;
             this.ntazzeXFila = this.prodotto.NumeroTazzexFila;
-            this.spazioTazzeFileMultiple = prodotto.SpazioFile;
+            this.spazioTazzeFileMultiple = this.prodotto.SpazioFile;
+            this.tazzeTelate = this.prodotto.TazzeTelate;
 
             // Riempio il menù a tendina dell'altezza dei bordi
             this.ComboAltezzaBordi.ItemsSource = this.bordo.ListaAltezzeBordi().ToArray();
@@ -93,6 +96,9 @@ namespace BeltsPack.Views
             {
                 this.passonoFix = this.prodotto.PassoTazze;
             }
+
+            // Riempio il mneù dei clineti
+           ComboClienti.ItemsSource = this.prodotto.ListaClienti().ToArray();
 
             // Abilito il data binding
             this.DataContext = this;
@@ -254,7 +260,7 @@ namespace BeltsPack.Views
         {
             // Controllo se ci sono aggiornamenti
             this.CheckForUpdates();
-            prodotto.Cliente = this.TBNomeCliente.Text;
+            //prodotto.Cliente = this.TBNomeCliente.Text;
 
             // Primo input per velocizzare il processo
             bool rootcreated = false;
@@ -266,7 +272,7 @@ namespace BeltsPack.Views
                 if (File.Exists(root) == false)
                 {
                     // pulisco il campo
-                    this.TBNomeCliente.Text = "";
+                    //this.TBNomeCliente.Text = "";
 
                     // Creo la directory
                     Directory.CreateDirectory(@"C:\ASquared");
@@ -444,6 +450,8 @@ namespace BeltsPack.Views
                 this.nastro.SetCaratterisitche();
                 // Calcolo il peso del nastro base
                 this.nastro.SetPeso();
+                // Determino i dettagli del cliente
+                this.prodotto.SetDettagliCliente();
 
                 if (this.prodotto.Tipologia == "Solo tazze" | this.prodotto.Tipologia == "Bordi e tazze")
                 {
@@ -635,11 +643,6 @@ namespace BeltsPack.Views
             this.nastro.SetTrattamentoSigla(this.nastro.Trattamento);
         }
 
-        private void DiBa_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void ComboQualityBordo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Assegno il trattamento del nastro
@@ -681,6 +684,26 @@ namespace BeltsPack.Views
 
             // Determino la sigla del trattamento
             this.tazza.SetTrattamentoSigla(this.tazza.Trattamento);
+        }
+
+        private void ComboTeleTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.tazza.Telata = this.tazzeTelate;
+
+            // Stabilisco la sigla delle tele
+            if(this.tazza.Telata == "Si")
+            {
+                this.tazza.SiglaTele = "HBF";
+            }
+            else
+            {
+                this.tazza.SiglaTele = "HBL";
+            }
+        }
+
+        private void ComboClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.prodotto.Cliente = this.cliente;
         }
     }
 }

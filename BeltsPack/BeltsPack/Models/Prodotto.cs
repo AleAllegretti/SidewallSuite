@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BeltsPack.Utils;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -59,6 +61,20 @@ namespace BeltsPack.Models
 	}
     public class Prodotto
     {
+		// Codice commissioni
+		public string CodiceCommissioni { get; set; }
+		// Descrizione commissioni
+		public string DescrizioneCommissioni { get; set; }
+		// Quantita commissioni
+		public string QuantitaCommissioni { get; set; }
+		// UM commissioni
+		public string UMCommissioni { get; set; }
+		// Nome agente
+		public string NomeAgente { get; set; }
+		// Commissioni agente
+		public string CommissioniAgente { get; set; }
+		// Tazze telate
+		public string TazzeTelate { get; set; }
 		// Numero tazze per fila
 		public int NumeroTazzexFila { get; set; }
 		// Spazio tra file di tazze
@@ -69,6 +85,10 @@ namespace BeltsPack.Models
 		public string TrattamentoBordo { get; set; }
 		// Trattamento tazze
 		public string TrattamentoTazze { get; set; }
+		// Modalità di trasporto (DAP, DDP ecc...)
+		public string TipoConsegna { get; set; }
+		// Destinazione
+		public string Destinazione { get; set; }
 		// Codice Trasporto
 		public string CodiceTrasporto { get; set; }
 		// Descrizione Trasporto
@@ -167,6 +187,50 @@ namespace BeltsPack.Models
 		public void SetPesoTotale(double pesoNastro, double pesoTazze, double pesoBordi)
 		{
 			this.PesoTotaleNastro = Math.Round(pesoNastro + pesoTazze + pesoBordi,1);
+		}
+		public List<string> ListaClienti()
+		{
+			List<string> Clienti = new List<string>();
+
+			// Crea il wrapper del database
+			DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+			dbSQL.OpenConnection();
+
+			// Crea il comando SQL
+			SqlDataReader reader;
+			SqlCommand creaComando = dbSQL.CreateClientiCommand();
+			reader = creaComando.ExecuteReader();
+			while (reader.Read())
+			{
+				var temp = reader.GetValue(reader.GetOrdinal("Descrizione"));
+				if (temp.ToString() != null)
+				{
+					Clienti.Add(reader.GetValue(reader.GetOrdinal("Descrizione")).ToString());
+				}
+			}
+
+			return Clienti;
+		}
+
+		public void SetDettagliCliente()
+        {
+			// Crea il wrapper del database
+			DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+			dbSQL.OpenConnection();
+
+			// Crea il comando SQL
+			SqlDataReader reader;
+			SqlCommand creaComando = dbSQL.ClienteSearchCommand(this.Cliente);
+			reader = creaComando.ExecuteReader();
+			while (reader.Read())
+			{
+				this.NomeAgente = reader.GetValue(reader.GetOrdinal("Agente_Descrizione")).ToString();
+				this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
+				this.TipoConsegna = reader.GetValue(reader.GetOrdinal("Cd_DOPorto")).ToString();
+				this.Destinazione = reader.GetValue(reader.GetOrdinal("Localita")).ToString();
+
+				break;
+			}
 		}
 	}
 }

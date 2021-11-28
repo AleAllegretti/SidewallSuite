@@ -54,7 +54,6 @@ namespace BeltsPack.Views
             // Configurazione più conveniente
             this.configurazioneconveniente = "N° configurazione più ottimizzata: " + this._imballi.NumeroConfigurazione[this._cassaInFerro.IndiceConfConveniente];
 
-
             // Inizializza la schermata
             InitializeComponent();
 
@@ -323,7 +322,7 @@ namespace BeltsPack.Views
             if (confirmed.ToString() == "Yes")
             {
                 // Creo la classe distinta
-                DiBa distinta = new DiBa(this._nastro, this._bordo, this._tazza, this._prodotto);
+                DiBa distinta = new DiBa(this._nastro, this._bordo, this._tazza, this._prodotto, this._cassaInFerro, NumeroConfigurazione, this._imballi);
 
                 // Larghezza utile
                 this._nastro.SetLarghezzautile(this._bordo.Larghezza, this._prodotto.PistaLaterale);
@@ -392,6 +391,12 @@ namespace BeltsPack.Views
                 {
                     // Codice giunzione
                     distinta.SearchCodGiunzione("GIU-OFF");
+                }
+                
+                // Commissioni
+                if (this._prodotto.NomeAgente != "")
+                {
+                    distinta.SearchCodCommissioni(this._prodotto.NomeAgente, "SPESE EXTRA");
                 }
 
                 // Prodotto finito

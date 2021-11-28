@@ -22,6 +22,14 @@ namespace BeltsPack.Models
     }
     public class Nastro
     {
+        // Spessore superiore
+        public int SpessoreSup { get; set; }
+        // Spessore inferiore
+        public int SpessoreInf { get; set; }
+        // Numero tele
+        public int NumTele { get; set; }
+        // Numero tessuti
+        public int NumTessuti { get; set; }
         // Codice Giunzione
         public string CodiceGiunzione { get; set; }
         // Descrizione Giunzione
@@ -115,6 +123,11 @@ namespace BeltsPack.Models
                 if (temp.ToString() == this.Tipo & Convert.ToInt32(temp1.ToString()) == this.Classe)
                 {
                     this.Peso = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMQ")));
+                    this.SpessoreSup = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreSup")));
+                    this.SpessoreInf = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreInf")));
+                    this.NumTele = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTele")));
+                    this.NumTessuti = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTessuti")));
+
                     break;
                 }
             }
