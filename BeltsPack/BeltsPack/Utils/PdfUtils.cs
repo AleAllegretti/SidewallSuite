@@ -15,6 +15,7 @@ using Syncfusion.XlsIO;
 using System.Windows.Forms.VisualStyles;
 using System.Data.SqlClient;
 using BeltsPack.ViewModels;
+using System.Windows;
 
 namespace BeltsPack.Utils
 {
@@ -119,8 +120,9 @@ namespace BeltsPack.Utils
             }
         }
 
-        public string FillSchedaTDS(Prodotto prodotto, string path, Nastro nastro)
+        public string FillSchedaTDS(Prodotto prodotto, string path, Nastro nastro, Bordo bordo)
         {
+
             // Carica il template
             string pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE_TC;
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
@@ -163,7 +165,11 @@ namespace BeltsPack.Utils
             RubberQualityField.Text = nastro.Trattamento;
             CleatsHeightField.Text = prodotto.AltezzaTazze.ToString();
             PitchField.Text = prodotto.PassoTazze.ToString();
-            if (nastro.SiglaTrattamento == "OR")
+            MinDiamPulleyField.Text = bordo.MinPulleyDiam.ToString();
+            MinDiamWheelField.Text = bordo.MinWheelDiam.ToString();
+            OperationalTemperatureField.Text = nastro.RangeTemperatura;
+
+            if (nastro.SiglaTrattamento == "OR" || nastro.SiglaTrattamento == "ORK")
             {
                 OilPresenceCombo.Value = "Scelta2";
             }
@@ -198,17 +204,24 @@ namespace BeltsPack.Utils
             {
                 BlkPresenceCombo.SelectedValue = "Scelta4";
             }
-
-            // Impostazioni del saving dialog
-            string FileName;
-            // Nome del file
-            FileName = "TDS" + "_" + prodotto.Cliente + "_" + prodotto.Codice + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".pdf";
-            // Rende il documento read-only
-            loadedDocument.Form.Flatten = false;
-            // Salva il file
-            loadedDocument.Save(path + "\\" + FileName);
-            // Output
-            return path + "\\" + FileName;
+            try
+            {
+                // Impostazioni del saving dialog
+                string FileName;
+                // Nome del file
+                FileName = "TDS" + "_" + prodotto.Cliente + "_" + prodotto.Codice + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".pdf";
+                // Rende il documento read-only
+                loadedDocument.Form.Flatten = false;
+                // Salva il file
+                loadedDocument.Save(path + "\\" + FileName);
+                // Output
+                return path + "\\" + FileName;
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione della TDS.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return "";
+            }
         }
         public string FillSchedaPaladini(ProdottoSelezionato prodottoSelezionato, string selectedPath)
         {

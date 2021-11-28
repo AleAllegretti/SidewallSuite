@@ -21,6 +21,10 @@ namespace BeltsPack.Models
     }
     public class Bordo
     {
+        // Min pulley diam
+        public int MinPulleyDiam { get; set; }
+        // Min wheel diam
+        public int MinWheelDiam { get; set; }
         // Codice Applicazione Blk
         public string CodiceApplicazionexBlk { get; set; }
         // Descrizione Applicazione Blk
@@ -133,6 +137,8 @@ namespace BeltsPack.Models
                 {
                     this.Peso = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Peso")));
                     this.PassoOnda = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("PassoOnda")));
+                    this.MinPulleyDiam = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("MinPulleyDiam")));
+                    this.MinWheelDiam = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("MinWheelDiam")));
                     break;
                 }
             }

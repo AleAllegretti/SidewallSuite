@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -801,7 +802,7 @@ namespace BeltsPack.Utils
             }
 
             // Creo la TDS
-            this.PdfUtils.FillSchedaTDS(this._prodotto, path, this._nastro);
+            this.PdfUtils.FillSchedaTDS(this._prodotto, path, this._nastro, this._bordo);
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)
@@ -825,7 +826,9 @@ namespace BeltsPack.Utils
                 ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il CSV è stato creato sul Desktop, ma i seguenti codici non sono stati trovati:" + "\n" +
                     codiciMancanti, ConfirmDialog.ButtonConf.OK_ONLY);
             }
-            
+
+            // Apro la directory per visualizzare i file
+            Process.Start(path);
         }
         public void createTXTNastro(string path)
         {

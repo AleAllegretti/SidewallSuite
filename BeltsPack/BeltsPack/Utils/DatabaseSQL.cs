@@ -373,7 +373,7 @@ namespace BeltsPack.Utils
 
         public SqlCommand CreateSettingBordiCommand()
         {
-            return this.CreateCommand("SELECT ID,Altezza,LarghezzaBase,PassoOnda,Peso,DataUltimoAggiornamento FROM " + TABELLA_BORDI);
+            return this.CreateCommand("SELECT ID,Altezza,LarghezzaBase,PassoOnda,Peso,DiametroCorrugato,DiametroPolistirolo,MinPulleyDiam,MinWheelDiam,DataUltimoAggiornamento FROM " + TABELLA_BORDI + " ORDER BY Altezza ASC");
         }
         public SqlCommand CreateClientiCommand()
         {

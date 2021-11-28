@@ -22,6 +22,8 @@ namespace BeltsPack.Models
     }
     public class Nastro
     {
+        // Range temperatura
+        public string RangeTemperatura { get; set; }
         // Spessore superiore
         public int SpessoreSup { get; set; }
         // Spessore inferiore
@@ -150,6 +152,22 @@ namespace BeltsPack.Models
 
             // Determino la sigla del trattamento
             this.SiglaTrattamento = siglaTrattamento[key];
+
+            this.SetTemperatureRange(key);
+        }
+        public void SetTemperatureRange(string key)
+        {
+            IDictionary<string, string> tempTrattamento = new Dictionary<string, string>();
+            tempTrattamento.Add("AY Abrasion Resistant", "-20° ÷  60°"); //adding a key/value using the Add() method
+            tempTrattamento.Add("AW Extra Abr. Resistant", "-50° ÷  60°");
+            tempTrattamento.Add("HR 130", "Up to 130°");
+            tempTrattamento.Add("HR 150", "Up to 150°");
+            tempTrattamento.Add("OR Oil Resistant", "-20° ÷  60°");
+            tempTrattamento.Add("FRK Self-Extinguish", "-20° ÷  60°");
+            tempTrattamento.Add("ORK Oil Res. and Self-Ext.", "-20° ÷  60°");
+
+            // Determino la sigla del trattamento
+            this.RangeTemperatura = tempTrattamento[key];
         }
     }
 
