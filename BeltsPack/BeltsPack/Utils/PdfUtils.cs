@@ -152,25 +152,36 @@ namespace BeltsPack.Utils
             i++;
             PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
             i++;
-            PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
+            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo bordi")
+            {
+                PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+                SidewallWidthField.Text = bordo.Larghezza.ToString();
+                i++;
+            }
             PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField SidewallHeightField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
             i++;
             if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo tazze")
             {
                 PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-                CleatsHeightField.Text = tazza.Altezza.ToString();
+                CleatsHeightField.Text = tazza.SiglaTele + "-" + tazza.Forma + tazza.Altezza.ToString() + " " + tazza.SiglaTele;
                 i++;
+            }
+                PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo bordi")
+            {
+                PdfLoadedTextBoxField SidewallHeightField =  loadedForm.Fields[i] as PdfLoadedTextBoxField;
+                SidewallHeightField.Text = bordo.SiglaTele + "-" + bordo.Altezza.ToString();
+                i++;
+            }
+            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo tazze")
+            {
                 PdfLoadedTextBoxField PitchField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
                 PitchField.Text = tazza.Passo.ToString();
                 i++;
-            }          
+            }
+            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;                     
             PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
             i++;
             PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
@@ -221,10 +232,9 @@ namespace BeltsPack.Utils
             WidthField.Text = nastro.Larghezza.ToString();
             LengthField.Text = nastro.Lunghezza.ToString();
             FreeLatSpaceField.Text = prodotto.PistaLaterale.ToString();
-            SidewallWidthField.Text = bordo.Larghezza.ToString();
             UsefulWidthField.Text = nastro.LarghezzaUtile.ToString();
-            BaseBeltField.Text = nastro.Tipo;
-            SidewallHeightField.Text = bordo.Altezza.ToString();
+            BaseBeltField.Text = nastro.Tipo + " " + nastro.Classe + "/" + nastro.NumTessuti + "+" +
+                        nastro.NumTele + " " + nastro.SpessoreSup + "+" + nastro.SpessoreInf;
             RubberQualityField.Text = nastro.Trattamento;
             
             

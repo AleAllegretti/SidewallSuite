@@ -166,6 +166,8 @@ namespace BeltsPack.Views
                 this.ComboBaseBordi.SelectedItem = null;
                 this.bordo.Altezza = 0;
                 this.ComboQualityBordo.SelectedItem = null;
+                this.ComboQualityBordo.IsEnabled = false;
+                this.ComboQualityTazze.IsEnabled = true;
             }
             else if (prodotto.Tipologia == "Solo bordi")
             {
@@ -178,6 +180,8 @@ namespace BeltsPack.Views
                 this.tazza.Altezza = 0;
                 this.ComboTeleTazze.SelectedItem = null;
                 this.ComboQualityTazze.SelectedItem = null;
+                this.ComboQualityTazze.IsEnabled = false;
+                this.ComboQualityBordo.IsEnabled = true;
             }
             else if (prodotto.Tipologia == "Bordi e tazze")
             {
@@ -188,6 +192,8 @@ namespace BeltsPack.Views
                 this.ComboBlk.IsEnabled = true;
                 this.ComboPassoFix.IsEnabled = true;
                 this.ComboBaseBordi.IsEnabled = true;
+                this.ComboQualityBordo.IsEnabled = true;
+                this.ComboQualityTazze.IsEnabled = true;
             }
         }
 

@@ -21,6 +21,8 @@ namespace BeltsPack.Models
     }
     public class Bordo
     {
+        // Sigla tele
+        public string SiglaTele { get; set; }
         // Codice Giunzione
         public string CodiceGiunzione { get; set; }
         // Descrizione Giunzione
@@ -147,6 +149,7 @@ namespace BeltsPack.Models
                     this.PassoOnda = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("PassoOnda")));
                     this.MinPulleyDiam = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("MinPulleyDiam")));
                     this.MinWheelDiam = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("MinWheelDiam")));
+                    this.SiglaTele = "HEF";
                     break;
                 }
             }
