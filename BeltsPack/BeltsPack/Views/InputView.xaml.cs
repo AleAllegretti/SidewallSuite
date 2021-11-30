@@ -165,6 +165,7 @@ namespace BeltsPack.Views
                 this.ComboAltezzaBordi.SelectedItem = null;
                 this.ComboBaseBordi.SelectedItem = null;
                 this.bordo.Altezza = 0;
+                this.ComboQualityBordo.SelectedItem = null;
             }
             else if (prodotto.Tipologia == "Solo bordi")
             {
@@ -175,6 +176,8 @@ namespace BeltsPack.Views
                 this.ComboAltezzaTazze.SelectedItem = null;
                 this.ComboFormaTazze.SelectedItem = null;
                 this.tazza.Altezza = 0;
+                this.ComboTeleTazze.SelectedItem = null;
+                this.ComboQualityTazze.SelectedItem = null;
             }
             else if (prodotto.Tipologia == "Bordi e tazze")
             {
@@ -482,17 +485,28 @@ namespace BeltsPack.Views
         private void ComboFormaTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Assegno la forma delle tazze
-            this.tazza.Forma = this.ComboFormaTazze.SelectedValue.ToString();
-
-            // Riempio il combo con tutte le altezze disponibili in base a quella tazza
-            this.ComboAltezzaTazze.ItemsSource = this.ListaAltezzeTazze().ToArray();
-
-            // Tazze a forma di C non fix e blinkers
-            if(this.tazza.Forma == "C")
+            try
             {
-                this.ComboBlk.IsEnabled = false;
-                this.ComboFix.IsEnabled = false;
-                this.ComboPassoFix.IsEnabled = false;
+                if (this.ComboFormaTazze.SelectedValue != null)
+                {
+                    this.tazza.Forma = this.ComboFormaTazze.SelectedValue.ToString();
+
+                    // Riempio il combo con tutte le altezze disponibili in base a quella tazza
+                    this.ComboAltezzaTazze.ItemsSource = this.ListaAltezzeTazze().ToArray();
+
+                    // Tazze a forma di C non fix e blinkers
+                    if (this.tazza.Forma == "C")
+                    {
+                        this.ComboBlk.IsEnabled = false;
+                        this.ComboFix.IsEnabled = false;
+                        this.ComboPassoFix.IsEnabled = false;
+                    }
+                }
+                
+            }            
+            catch
+            {
+                return;
             }
         }
         public List<int> ListaAltezzeTazze()
@@ -636,20 +650,28 @@ namespace BeltsPack.Views
 
         private void ComboQuality_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Assegno il trattamento del nastro
-            this.nastro.Trattamento = this.ComboQuality.SelectedValue.ToString();
+            if (this.ComboQuality.SelectedValue != null)
+            {
+                // Assegno il trattamento del nastro
+                this.nastro.Trattamento = this.ComboQuality.SelectedValue.ToString();
 
-            // Determino la sigla del trattamento
-            this.nastro.SetTrattamentoSigla(this.nastro.Trattamento);
+                // Determino la sigla del trattamento
+                this.nastro.SetTrattamentoSigla(this.nastro.Trattamento);
+            }
+            
         }
 
         private void ComboQualityBordo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Assegno il trattamento del nastro
-            this.bordo.Trattamento = this.ComboQualityBordo.SelectedValue.ToString();
+            if (this.ComboQualityBordo.SelectedValue !=null)
+            {
+                // Assegno il trattamento del nastro
+                this.bordo.Trattamento = this.ComboQualityBordo.SelectedValue.ToString();
 
-            // Determino la sigla del trattamento
-            this.bordo.SetTrattamentoSigla(this.bordo.Trattamento);
+                // Determino la sigla del trattamento
+                this.bordo.SetTrattamentoSigla(this.bordo.Trattamento);
+            }
+            
         }
 
         private void TipologiaTrasporto_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -680,10 +702,14 @@ namespace BeltsPack.Views
         private void ComboQualityTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Assegno il trattamento del nastro
-            this.tazza.Trattamento = this.ComboQualityTazze.SelectedValue.ToString();
+            if (this.ComboQualityTazze.SelectedValue != null)
+            {
+                this.tazza.Trattamento = this.ComboQualityTazze.SelectedValue.ToString();
 
-            // Determino la sigla del trattamento
-            this.tazza.SetTrattamentoSigla(this.tazza.Trattamento);
+                // Determino la sigla del trattamento
+                this.tazza.SetTrattamentoSigla(this.tazza.Trattamento);
+            }
+            
         }
 
         private void ComboTeleTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -21,6 +21,14 @@ namespace BeltsPack.Models
     }
     public class Bordo
     {
+        // Codice Giunzione
+        public string CodiceGiunzione { get; set; }
+        // Descrizione Giunzione
+        public string DescrizioneGiunzione { get; set; }
+        // Quantita Giunzione
+        public string QuantitaGiunzione { get; set; }
+        // UM Giunzione
+        public string UMGiunzione { get; set; }
         // Min pulley diam
         public int MinPulleyDiam { get; set; }
         // Min wheel diam

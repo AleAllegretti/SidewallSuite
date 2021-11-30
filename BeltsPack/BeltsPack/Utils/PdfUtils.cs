@@ -21,6 +21,9 @@ namespace BeltsPack.Utils
         private static readonly string RESOURCE_NAME_SCHEDA_PALADINI = "Scheda_Tecnica_Paladini3.pdf";
         private static readonly string RESOURCE_NAME_SCHEDA_POSTPRODUZIONE = "Scheda_Tecnica_PostProduzione_Mod.pdf";
         private static readonly string RESOURCE_NAME_TDS_BORDI_E_TAZZE = "Sidewalls_Cleats_";
+        private static readonly string RESOURCE_NAME_TDS_BORDI = "Sidewalls.pdf";
+        private static readonly string RESOURCE_NAME_TDS_TAZZE = "Cleats_";
+
         public string SAVING_PATH;
         private static string GetFullPath(string localPdfName)
         {
@@ -118,54 +121,99 @@ namespace BeltsPack.Utils
         {
 
             // Carica il template
-            string pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+            string pdfTemplate = "";
+            if (prodotto.Tipologia == "Bordi e tazze")
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+            }
+            if (prodotto.Tipologia == "Solo bordi")
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI;
+            }
+            if (prodotto.Tipologia == "Solo tazze")
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + ".pdf";
+            }
+
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
             PdfLoadedForm loadedForm = loadedDocument.Form;
-            PdfLoadedTextBoxField ClienteField = loadedForm.Fields[0] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField CommessaField = loadedForm.Fields[1] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField MailField = loadedForm.Fields[2] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField WidthField = loadedForm.Fields[3] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField LengthField = loadedForm.Fields[4] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[5] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[6] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[7] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[8] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField SidewallHeightField = loadedForm.Fields[9] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[10] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[11] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField PitchField = loadedForm.Fields[12] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[13] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[14] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField OperationalTemperatureField = loadedForm.Fields[15] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField QuantityField = loadedForm.Fields[16] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField NotesField = loadedForm.Fields[17] as PdfLoadedTextBoxField;
-            PdfLoadedRadioButtonListField OilPresenceCombo = loadedForm.Fields[18] as PdfLoadedRadioButtonListField;
-            PdfLoadedRadioButtonListField EndlessClosedCombo = loadedForm.Fields[19] as PdfLoadedRadioButtonListField;
-            if (tazza.Forma == "TC" || tazza.Forma == "T")
+
+            // Contatore per il numero di campo
+            int i = 0;
+            PdfLoadedTextBoxField ClienteField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField CommessaField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField MailField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField WidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField LengthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField SidewallHeightField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo tazze")
             {
-                PdfLoadedRadioButtonListField FixPresenceCombo = loadedForm.Fields[20] as PdfLoadedRadioButtonListField;
-                if (prodotto.PresenzaFix == "Si")
+                PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+                CleatsHeightField.Text = tazza.Altezza.ToString();
+                i++;
+                PdfLoadedTextBoxField PitchField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+                PitchField.Text = tazza.Passo.ToString();
+                i++;
+            }          
+            PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField OperationalTemperatureField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField QuantityField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedTextBoxField NotesField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
+            i++;
+            PdfLoadedRadioButtonListField OilPresenceCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
+            i++;
+            PdfLoadedRadioButtonListField EndlessClosedCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
+            if (prodotto.Tipologia == "Bordi e tazze")
+            {
+                if (tazza.Forma == "TC" || tazza.Forma == "T")
                 {
-                    FixPresenceCombo.SelectedValue = "Scelta3";
+                    PdfLoadedRadioButtonListField FixPresenceCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
+                    i++;
+                    if (prodotto.PresenzaFix == "Si")
+                    {
+                        FixPresenceCombo.SelectedValue = "Scelta3";
+                    }
+                    else
+                    {
+                        FixPresenceCombo.SelectedValue = "Scelta1";
+                    }
                 }
-                else
+                if (tazza.Forma == "TC")
                 {
-                    FixPresenceCombo.SelectedValue = "Scelta1";
+                    PdfLoadedRadioButtonListField BlkPresenceCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
+                    i++;
+                    if (nastro.Aperto)
+                    {
+                        BlkPresenceCombo.SelectedValue = "Scelta1";
+                    }
+                    else
+                    {
+                        BlkPresenceCombo.SelectedValue = "Scelta4";
+                    }
                 }
             }
-            if (tazza.Forma == "TC")
-            {
-                PdfLoadedRadioButtonListField BlkPresenceCombo = loadedForm.Fields[21] as PdfLoadedRadioButtonListField;
-                if (nastro.Aperto)
-                {
-                    BlkPresenceCombo.SelectedValue = "Scelta1";
-                }
-                else
-                {
-                    BlkPresenceCombo.SelectedValue = "Scelta4";
-                }
-            }
-            
+
             // Riempie la scheda pdf
             ClienteField.Text = prodotto.Cliente;
             CommessaField.Text = prodotto.Codice;
@@ -178,8 +226,8 @@ namespace BeltsPack.Utils
             BaseBeltField.Text = nastro.Tipo;
             SidewallHeightField.Text = bordo.Altezza.ToString();
             RubberQualityField.Text = nastro.Trattamento;
-            CleatsHeightField.Text = tazza.Altezza.ToString();
-            PitchField.Text = tazza.Passo.ToString();
+            
+            
             MinDiamPulleyField.Text = bordo.MinPulleyDiam.ToString();
             MinDiamWheelField.Text = bordo.MinWheelDiam.ToString();
             OperationalTemperatureField.Text = nastro.RangeTemperatura;
@@ -187,11 +235,11 @@ namespace BeltsPack.Utils
 
             if (nastro.SiglaTrattamento == "OR" || nastro.SiglaTrattamento == "ORK")
             {
-                OilPresenceCombo.Value = "Scelta2";
+                OilPresenceCombo.SelectedValue = "Scelta2";
             }
             else
             {
-                OilPresenceCombo.Value = "Scelta1";
+                OilPresenceCombo.SelectedValue = "Scelta1";
             }
 
             if (nastro.Aperto)

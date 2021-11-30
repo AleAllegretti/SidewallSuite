@@ -389,6 +389,12 @@ namespace BeltsPack.Views
                 // Giunzione
                 if (this._nastro.Aperto == false)
                 {
+                    if (this._prodotto.Tipologia == "Solo bordi")
+                    {
+                        // Aggiungo la giunzione dei bordi
+                        distinta.SearchCodGiunzioneBordi("GIUNZIONEBORDI");
+                    }
+
                     // Codice giunzione
                     distinta.SearchCodGiunzione("GIU-OFF");
                 }

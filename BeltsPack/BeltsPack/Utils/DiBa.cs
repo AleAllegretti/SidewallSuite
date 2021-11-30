@@ -62,6 +62,7 @@ namespace BeltsPack.Utils
             mapCodici.Add(13, "Imballo");
             mapCodici.Add(14, "Trasporto");
             mapCodici.Add(15, "Commissioni");
+            mapCodici.Add(16, "Giunzione bordo");
 
         }
 
@@ -577,6 +578,28 @@ namespace BeltsPack.Utils
             // Controllo che il codice del nastro sia presente
             this.PresenzaCodice(this._prodotto.CodiceTrasporto, 14);
         }
+        public void SearchCodGiunzioneBordi(string codice)
+        {
+
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.GiunzioneSearchCommand(codice);
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                this._bordo.CodiceGiunzione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._bordo.DescrizioneGiunzione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
+                this._bordo.UMGiunzione = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+
+                break;
+            }
+            // Controllo che il codice del nastro sia presente
+            this.PresenzaCodice(this._bordo.CodiceGiunzione, 16);
+        }
         public static List<Nastro> GetNastri(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto)
         {
 
@@ -700,6 +723,16 @@ namespace BeltsPack.Utils
                     Codice = bordo.CodiceBlk,
                     Descrizione = bordo.DescrizioneBlk,
                     QuantitaDiba = tazza.Numero * 2,
+                    SpazioDiba1 = "",
+                    SpazioDiba2 = "",
+                    UM = bordo.UMBlk
+                },
+                  new Nastro // Giunzione bordi
+                {
+                    SpazioDiba = "",
+                    Codice = bordo.CodiceGiunzione,
+                    Descrizione = bordo.DescrizioneGiunzione,
+                    QuantitaDiba = 1,
                     SpazioDiba1 = "",
                     SpazioDiba2 = "",
                     UM = bordo.UMBlk
@@ -855,11 +888,20 @@ namespace BeltsPack.Utils
                 {
                     sw.WriteLine("Base Belt type: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
                         this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
-                    sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza);
-                    sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                    if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                    {
+                        sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza);
+                    }
+                    if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                    {
+                        sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                    }
                     sw.WriteLine("Belt width: " + this._nastro.Larghezza + " [mm]");
                     sw.WriteLine("Free Lateral Space: " + this._prodotto.PistaLaterale + " [mm]");
-                    sw.WriteLine("Cleats pitch: " + this._tazza.Passo + " [mm]");
+                    if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                    {
+                        sw.WriteLine("Cleats pitch: " + this._tazza.Passo + " [mm]");
+                    }
                     if (this._nastro.Aperto)
                     {
                         sw.WriteLine("Open belt length: " + this._nastro.Lunghezza + " [mm]");
