@@ -62,5 +62,6 @@ namespace BeltsPack.Views.Dialogs
         {
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
+
     }
 }

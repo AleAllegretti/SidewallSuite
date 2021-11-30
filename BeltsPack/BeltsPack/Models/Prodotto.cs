@@ -234,5 +234,13 @@ namespace BeltsPack.Models
 				break;
 			}
 		}
+		public class Fornitore
+        {
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+			public string ImageLocalPath { get; set; }
+            public int Height { get; set; }
+			public int Width { get; set; }
+		}
 	}
 }

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Syncfusion.Pdf.Parsing;
 using System.Windows.Forms;
 using System.IO;
@@ -11,11 +6,10 @@ using BeltsPack.Models;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using System.Drawing;
-using Syncfusion.XlsIO;
-using System.Windows.Forms.VisualStyles;
 using System.Data.SqlClient;
 using BeltsPack.ViewModels;
 using System.Windows;
+using static BeltsPack.Models.Prodotto;
 
 namespace BeltsPack.Utils
 {
@@ -26,7 +20,7 @@ namespace BeltsPack.Utils
         private static readonly string RESOURCE_NAME_SCHEDA_PRODUZIONE_LEGNO = "Scheda_Tecnica_Produzione_Legno_Mod.pdf";
         private static readonly string RESOURCE_NAME_SCHEDA_PALADINI = "Scheda_Tecnica_Paladini3.pdf";
         private static readonly string RESOURCE_NAME_SCHEDA_POSTPRODUZIONE = "Scheda_Tecnica_PostProduzione_Mod.pdf";
-        private static readonly string RESOURCE_NAME_TDS_BORDI_E_TAZZE_TC = "Sidewalls_Cleats_TC.pdf";
+        private static readonly string RESOURCE_NAME_TDS_BORDI_E_TAZZE = "Sidewalls_Cleats_";
         public string SAVING_PATH;
         private static string GetFullPath(string localPdfName)
         {
@@ -120,54 +114,76 @@ namespace BeltsPack.Utils
             }
         }
 
-        public string FillSchedaTDS(Prodotto prodotto, string path, Nastro nastro, Bordo bordo)
+        public string FillSchedaTDS(Prodotto prodotto, string path, Nastro nastro, Bordo bordo, Fornitore selectedLogo, Tazza tazza)
         {
 
             // Carica il template
-            string pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE_TC;
+            string pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
             PdfLoadedForm loadedForm = loadedDocument.Form;
             PdfLoadedTextBoxField ClienteField = loadedForm.Fields[0] as PdfLoadedTextBoxField;
             PdfLoadedTextBoxField CommessaField = loadedForm.Fields[1] as PdfLoadedTextBoxField;
             PdfLoadedTextBoxField MailField = loadedForm.Fields[2] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField DistributoreField = loadedForm.Fields[3] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField WidthField = loadedForm.Fields[4] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField LengthField = loadedForm.Fields[5] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[6] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[7] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[8] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[9] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField SidewallHeightField = loadedForm.Fields[10] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[11] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[12] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField PitchField = loadedForm.Fields[13] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[14] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[15] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField OperationalTemperatureField = loadedForm.Fields[16] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField QuantityField = loadedForm.Fields[17] as PdfLoadedTextBoxField;
-            PdfLoadedTextBoxField NotesField = loadedForm.Fields[18] as PdfLoadedTextBoxField;
-            PdfLoadedRadioButtonListField OilPresenceCombo = loadedForm.Fields[19] as PdfLoadedRadioButtonListField;
-            PdfLoadedRadioButtonListField EndlessClosedCombo = loadedForm.Fields[20] as PdfLoadedRadioButtonListField;
-            PdfLoadedRadioButtonListField FixPresenceCombo = loadedForm.Fields[21] as PdfLoadedRadioButtonListField;
-            PdfLoadedRadioButtonListField BlkPresenceCombo = loadedForm.Fields[22] as PdfLoadedRadioButtonListField;
-
+            PdfLoadedTextBoxField WidthField = loadedForm.Fields[3] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField LengthField = loadedForm.Fields[4] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[5] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[6] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[7] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[8] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField SidewallHeightField = loadedForm.Fields[9] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[10] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[11] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField PitchField = loadedForm.Fields[12] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[13] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[14] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField OperationalTemperatureField = loadedForm.Fields[15] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField QuantityField = loadedForm.Fields[16] as PdfLoadedTextBoxField;
+            PdfLoadedTextBoxField NotesField = loadedForm.Fields[17] as PdfLoadedTextBoxField;
+            PdfLoadedRadioButtonListField OilPresenceCombo = loadedForm.Fields[18] as PdfLoadedRadioButtonListField;
+            PdfLoadedRadioButtonListField EndlessClosedCombo = loadedForm.Fields[19] as PdfLoadedRadioButtonListField;
+            if (tazza.Forma == "TC" || tazza.Forma == "T")
+            {
+                PdfLoadedRadioButtonListField FixPresenceCombo = loadedForm.Fields[20] as PdfLoadedRadioButtonListField;
+                if (prodotto.PresenzaFix == "Si")
+                {
+                    FixPresenceCombo.SelectedValue = "Scelta3";
+                }
+                else
+                {
+                    FixPresenceCombo.SelectedValue = "Scelta1";
+                }
+            }
+            if (tazza.Forma == "TC")
+            {
+                PdfLoadedRadioButtonListField BlkPresenceCombo = loadedForm.Fields[21] as PdfLoadedRadioButtonListField;
+                if (nastro.Aperto)
+                {
+                    BlkPresenceCombo.SelectedValue = "Scelta1";
+                }
+                else
+                {
+                    BlkPresenceCombo.SelectedValue = "Scelta4";
+                }
+            }
+            
             // Riempie la scheda pdf
             ClienteField.Text = prodotto.Cliente;
             CommessaField.Text = prodotto.Codice;
             MailField.Text = prodotto.EmailCliente;
-            WidthField.Text = prodotto.LarghezzaNastro.ToString();
-            LengthField.Text = prodotto.LunghezzaNastro.ToString();
+            WidthField.Text = nastro.Larghezza.ToString();
+            LengthField.Text = nastro.Lunghezza.ToString();
             FreeLatSpaceField.Text = prodotto.PistaLaterale.ToString();
-            SidewallWidthField.Text = prodotto.LarghezzaBordo.ToString();
+            SidewallWidthField.Text = bordo.Larghezza.ToString();
             UsefulWidthField.Text = nastro.LarghezzaUtile.ToString();
             BaseBeltField.Text = nastro.Tipo;
-            SidewallHeightField.Text = prodotto.AltezzaBordo.ToString();
+            SidewallHeightField.Text = bordo.Altezza.ToString();
             RubberQualityField.Text = nastro.Trattamento;
-            CleatsHeightField.Text = prodotto.AltezzaTazze.ToString();
-            PitchField.Text = prodotto.PassoTazze.ToString();
+            CleatsHeightField.Text = tazza.Altezza.ToString();
+            PitchField.Text = tazza.Passo.ToString();
             MinDiamPulleyField.Text = bordo.MinPulleyDiam.ToString();
             MinDiamWheelField.Text = bordo.MinWheelDiam.ToString();
             OperationalTemperatureField.Text = nastro.RangeTemperatura;
+            NotesField.Text = "SIDEWALL AND CLEATS ARE HOT VULCANIZED.";
 
             if (nastro.SiglaTrattamento == "OR" || nastro.SiglaTrattamento == "ORK")
             {
@@ -187,23 +203,16 @@ namespace BeltsPack.Utils
                 EndlessClosedCombo.SelectedValue = "Scelta1";
             }
 
-            if (prodotto.PresenzaFix == "Si")
+            // Logo distributore
+            if (selectedLogo.ImageLocalPath.ToString() != "")
             {
-                FixPresenceCombo.SelectedValue = "Scelta3";
+                PdfLoadedPage page = loadedDocument.Pages[0] as PdfLoadedPage;
+                PdfGraphics graphics = page.Graphics;
+                PdfBitmap image = new PdfBitmap(selectedLogo.ImageLocalPath.ToString());
+                graphics.DrawImage(image, new PointF(360, 60), new SizeF(selectedLogo.Height, selectedLogo.Width));
             }
-            else
-            {
-                FixPresenceCombo.SelectedValue = "Scelta1";
-            }
+            
 
-            if (nastro.Aperto)
-            {
-                BlkPresenceCombo.SelectedValue = "Scelta1";
-            }
-            else
-            {
-                BlkPresenceCombo.SelectedValue = "Scelta4";
-            }
             try
             {
                 // Impostazioni del saving dialog

@@ -83,7 +83,8 @@
         
         <!--Bottoni-->
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button ToolTip="Annulla selezione" Name="AnnullaSelezione" Margin="40,30,40,20" Height="25" Width="120" Click="AnnullaSelezione_Click" >
+            <Button ToolTip="Annulla selezione" Name="AnnullaSelezione" Margin="40,30,40,20" 
+                    Height="25" Width="120" Click="AnnullaSelezione_Click" >
                 <TextBlock Text="Annulla" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,0,0" 
                                 TextWrapping="Wrap" TextAlignment="Center"/>
             </Button>

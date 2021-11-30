@@ -10,6 +10,8 @@ using BeltsPack.Models;
 using BeltsPack.Views.Dialogs;
 using CsvHelper;
 using CsvHelper.Configuration;
+using MaterialDesignThemes.Wpf;
+using static BeltsPack.Models.Prodotto;
 
 namespace BeltsPack.Utils
 {
@@ -801,8 +803,12 @@ namespace BeltsPack.Utils
                 this.createTXTTrasporto(path);
             }
 
+            // Faccio comparire il menù per la scelta del logo
+            List<Fornitore> fornitori = new List<Fornitore>();
+            var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
+
             // Creo la TDS
-            this.PdfUtils.FillSchedaTDS(this._prodotto, path, this._nastro, this._bordo);
+            this.PdfUtils.FillSchedaTDS(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)

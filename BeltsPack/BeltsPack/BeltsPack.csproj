@@ -258,6 +258,9 @@
     <Compile Include="Views\Dialogs\DialogSummary.xaml.cs">
       <DependentUpon>DialogSummary.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\LogoSelectionDialog.xaml.cs">
+      <DependentUpon>LogoSelectionDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\NastroNonCodDialog.xaml.cs">
       <DependentUpon>NastroNonCodDialog.xaml</DependentUpon>
     </Compile>
@@ -366,6 +369,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\DialogSummary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\LogoSelectionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -492,6 +499,16 @@
     <Content Include="Assets\Images\Imballo_bobina.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\Images\Logo_Rik.png" />
+    <Resource Include="Assets\Images\Logo_Bud.png" />
+    <Resource Include="Assets\Images\Logo_Bull.png" />
+    <Resource Include="Assets\Images\Logo_Centrobelt.png" />
+    <Resource Include="Assets\Images\Logo_Ersa.png" />
+    <Resource Include="Assets\Images\Logo_Lutze.png" />
+    <Resource Include="Assets\Images\Logo_Martial.png" />
+    <Resource Include="Assets\Images\Logo_MBS.png" />
+    <Resource Include="Assets\Images\Logo_Primogum.png" />
+    <Resource Include="Assets\Images\Logo_Rema.png" />
     <Content Include="Assets\Images\Logo_Sig.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
