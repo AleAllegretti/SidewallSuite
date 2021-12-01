@@ -11,6 +11,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
@@ -39,16 +41,36 @@
             </ListBox>
         </StackPanel>
 
-        <!--Bottoni-->
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button ToolTip="Nessun logo" Name="BtnNessunLogo" Margin="40,30,40,20" 
-                    Height="25" Width="120" Click="BtnNessunLogo_Click" >
-                <TextBlock Text="Nessun logo" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,0,0" 
-                                TextWrapping="Wrap" TextAlignment="Center"/>
-            </Button>
+        <!--Titolo-->
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"
+                Margin="0,20,0,20"
+                Text="Lingua note offerta" FontSize="18" FontWeight="DemiBold">
+        </TextBlock>
 
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Vertical" Margin="40,0,0,0">
+                <Image Source="/Assets/Images/Italian_Flag.png" Width="40" Height="40"></Image>
+                <RadioButton Name="Italian" HorizontalAlignment="Center" Margin="0,10,0,0" GroupName="Language" IsChecked="{Binding noteItalian, Mode=TwoWay}"></RadioButton>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="30,0,0,0">
+                <Image Source="/Assets/Images/English_Flag.png" Width="40" Height="40"></Image>
+                <RadioButton Name="English" HorizontalAlignment="Center" Margin="0,10,0,0" GroupName="Language" IsChecked="{Binding noteEnglish, Mode=TwoWay}"></RadioButton>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="30,0,0,0">
+                <Image Source="/Assets/Images/Spanish_Flag.png" Width="40" Height="40"></Image>
+                <RadioButton Name="Spanish" HorizontalAlignment="Center" Margin="0,10,0,0" GroupName="Language" IsChecked="{Binding noteSpanish, Mode=TwoWay}"></RadioButton>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="30,0,40,0">
+                <Image Source="/Assets/Images/German_Flag.png" Width="40" Height="40"></Image>
+                <RadioButton Name="German" HorizontalAlignment="Center" Margin="0,10,0,0" GroupName="Language" IsChecked="{Binding noteGerman, Mode=TwoWay}"></RadioButton>
+            </StackPanel>
+           
+        </StackPanel>
+        
+        <!--Bottoni-->
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Background="#40EE93" ToolTip="Conferma logo" Name="ConfermaLogo" 
-                    Margin="20,30,40,20" Height="25" Width="120" Click="ConfermaLogo_Click"  >
+                    Margin="20,50,40,20" Height="35" Width="120" Click="ConfermaLogo_Click"  >
                 <TextBlock Text="Conferma" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,0,0" 
                             TextWrapping="Wrap" TextAlignment="Center" />
             </Button>

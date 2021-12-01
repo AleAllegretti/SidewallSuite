@@ -487,6 +487,9 @@
     <Content Include="Assets\Images\Anonimo_Logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\Images\Empty_Logo.png" />
+    <Resource Include="Assets\Images\English_Flag.png" />
+    <Resource Include="Assets\Images\German_Flag.png" />
     <Content Include="Assets\Images\IconaBordo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -509,6 +512,7 @@
     <Resource Include="Assets\Images\Logo_MBS.png" />
     <Resource Include="Assets\Images\Logo_Primogum.png" />
     <Resource Include="Assets\Images\Logo_Rema.png" />
+    <Resource Include="Assets\Images\Italian_Flag.png" />
     <Content Include="Assets\Images\Logo_Sig.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -521,6 +525,7 @@
     <Content Include="Assets\Images\Parameters_Icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\Images\Spanish_Flag.png" />
     <Content Include="Assets\Pdf\SchedaTecnicaPaladini.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

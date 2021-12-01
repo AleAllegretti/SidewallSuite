@@ -274,7 +274,7 @@ namespace BeltsPack.Utils
             }
 
             // Logo distributore
-            if (selectedLogo != null)
+            if (selectedLogo.ImageLocalPath != "")
             {
                 PdfLoadedPage page = loadedDocument.Pages[0] as PdfLoadedPage;
                 PdfGraphics graphics = page.Graphics;
