@@ -163,7 +163,7 @@ namespace BeltsPack.Utils
             if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo tazze")
             {
                 PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-                CleatsHeightField.Text = tazza.SiglaTele + "-" + tazza.Forma + tazza.Altezza.ToString() + " " + tazza.SiglaTele;
+                CleatsHeightField.Text = tazza.SiglaTele + "-" + tazza.Forma + tazza.Altezza.ToString();
                 i++;
             }
                 PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
@@ -262,7 +262,7 @@ namespace BeltsPack.Utils
             }
 
             // Logo distributore
-            if (selectedLogo.ImageLocalPath.ToString() != "")
+            if (selectedLogo != null)
             {
                 PdfLoadedPage page = loadedDocument.Pages[0] as PdfLoadedPage;
                 PdfGraphics graphics = page.Graphics;

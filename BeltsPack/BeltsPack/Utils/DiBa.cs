@@ -53,7 +53,7 @@ namespace BeltsPack.Utils
             mapCodici.Add(4, "Attrezzaggio linea");
             mapCodici.Add(5, "Applicazione bordo");
             mapCodici.Add(6, "Applicazione tazze");
-            mapCodici.Add(7, "Preparazione bordo");
+            mapCodici.Add(7, "Preparazione nastro");
             mapCodici.Add(8, "Fix");
             mapCodici.Add(9, "Blinkers");
             mapCodici.Add(10, "Applicazione blinkers");
@@ -398,8 +398,15 @@ namespace BeltsPack.Utils
         }
         public void SearchCodPrepNastro(string sottogruppo,
                                    string famiglia,
-                                   int altezza)
+                                   int altezza,
+                                   string tipologia)
         {
+            // Se il nastro è solo tazze
+            string descrizione = "";
+            if (tipologia == "Solo tazze")
+            {
+                descrizione = "cleated";
+            }
 
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
@@ -407,7 +414,7 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.PreparazioneSearchCommand(altezza, famiglia, sottogruppo);
+            SqlCommand creaComando = dbSQL.PreparazioneSearchCommand(altezza, famiglia, sottogruppo, descrizione);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {

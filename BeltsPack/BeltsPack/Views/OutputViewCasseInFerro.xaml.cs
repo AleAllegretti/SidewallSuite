@@ -366,7 +366,7 @@ namespace BeltsPack.Views
                 if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
                 {
                     // Preparazione nastro
-                    distinta.SearchCodPrepNastro("NAS", "LAV", this._bordo.Altezza);
+                    distinta.SearchCodPrepNastro("NAS", "LAV", this._bordo.Altezza, this._prodotto.Tipologia);
                 }
                 if (this._prodotto.Tipologia == "Bordi e tazze")
                 {
