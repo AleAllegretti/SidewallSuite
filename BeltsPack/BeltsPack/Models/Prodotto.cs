@@ -61,6 +61,8 @@ namespace BeltsPack.Models
 	}
     public class Prodotto
     {
+		// Quantità
+		public int Qty { get; set; }
 		// Email cliente
 		public string EmailCliente { get; set; }
 		// Codice commissioni

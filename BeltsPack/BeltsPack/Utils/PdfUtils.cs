@@ -117,148 +117,160 @@ namespace BeltsPack.Utils
             }
         }
 
-        public string FillSchedaTDS(Prodotto prodotto, string path, Nastro nastro, Bordo bordo, Fornitore selectedLogo, Tazza tazza)
+        public string FillSchedaTDSSidewallsCleats(Prodotto prodotto, string path, Nastro nastro, Bordo bordo, Fornitore selectedLogo, Tazza tazza)
         {
 
             // Carica il template
             string pdfTemplate = "";
-            if (prodotto.Tipologia == "Bordi e tazze")
-            {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
-            }
-            if (prodotto.Tipologia == "Solo bordi")
-            {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI;
-            }
-            if (prodotto.Tipologia == "Solo tazze")
-            {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + ".pdf";
-            }
+            pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
             PdfLoadedForm loadedForm = loadedDocument.Form;
+            PdfLoadedFormFieldCollection fieldCollection = loadedForm.Fields as PdfLoadedFormFieldCollection;
+            PdfLoadedField loadedField = null;
 
-            // Contatore per il numero di campo
-            int i = 0;
-            PdfLoadedTextBoxField ClienteField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField CommessaField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField MailField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField WidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField LengthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField FreeLatSpaceField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo bordi")
+            // Cliente
+            if (fieldCollection.TryGetField("1", out loadedField))
             {
-                PdfLoadedTextBoxField SidewallWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-                SidewallWidthField.Text = bordo.Larghezza.ToString();
-                i++;
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.Cliente;
             }
-            PdfLoadedTextBoxField UsefulWidthField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo tazze")
+            // Commessa
+            if (fieldCollection.TryGetField("2", out loadedField))
             {
-                PdfLoadedTextBoxField CleatsHeightField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-                CleatsHeightField.Text = tazza.SiglaTele + "-" + tazza.Forma + tazza.Altezza.ToString();
-                i++;
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.Codice;
             }
-                PdfLoadedTextBoxField BaseBeltField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo bordi")
+            // Mail
+            if (fieldCollection.TryGetField("3", out loadedField))
             {
-                PdfLoadedTextBoxField SidewallHeightField =  loadedForm.Fields[i] as PdfLoadedTextBoxField;
-                SidewallHeightField.Text = bordo.SiglaTele + "-" + bordo.Altezza.ToString();
-                i++;
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.EmailCliente;
             }
-            if (prodotto.Tipologia == "Bordi e tazze" || prodotto.Tipologia == "Solo tazze")
+            // Larghezza
+            if (fieldCollection.TryGetField("4", out loadedField))
             {
-                PdfLoadedTextBoxField PitchField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-                PitchField.Text = tazza.Passo.ToString();
-                i++;
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Larghezza.ToString();
             }
-            PdfLoadedTextBoxField RubberQualityField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;                     
-            PdfLoadedTextBoxField MinDiamPulleyField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField MinDiamWheelField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField OperationalTemperatureField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField QuantityField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedTextBoxField NotesField = loadedForm.Fields[i] as PdfLoadedTextBoxField;
-            i++;
-            PdfLoadedRadioButtonListField OilPresenceCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
-            i++;
-            PdfLoadedRadioButtonListField EndlessClosedCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
-            if (prodotto.Tipologia == "Bordi e tazze")
+            // Lunghezza
+            if (fieldCollection.TryGetField("5", out loadedField))
             {
-                if (tazza.Forma == "TC" || tazza.Forma == "T")
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Lunghezza.ToString();
+            }
+            // Piste laterali
+            if (fieldCollection.TryGetField("6", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.PistaLaterale.ToString();
+            }
+            // Larghezza bordo
+            if (fieldCollection.TryGetField("7", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.Larghezza.ToString();
+            }
+            // Larghezza utile
+            if (fieldCollection.TryGetField("8", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.LarghezzaUtile.ToString();
+            }
+            // Altezza bordo
+            if (fieldCollection.TryGetField("9", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.SiglaTele + "-" + bordo.Altezza.ToString();
+            }
+            // Altezza tazze
+            if (fieldCollection.TryGetField("10", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = tazza.SiglaTele + "-" + tazza.Forma + tazza.Altezza.ToString();
+            }
+            // Nastro base
+            if (fieldCollection.TryGetField("11", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Tipo + " " + nastro.Classe + "/" + nastro.NumTessuti + "+" +
+                        nastro.NumTele + " " + nastro.SpessoreSup + "+" + nastro.SpessoreInf;
+            }
+            // Passo
+            if (fieldCollection.TryGetField("12", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = tazza.Passo.ToString();
+            }
+            // Qualità gomma
+            if (fieldCollection.TryGetField("13", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Trattamento;
+            }
+            // Min pulley diam
+            if (fieldCollection.TryGetField("14", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.MinPulleyDiam.ToString();
+            }
+            // Min wheel diam
+            if (fieldCollection.TryGetField("15", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.MinWheelDiam.ToString();
+            }
+            // Op. temperature
+            if (fieldCollection.TryGetField("16", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.RangeTemperatura;
+            }
+            // Quantity
+            if (fieldCollection.TryGetField("17", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.Qty.ToString();
+            }
+            // Notes
+            if (fieldCollection.TryGetField("18", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = "SIDEWALL AND CLEATS ARE HOT VULCANIZED.";
+            }
+            // Presenza olio
+            if (fieldCollection.TryGetField("19", out loadedField))
+            {
+                if (nastro.SiglaTrattamento == "OR" || nastro.SiglaTrattamento == "ORK")
                 {
-                    PdfLoadedRadioButtonListField FixPresenceCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
-                    i++;
+                    (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta2";
+                }
+                else
+                {
+                    (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta1";
+                }
+            }
+            // Aperto chiuso
+            if (fieldCollection.TryGetField("20", out loadedField))
+            {
+                if (nastro.Aperto)
+                {
+                    (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta2";
+                }
+                else
+                {
+                    (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta1";
+                }
+            }
+            // Fix
+            if (tazza.Forma == "TC" || tazza.Forma == "T")
+            {
+                if (fieldCollection.TryGetField("21", out loadedField))
+                {
                     if (prodotto.PresenzaFix == "Si")
                     {
-                        FixPresenceCombo.SelectedValue = "Scelta3";
+                        (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta3";
                     }
                     else
                     {
-                        FixPresenceCombo.SelectedValue = "Scelta1";
+                        (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta1";
                     }
                 }
-                if (tazza.Forma == "TC")
+                // Blinkers
+                if (fieldCollection.TryGetField("22", out loadedField))
                 {
-                    PdfLoadedRadioButtonListField BlkPresenceCombo = loadedForm.Fields[i] as PdfLoadedRadioButtonListField;
-                    i++;
-                    if (nastro.Aperto)
+
+                    if (prodotto.PresenzaBlinkers == "Si")
                     {
-                        BlkPresenceCombo.SelectedValue = "Scelta1";
+                        (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta1";
                     }
                     else
                     {
-                        BlkPresenceCombo.SelectedValue = "Scelta4";
+                        (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta4";
                     }
                 }
-            }
-
-            // Riempie la scheda pdf
-            ClienteField.Text = prodotto.Cliente;
-            CommessaField.Text = prodotto.Codice;
-            MailField.Text = prodotto.EmailCliente;
-            WidthField.Text = nastro.Larghezza.ToString();
-            LengthField.Text = nastro.Lunghezza.ToString();
-            FreeLatSpaceField.Text = prodotto.PistaLaterale.ToString();
-            UsefulWidthField.Text = nastro.LarghezzaUtile.ToString();
-            BaseBeltField.Text = nastro.Tipo + " " + nastro.Classe + "/" + nastro.NumTessuti + "+" +
-                        nastro.NumTele + " " + nastro.SpessoreSup + "+" + nastro.SpessoreInf;
-            RubberQualityField.Text = nastro.Trattamento;
-            
-            
-            MinDiamPulleyField.Text = bordo.MinPulleyDiam.ToString();
-            MinDiamWheelField.Text = bordo.MinWheelDiam.ToString();
-            OperationalTemperatureField.Text = nastro.RangeTemperatura;
-            NotesField.Text = "SIDEWALL AND CLEATS ARE HOT VULCANIZED.";
-
-            if (nastro.SiglaTrattamento == "OR" || nastro.SiglaTrattamento == "ORK")
-            {
-                OilPresenceCombo.SelectedValue = "Scelta2";
-            }
-            else
-            {
-                OilPresenceCombo.SelectedValue = "Scelta1";
-            }
-
-            if (nastro.Aperto)
-            {
-                EndlessClosedCombo.SelectedValue = "Scelta2";
-            }
-            else
-            {
-                EndlessClosedCombo.SelectedValue = "Scelta1";
             }
 
             // Logo distributore
@@ -268,8 +280,7 @@ namespace BeltsPack.Utils
                 PdfGraphics graphics = page.Graphics;
                 PdfBitmap image = new PdfBitmap(selectedLogo.ImageLocalPath.ToString());
                 graphics.DrawImage(image, new PointF(360, 60), new SizeF(selectedLogo.Height, selectedLogo.Width));
-            }
-            
+            }          
 
             try
             {

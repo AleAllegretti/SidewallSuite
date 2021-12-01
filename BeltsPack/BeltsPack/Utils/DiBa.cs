@@ -848,7 +848,7 @@ namespace BeltsPack.Utils
             var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
 
             // Creo la TDS
-            this.PdfUtils.FillSchedaTDS(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
+            this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)

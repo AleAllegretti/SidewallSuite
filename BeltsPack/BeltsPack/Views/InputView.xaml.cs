@@ -48,6 +48,7 @@ namespace BeltsPack.Views
         public int passonoFix { get; set; }
         public int pistaLaterale { get; set; }
         public int classeNastro { get; set; }
+        public int qtyProdotto { get; set; }
         public UserControl ParentControl { get; set; }
         public InputView(Prodotto prodotto)
         {
@@ -69,6 +70,7 @@ namespace BeltsPack.Views
             this.ntazzeXFila = this.prodotto.NumeroTazzexFila;
             this.spazioTazzeFileMultiple = this.prodotto.SpazioFile;
             this.tazzeTelate = this.prodotto.TazzeTelate;
+            this.qtyProdotto = this.prodotto.Qty;
 
             // Riempio il menù a tendina dell'altezza dei bordi
             this.ComboAltezzaBordi.ItemsSource = this.bordo.ListaAltezzeBordi().ToArray();
@@ -736,6 +738,11 @@ namespace BeltsPack.Views
         private void ComboClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.prodotto.Cliente = this.cliente;
+        }
+
+        private void Quantity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.prodotto.Qty = qtyProdotto;
         }
     }
 }
