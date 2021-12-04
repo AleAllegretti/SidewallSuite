@@ -122,7 +122,26 @@ namespace BeltsPack.Utils
 
             // Carica il template
             string pdfTemplate = "";
-            pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+            if (prodotto.Tipologia == "Bordi e tazze")
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+            }
+            else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile == 1)
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + ".pdf";
+            }
+            else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile != 1 && tazza.NumeroFile <= 5)
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + "_x_" + tazza.NumeroFile + ".pdf";
+            }
+            else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile != 1 && tazza.NumeroFile > 5)
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + "_x_5" + ".pdf";
+            }
+            else
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI;
+            }
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
             PdfLoadedForm loadedForm = loadedDocument.Form;
@@ -271,6 +290,11 @@ namespace BeltsPack.Utils
                         (loadedField as PdfLoadedRadioButtonListField).SelectedValue = "Scelta4";
                     }
                 }
+            }
+            // Spazio tra le file
+            if (fieldCollection.TryGetField("23", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = tazza.SpazioFileMultiple.ToString();
             }
 
             // Logo distributore

@@ -36,6 +36,7 @@ namespace BeltsPack.Views
         public int ntazzeXFila { get; set; }
         public int spazioTazzeFileMultiple { get; set; }
         public int lunghezzaNastro { get; set; }
+        public int larghezzaTazze { get; set; }
         public int larghezzaNastro { get; set; }
         public string cliente { get; set; }
         public string apertoChiuso { get; set; }
@@ -256,7 +257,6 @@ namespace BeltsPack.Views
             if (int.TryParse(this.TBPistaLaterale.Text, out int _))
             {
                 this.prodotto.PistaLaterale = Convert.ToInt32(this.TBPistaLaterale.Text);
-                this.tazza.Lunghezza = this.nastro.Larghezza - (this.prodotto.PistaLaterale * 2);
             }
             else if (this.TBPistaLaterale.Text == "")
             {
@@ -469,7 +469,7 @@ namespace BeltsPack.Views
                     // Calcolo il numero e di tazze totali
                     this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo);
                     // Lunghezza delle tazze
-                    this.tazza.SetLunghezzaTotale(this.nastro.LarghezzaUtile);
+                    this.tazza.SetLunghezzaTotale(this.tazza.Lunghezza);
                     // Caratteristiche
                     this.tazza.CarattersticheTazza();
                     // Peso totale tazze [kg]
@@ -570,6 +570,8 @@ namespace BeltsPack.Views
             tazza.Altezza = Convert.ToInt32(this.ComboAltezzaTazze.SelectedValue.ToString());
             // Determino le caratterstiche della tazza
             this.tazza.CarattersticheTazza();
+            // Azzero lo spazio tra le tazze
+            this.SpazioTazzeFileMultiple.Text = "";
         }
 
         private void ComboFix_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -689,22 +691,62 @@ namespace BeltsPack.Views
 
         private void ComboNTazzexFila_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.tazza.NumeroFile = this.ntazzeXFila;
+            // Assegno il numero di tazze
+            this.tazza.NumeroFile = Convert.ToInt32(this.ComboNTazzexFila.SelectedItem);
 
-            // Se ho solo una fila singola disabilito il textbox per lo spazio tra le varie file
-            if (this.tazza.NumeroFile == 1)
+            // Calcolo la larghezza di ogni singola tazza
+           if (this.tazza.NumeroFile != 0)
             {
-                this.SpazioTazzeFileMultiple.IsEnabled = false;
+                if (this.prodotto.Tipologia == "Bordi e tazze")
+                {
+                    this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1) - 2 * this.bordo.Larghezza) / this.tazza.NumeroFile;
+                    this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                }
+                else if (this.prodotto.Tipologia == "Solo tazze")
+                {
+                    this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1)) / this.tazza.NumeroFile;
+                    this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                }
+                else
+                {
+                    this.LarghezzaTazza.Text = "0";
+                }
+                
             }
-            else
-            {
-                this.SpazioTazzeFileMultiple.IsEnabled = true;
-            }
+
+            // Determino la lunghezza della tazza come se fosse una unica
+            this.tazza.Lunghezza = this.larghezzaTazze * this.tazza.NumeroFile;
         }
 
         private void SpazioTazzeFileMultiple_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.spazioTazzeFileMultiple = this.tazza.SpazioFileMultiple;
+            // Assegno lo spazio
+            if (this.SpazioTazzeFileMultiple.Text != "")
+            {
+                this.tazza.SpazioFileMultiple = Convert.ToInt32(this.SpazioTazzeFileMultiple.Text);
+            }
+            
+            // Se lo spazio è diverso da zero, calcolo quante tazze x fila posso mettere
+            int maxTazzeXFila = 2;
+            double temp = (this.nastro.Larghezza - this.pistaLaterale * 2 - this.tazza.SpazioFileMultiple * (maxTazzeXFila - 1)) / maxTazzeXFila;
+            if (this.tazza.SpazioFileMultiple != 0)
+            {
+                this.ComboNTazzexFila.Items.Clear();
+                this.ComboNTazzexFila.IsEnabled = true;
+                while (Math.Round(temp,0) >= this.tazza.Altezza)
+                {
+                    this.ComboNTazzexFila.Items.Add(maxTazzeXFila);
+                    maxTazzeXFila++;
+                    temp = (this.nastro.Larghezza - this.pistaLaterale * 2 - this.tazza.SpazioFileMultiple * (maxTazzeXFila - 1)) / maxTazzeXFila;
+                }
+            }
+            else
+            {
+                this.ComboNTazzexFila.Items.Clear();
+                this.ComboNTazzexFila.Items.Add(1);
+                this.ComboNTazzexFila.SelectedItem = this.ComboNTazzexFila.Items[0];
+                this.ComboNTazzexFila.IsEnabled = false;
+            }
         }
 
         private void ComboQualityTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)

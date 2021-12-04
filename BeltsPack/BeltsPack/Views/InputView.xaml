@@ -473,14 +473,6 @@
                     </ComboBox>
                 </StackPanel>
 
-                <!--Spazio tazze file multiple-->
-                <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top" >
-                    <Label  Content="Spazio tazze" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="SpazioTazzeFileMultiple"   
-                                 Margin="40,0,0,0"  md:HintAssist.Hint="[mm]"
-                                 Text="{Binding spazioTazzeFileMultiple, Mode=TwoWay}" TextChanged="SpazioTazzeFileMultiple_TextChanged"></TextBox>
-                </StackPanel>
-
                 <!--Trattamento tazze-->
                 <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="Trattamento" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
@@ -497,23 +489,29 @@
                     </ComboBox>
                 </StackPanel>
 
+                <!--Spazio tazze file multiple-->
+                <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top" >
+                    <Label  Content="Spazio tazze" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left"  ToolTip="Imposta lunghezza nastro" Name ="SpazioTazzeFileMultiple"   
+                                 Margin="40,0,0,0"  md:HintAssist.Hint="[mm]"
+                                 Text="{Binding spazioTazzeFileMultiple, Mode=TwoWay}" TextChanged="SpazioTazzeFileMultiple_TextChanged"></TextBox>
+                </StackPanel>
+                
                 <!--N° tazze x fila-->
-                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="N° tazze x fila" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left" ToolTip="Imposta se il nastro è aperto o chiuso" Name="ComboNTazzexFila"  
                               SelectedValuePath="Content" Margin="40,0,0,0" 
                               SelectedValue="{Binding ntazzeXFila, Mode=TwoWay}" SelectionChanged="ComboNTazzexFila_SelectionChanged">
-                        <ComboBoxItem >1</ComboBoxItem>
-                        <ComboBoxItem >2</ComboBoxItem>
-                        <ComboBoxItem >3</ComboBoxItem>
-                        <ComboBoxItem >4</ComboBoxItem>
-                        <ComboBoxItem >5</ComboBoxItem>
-                        <ComboBoxItem >6</ComboBoxItem>
-                        <ComboBoxItem >7</ComboBoxItem>
-                        <ComboBoxItem >8</ComboBoxItem>
-                        <ComboBoxItem >9</ComboBoxItem>
-                        <ComboBoxItem >10</ComboBoxItem>
                     </ComboBox>
+                </StackPanel>
+
+                <!--Larghezza tazze-->
+                <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top" >
+                    <Label  Content="Larghezza tazze" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left"  ToolTip="Mostra larghezza tazze" Name ="LarghezzaTazza"   
+                                 Margin="40,0,0,0"  md:HintAssist.Hint="[mm]" IsReadOnly="True" IsEnabled="False"
+                                 Text="{Binding larghezzaTazze, Mode=TwoWay}" ></TextBox>
                 </StackPanel>
                 
             </Grid>

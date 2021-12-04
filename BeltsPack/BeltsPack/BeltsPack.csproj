@@ -541,6 +541,18 @@
     <Content Include="Assets\Pdf\Scheda_Tecnica_Produzione_Legno_Mod.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Assets\Pdf\Cleats_C_x_2.pdf" />
+    <None Include="Assets\Pdf\Cleats_C_x_3.pdf" />
+    <None Include="Assets\Pdf\Cleats_C_x_4.pdf" />
+    <None Include="Assets\Pdf\Cleats_C_x_5.pdf" />
+    <None Include="Assets\Pdf\Cleats_TC_x_2.pdf" />
+    <None Include="Assets\Pdf\Cleats_TC_x_3.pdf" />
+    <None Include="Assets\Pdf\Cleats_TC_x_4.pdf" />
+    <None Include="Assets\Pdf\Cleats_TC_x_5.pdf" />
+    <None Include="Assets\Pdf\Cleats_T_x_2.pdf" />
+    <None Include="Assets\Pdf\Cleats_T_x_3.pdf" />
+    <None Include="Assets\Pdf\Cleats_T_x_4.pdf" />
+    <None Include="Assets\Pdf\Cleats_T_x_5.pdf" />
     <None Include="Assets\Pdf\Sidewalls_Cleats_C.pdf" />
     <None Include="Assets\Pdf\Sidewalls_Cleats_T.pdf" />
     <None Include="Assets\Pdf\Sidewalls_Cleats_TC.pdf" />

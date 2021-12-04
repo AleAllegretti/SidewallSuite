@@ -851,6 +851,8 @@ namespace BeltsPack.Utils
                 this.createTXTTrasporto(path);
             }
 
+            // Creo note delle tazze
+            this.createTXTTazze(path);
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)
@@ -921,7 +923,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Endless belt length: " + this._nastro.Lunghezza + " [mm]");
                         }
-
+                        sw.WriteLine("-");
                     }
                 }
                 else if(language == "Italian")
@@ -953,7 +955,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Nastro chiuso: " + this._nastro.Lunghezza + " [mm]");
                         }
-
+                        sw.WriteLine("-");
                     }
                 }
                 else if (language == "German")
@@ -985,7 +987,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Basisgurtkörper offer: " + this._nastro.Lunghezza + " [mm]");
                         }
-
+                        sw.WriteLine("-");
                     }
                 }
                 else if (language == "Spanish")
@@ -1017,7 +1019,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Banda cerrada: " + this._nastro.Lunghezza + " [mm]");
                         }
-
+                        sw.WriteLine("-");
                     }
                 }
 
@@ -1051,6 +1053,40 @@ namespace BeltsPack.Utils
                         this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
                         this._imballi.Altezza[numeroConf] + " [mm]");
                     sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+                    sw.WriteLine("-");
+                }
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        public void createTXTTazze(string path)
+        {
+            string fileName = "Dettagli_Tazze.txt";
+
+            path = path + "\\" + fileName;
+            FileInfo fi = new FileInfo(path);
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.     
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
+                // Create a new file     
+                using (StreamWriter sw = fi.CreateText())
+                {
+                    sw.WriteLine("N° tazze: " + this._tazza.Numero);
+                    sw.WriteLine("Lunghezza: " + this._tazza.Lunghezza);
+                    sw.WriteLine("N° file: " + this._tazza.NumeroFile);
+                    if (this._tazza.NumeroFile != 1)
+                    {
+                        sw.WriteLine("Spazio file: " + this._tazza.SpazioFileMultiple);
+                    }
+                    sw.WriteLine("-");
                 }
             }
             catch
