@@ -907,7 +907,15 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            if (this._tazza.NumeroFile == 1)
+                            {
+                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            }
+                            else
+                            {
+                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " rows");
+                            }
                         }
                         sw.WriteLine("Belt width: " + this._nastro.Larghezza + " [mm]");
                         sw.WriteLine("Free Lateral Space: " + this._prodotto.PistaLaterale + " [mm]");
@@ -939,7 +947,15 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            if (this._tazza.NumeroFile == 1)
+                            {
+                                sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            }
+                            else
+                            {
+                                sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " file");
+                            }
                         }
                         sw.WriteLine("Larghezza nastro: " + this._nastro.Larghezza + " [mm]");
                         sw.WriteLine("Piste laterali: " + this._prodotto.PistaLaterale + " [mm]");
@@ -971,7 +987,15 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            sw.WriteLine("Stollen typ: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            if (this._tazza.NumeroFile == 1)
+                            {
+                                sw.WriteLine("Stollen typ: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            }
+                            else
+                            {
+                                sw.WriteLine("Stollen typ: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " Datei");
+                            }
                         }
                         sw.WriteLine("Basisgurt breite: " + this._nastro.Larghezza + " [mm]");
                         sw.WriteLine("Randzone: " + this._prodotto.PistaLaterale + " [mm]");
@@ -1003,7 +1027,15 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            if (this._tazza.NumeroFile == 1)
+                            {
+                                sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                            }
+                            else
+                            {
+                                sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " filas");
+                            }
                         }
                         sw.WriteLine("Ancho de banda: " + this._nastro.Larghezza + " [mm]");
                         sw.WriteLine("Playas libres laterales: " + this._prodotto.PistaLaterale + " [mm]");

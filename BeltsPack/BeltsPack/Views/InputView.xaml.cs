@@ -629,7 +629,7 @@ namespace BeltsPack.Views
 
         private void ComboPassoFix_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.tazza.Passo = this.passoFix;
+            this.tazza.Passo = Convert.ToInt32(this.ComboPassoFix.Text);
         }
 
         private void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
