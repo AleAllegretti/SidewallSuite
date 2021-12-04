@@ -831,8 +831,16 @@ namespace BeltsPack.Utils
                 ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
+            // Faccio comparire il menù per la scelta del logo
+            List<Fornitore> fornitori = new List<Fornitore>();
+            var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
+
+            // Creo la TDS
+            this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
+
+
             // Creo le note del nastro
-            this.createTXTNastro(path);
+            this.createTXTNastro(path, selectedLogo.Language);
 
             // Creo le note per l'imballo
             this.createTXTImballo(path, this._numeroConfigurazione);
@@ -843,12 +851,6 @@ namespace BeltsPack.Utils
                 this.createTXTTrasporto(path);
             }
 
-            // Faccio comparire il menù per la scelta del logo
-            List<Fornitore> fornitori = new List<Fornitore>();
-            var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
-
-            // Creo la TDS
-            this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)
@@ -876,7 +878,7 @@ namespace BeltsPack.Utils
             // Apro la directory per visualizzare i file
             Process.Start(path);
         }
-        public void createTXTNastro(string path)
+        public void createTXTNastro(string path, string language)
         {
             string fileName = "Caratteristiche_Nastro.txt";
             path = path + "\\" + fileName;
@@ -890,35 +892,135 @@ namespace BeltsPack.Utils
                     File.Delete(path);
                 }
 
-                // Create a new file     
-                using (StreamWriter sw = fi.CreateText())
+                if (language == "English")
                 {
-                    sw.WriteLine("Base Belt type: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
-                        this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
-                    if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                    // Create a new file     
+                    using (StreamWriter sw = fi.CreateText())
                     {
-                        sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza);
+                        sw.WriteLine("Base Belt type: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
+                            this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                        {
+                            sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza);
+                        }
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                        }
+                        sw.WriteLine("Belt width: " + this._nastro.Larghezza + " [mm]");
+                        sw.WriteLine("Free Lateral Space: " + this._prodotto.PistaLaterale + " [mm]");
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Cleats pitch: " + this._tazza.Passo + " [mm]");
+                        }
+                        if (this._nastro.Aperto)
+                        {
+                            sw.WriteLine("Open belt length: " + this._nastro.Lunghezza + " [mm]");
+                        }
+                        else
+                        {
+                            sw.WriteLine("Endless belt length: " + this._nastro.Lunghezza + " [mm]");
+                        }
+
                     }
-                    if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
-                    {
-                        sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
-                    }
-                    sw.WriteLine("Belt width: " + this._nastro.Larghezza + " [mm]");
-                    sw.WriteLine("Free Lateral Space: " + this._prodotto.PistaLaterale + " [mm]");
-                    if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
-                    {
-                        sw.WriteLine("Cleats pitch: " + this._tazza.Passo + " [mm]");
-                    }
-                    if (this._nastro.Aperto)
-                    {
-                        sw.WriteLine("Open belt length: " + this._nastro.Lunghezza + " [mm]");
-                    }
-                    else
-                    {
-                        sw.WriteLine("Endless belt length: " + this._nastro.Lunghezza + " [mm]");
-                    }
-                    
                 }
+                else if(language == "Italian")
+                {
+                    // Create a new file     
+                    using (StreamWriter sw = fi.CreateText())
+                    {
+                        sw.WriteLine("Nastro base: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
+                            this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                        {
+                            sw.WriteLine("Bordi: HEF" + this._bordo.Altezza);
+                        }
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                        }
+                        sw.WriteLine("Larghezza nastro: " + this._nastro.Larghezza + " [mm]");
+                        sw.WriteLine("Piste laterali: " + this._prodotto.PistaLaterale + " [mm]");
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Passo tazze: " + this._tazza.Passo + " [mm]");
+                        }
+                        if (this._nastro.Aperto)
+                        {
+                            sw.WriteLine("Nastro aperto: " + this._nastro.Lunghezza + " [mm]");
+                        }
+                        else
+                        {
+                            sw.WriteLine("Nastro chiuso: " + this._nastro.Lunghezza + " [mm]");
+                        }
+
+                    }
+                }
+                else if (language == "German")
+                {
+                    // Create a new file     
+                    using (StreamWriter sw = fi.CreateText())
+                    {
+                        sw.WriteLine("Basisgurt typ: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
+                            this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                        {
+                            sw.WriteLine("Wellkanten typ: HEF" + this._bordo.Altezza);
+                        }
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Stollen typ: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                        }
+                        sw.WriteLine("Basisgurt breite: " + this._nastro.Larghezza + " [mm]");
+                        sw.WriteLine("Randzone: " + this._prodotto.PistaLaterale + " [mm]");
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Stollenabstand : " + this._tazza.Passo + " [mm]");
+                        }
+                        if (this._nastro.Aperto)
+                        {
+                            sw.WriteLine("Basisgurtkörper geschlossen : " + this._nastro.Lunghezza + " [mm]");
+                        }
+                        else
+                        {
+                            sw.WriteLine("Basisgurtkörper offer: " + this._nastro.Lunghezza + " [mm]");
+                        }
+
+                    }
+                }
+                else if (language == "Spanish")
+                {
+                    // Create a new file     
+                    using (StreamWriter sw = fi.CreateText())
+                    {
+                        sw.WriteLine("Tipo de banda: " + this._nastro.Tipo + " " + this._nastro.Classe + "/" + this._nastro.NumTessuti + "+" +
+                            this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                        {
+                            sw.WriteLine("Tipo de borde contenciòn: HEF" + this._bordo.Altezza);
+                        }
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                        }
+                        sw.WriteLine("Ancho de banda: " + this._nastro.Larghezza + " [mm]");
+                        sw.WriteLine("Playas libres laterales: " + this._prodotto.PistaLaterale + " [mm]");
+                        if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
+                        {
+                            sw.WriteLine("Paso entre taco: " + this._tazza.Passo + " [mm]");
+                        }
+                        if (this._nastro.Aperto)
+                        {
+                            sw.WriteLine("Banda abierta: " + this._nastro.Lunghezza + " [mm]");
+                        }
+                        else
+                        {
+                            sw.WriteLine("Banda cerrada: " + this._nastro.Lunghezza + " [mm]");
+                        }
+
+                    }
+                }
+
             }
             catch
             {
