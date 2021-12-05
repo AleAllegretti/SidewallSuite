@@ -23,6 +23,7 @@
         <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0">
             <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,30,10,10"
                   x:Name="dataGrid" AutoGenerateColumns="True" IsReadOnly="False" ItemsSource="{Binding}"
+                      GridLinesVisibility="All" VerticalGridLinesBrush="#c7c7c7"
                   AlternationCount="2" AlternatingRowBackground="#E5E5E5" CellEditEnding="dataGrid_CellEditEnding" BeginningEdit="dataGrid_BeginningEdit" >
 
                 <DataGrid.Resources>

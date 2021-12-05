@@ -27,7 +27,7 @@ namespace BeltsPack.Views
         private Prodotto _prodotto;
         private Bordo _bordo;
         private Tazza _tazza;
-
+        private CassaInFerro _cassaInFerro;
         public OutputView(Nastro nastro, Imballi imballi, InputView inputView, Prodotto prodotto, Bordo bordo, Tazza tazza)
         {
             this._bordo = bordo;
@@ -147,8 +147,112 @@ namespace BeltsPack.Views
             SqlCommand sqlCommand = database.UpdateDbCommand(this._nastro, this._bordo, this._tazza, this._prodotto, this._imballi, 0);
             sqlCommand.ExecuteNonQuery();
 
-            // Il salvataggio è avvenuto correttamente
-            await DialogsHelper.ShowConfirmDialog("L'imballo è stato salvato correttamente nella versione " + this._prodotto.VersioneCodice + ".", ConfirmDialog.ButtonConf.OK_ONLY);
+            // Genero la distinta base e i relativi documenti
+            ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Vuoi generare anche l'offerta?", ConfirmDialog.ButtonConf.YES_NO);
+
+            // Naviga al menù principale o resta sulla pagina
+            if (confirmed.ToString() == "Yes")
+            {
+                // Creo la classe distinta
+                DiBa distinta = new DiBa(this._nastro, this._bordo, this._tazza, this._prodotto, this._cassaInFerro, 0, this._imballi);
+
+                // Larghezza utile
+                this._nastro.SetLarghezzautile(this._bordo.Larghezza, this._prodotto.PistaLaterale);
+                // Caratteristiche nastro
+                this._nastro.SetCaratterisitche();
+
+                // Codice Nastro
+                distinta.SearchCodnastro(this._nastro.Tipo, this._nastro.Classe, this._nastro.Larghezza, this._nastro.SiglaTrattamento);
+                if (_prodotto.Tipologia == "Bordi e tazze" || _prodotto.Tipologia == "Solo bordi")
+                {
+                    // Lunghezza bordo
+                    this._bordo.SetLunghezzaTotaleBordo(this._nastro.Lunghezza);
+
+                    // Codice Bordo
+                    distinta.searchCodBordo(this._bordo.Altezza, this._bordo.Larghezza, this._nastro.SiglaTrattamento);
+
+                    // Raspatura bordo
+                    distinta.searchCodRaspaturaBordo("RAB", this._bordo.Altezza, this._bordo.SiglaTrattamento);
+
+                    // Attrezzaggio bordo
+                    distinta.SearchCodAttAppBor("ATR", "LAV", _bordo.Altezza);
+
+                    // Applicazione bordo
+                    distinta.SearchCodAttAppBor("APB", "LAV", _bordo.Altezza);
+
+                }
+                if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze")
+                {
+                    // Calcolo il numero e di tazze totali
+                    this._tazza.NumeroTazzeTotali(this._nastro.Lunghezza, this._tazza.Passo);
+                    // Lunghezza delle tazze
+                    this._tazza.SetLunghezzaTotale(this._nastro.LarghezzaUtile);
+                    // Caratteristiche
+                    this._tazza.CarattersticheTazza();
+                    // Raspatura tazze
+                    distinta.searchCodRaspaturaTazze("RAT", this._tazza.Altezza, this._bordo.Trattamento, this._tazza.Forma);
+
+                    // Applicazione tazze
+                    distinta.searchCodApplicazioneTazze("LAV", "APT", "APT", this._tazza.Altezza, this._tazza.Forma);
+                }
+                if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
+                {
+                    // Preparazione nastro
+                    distinta.SearchCodPrepNastro("NAS", "LAV", this._bordo.Altezza, this._prodotto.Tipologia);
+                }
+                if (this._prodotto.Tipologia == "Bordi e tazze")
+                {
+                    if (this._prodotto.PresenzaFix == "Si")
+                    {
+                        // Fix
+                        distinta.SearchCodFix("FIX", "LAV", this._bordo.Altezza);
+                    }
+
+                    if (this._prodotto.PresenzaBlinkers == "Si")
+                    {
+                        // Blk
+                        distinta.SearchCodBlk("LIS", "LIS", this._bordo.Altezza, this._bordo.SiglaTrattamento);
+                        // Applicazione blinkers
+                        distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
+                    }
+
+                }
+
+                // Giunzione
+                if (this._nastro.Aperto == false)
+                {
+                    if (this._prodotto.Tipologia == "Solo bordi")
+                    {
+                        // Aggiungo la giunzione dei bordi
+                        distinta.SearchCodGiunzioneBordi("GIUNZIONEBORDI");
+                    }
+
+                    // Codice giunzione
+                    distinta.SearchCodGiunzione("GIU-OFF");
+                }
+
+                // Commissioni
+                if (this._prodotto.NomeAgente != "")
+                {
+                    distinta.SearchCodCommissioni(this._prodotto.NomeAgente, "SPESE EXTRA");
+                }
+
+                // Inserisco la movimentazione se il nastro è più alto di 280
+                if (this._prodotto.AltezzaApplicazioni >= 280)
+                {
+                    distinta.SearchCodMovimentazione("SPESE EXTRA");
+                }
+
+                // Prodotto finito
+                distinta.SearchCodProdotto(this._bordo.Altezza, this._prodotto.Tipologia);
+                // Imballo
+                distinta.SearchCodImballo(this._nastro.Lunghezza);
+                // Trasporto
+                distinta.SearchCodTrasporto("Trasporto");
+
+                // Crea CSV
+                distinta.creaCSV();
+            }
 
             // Ritorna va al database
             this.NavigationService.Navigate(new DatabaseView());

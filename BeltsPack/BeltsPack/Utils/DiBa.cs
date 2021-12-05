@@ -28,7 +28,7 @@ namespace BeltsPack.Utils
         private PdfUtils PdfUtils = new PdfUtils();
 
         // Variabili
-        bool[] StatoCodici = new bool[15];
+        bool[] StatoCodici = new bool[25];
         bool allertCodiceMancante;
         IDictionary<int, string> mapCodici = new Dictionary<int, string>();
         public DiBa(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, CassaInFerro cassaInFerro, int numeroConfigurazione, Imballi imballi)
@@ -63,6 +63,7 @@ namespace BeltsPack.Utils
             mapCodici.Add(14, "Trasporto");
             mapCodici.Add(15, "Commissioni");
             mapCodici.Add(16, "Giunzione bordo");
+            mapCodici.Add(17, "Movimentazione");
 
         }
 
@@ -79,7 +80,7 @@ namespace BeltsPack.Utils
             larghezza = larghezza * 0.001;
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -97,7 +98,7 @@ namespace BeltsPack.Utils
                     // Prendo le caratteristiche del nastro
                     this._nastro.Codice = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                     this._nastro.Descrizione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                    this._nastro.UM = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                    this._nastro.UM = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                     // Per considerare la larghezza maggiore più vicina alla larghezza del nastro
                     largh_min = temp_Largh;
@@ -134,7 +135,7 @@ namespace BeltsPack.Utils
                                     string sottogruppo = "BOR")
         {
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -146,7 +147,7 @@ namespace BeltsPack.Utils
                 // Prendo le caratteristiche del nastro
                 this._bordo.Codice = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._bordo.Descrizione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._bordo.UM = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._bordo.UM = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -159,7 +160,7 @@ namespace BeltsPack.Utils
                                     string trattamento)
         {
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Controllo il trattamento
@@ -177,7 +178,7 @@ namespace BeltsPack.Utils
                     // Prendo le caratteristiche del nastro
                     this._bordo.CodiceRaspatura = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                     this._bordo.DescrizioneRaspatura = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                    this._bordo.UMRaspatura = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                    this._bordo.UMRaspatura = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                     break;
             }
@@ -191,7 +192,7 @@ namespace BeltsPack.Utils
                                     string forma)
     {
         // Crea il wrapper del database
-        DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+        DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
         dbSQL.OpenConnection();
 
         // Controllo il trattamento
@@ -208,7 +209,7 @@ namespace BeltsPack.Utils
         {
             this._tazza.CodiceRaspatura = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
             this._tazza.DescrizioneRaspatura = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-            this._tazza.UMRaspatura = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();           
+            this._tazza.UMRaspatura = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();           
 
             break;
         }
@@ -221,7 +222,7 @@ namespace BeltsPack.Utils
         {
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -234,7 +235,7 @@ namespace BeltsPack.Utils
                 {
                     this._bordo.CodiceAttrezzaggio = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                     this._bordo.DescrizioneAttrezzaggio = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                    this._bordo.UMAttrezzaggio = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                    this._bordo.UMAttrezzaggio = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                     
                 }
@@ -242,7 +243,7 @@ namespace BeltsPack.Utils
                 {
                     this._bordo.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                     this._bordo.DescrizioneApplicazione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                    this._bordo.UMApplicazione = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                    this._bordo.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                     
                 }
@@ -266,7 +267,7 @@ namespace BeltsPack.Utils
                                    string forma)
         {
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Considero la descrizione in locale
@@ -302,7 +303,7 @@ namespace BeltsPack.Utils
 
                     // Prendo le caratteristiche del nastro
                     this._tazza.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
-                    this._tazza.UMApplicazione = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                    this._tazza.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                     break;
                 }
@@ -337,7 +338,7 @@ namespace BeltsPack.Utils
             }
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -348,7 +349,7 @@ namespace BeltsPack.Utils
             {
                 this._bordo.CodiceFix = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._bordo.DescrizioneFix = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._bordo.UMFix = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._bordo.UMFix = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -378,7 +379,7 @@ namespace BeltsPack.Utils
             }
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -389,7 +390,7 @@ namespace BeltsPack.Utils
             {
                 this._bordo.CodiceBlk = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._bordo.DescrizioneBlk = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._bordo.UMBlk = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._bordo.UMBlk = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -409,7 +410,7 @@ namespace BeltsPack.Utils
             }
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -420,7 +421,7 @@ namespace BeltsPack.Utils
             {
                 this._nastro.CodicePreparazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._nastro.DescrizionePreparazione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._nastro.UMPreparazione = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._nastro.UMPreparazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -431,7 +432,7 @@ namespace BeltsPack.Utils
         {
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -442,7 +443,7 @@ namespace BeltsPack.Utils
             {
                 this._nastro.CodiceGiunzione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._nastro.DescrizioneGiunzione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._nastro.UMGiunzione = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._nastro.UMGiunzione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -453,7 +454,7 @@ namespace BeltsPack.Utils
         {
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -464,7 +465,7 @@ namespace BeltsPack.Utils
             {
                 this._bordo.CodiceApplicazionexBlk = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._bordo.DescrizioneApplicazioneBlk = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._bordo.UMApplicazioneBlk = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._bordo.UMApplicazioneBlk = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -477,7 +478,7 @@ namespace BeltsPack.Utils
             this._prodotto.DescrizioneCommissioni = "Commissioni " + this._prodotto.NomeAgente + " " + this._prodotto.CommissioniAgente + "%";
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -487,12 +488,35 @@ namespace BeltsPack.Utils
             while (reader.Read())
             {
                 this._prodotto.CodiceCommissioni = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
-                this._prodotto.UMCommissioni = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._prodotto.UMCommissioni = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
             // Controllo che il codice del nastro sia presente
-            this.PresenzaCodice(this._prodotto.CodiceCommissioni, 11);
+            this.PresenzaCodice(this._prodotto.CodiceCommissioni, 15);
+        }
+        public void SearchCodMovimentazione(string codice)
+        {
+            // Determino la descrizione in base al nome dell'agente
+            this._prodotto.DescrizioneMovimentazione = "Movimentazione";
+
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.MovimentazioneSearchCommand(codice);
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                this._prodotto.CodiceMovimentazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._prodotto.UMMovimentazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
+
+                break;
+            }
+            // Controllo che il codice del nastro sia presente
+            this.PresenzaCodice(this._prodotto.CodiceMovimentazione, 17);
         }
         public void SearchCodProdotto(int altezza,
                                     string tipologiaProdotto)
@@ -512,7 +536,7 @@ namespace BeltsPack.Utils
             }
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -523,7 +547,7 @@ namespace BeltsPack.Utils
             {
                 this._prodotto.CodiceProdotto = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._prodotto.DescrizioneProdotto = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._prodotto.UMProdotto = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._prodotto.UMProdotto = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -546,7 +570,7 @@ namespace BeltsPack.Utils
             }
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -557,7 +581,7 @@ namespace BeltsPack.Utils
             {
                 this._prodotto.CodiceImballo = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._prodotto.DescrizioneImballo = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._prodotto.UMImballo = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._prodotto.UMImballo = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -567,7 +591,7 @@ namespace BeltsPack.Utils
         public void SearchCodTrasporto(string descrizione)
         {
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -578,7 +602,7 @@ namespace BeltsPack.Utils
             {
                 this._prodotto.CodiceTrasporto = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._prodotto.DescrizioneTrasporto = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._prodotto.UMTrasporto = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._prodotto.UMTrasporto = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -589,7 +613,7 @@ namespace BeltsPack.Utils
         {
 
             // Crea il wrapper del database
-            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
@@ -600,7 +624,7 @@ namespace BeltsPack.Utils
             {
                 this._bordo.CodiceGiunzione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._bordo.DescrizioneGiunzione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-                this._bordo.UMGiunzione = reader.GetValue(reader.GetOrdinal("Unita_Misura_Pr")).ToString();
+                this._bordo.UMGiunzione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
                 break;
             }
@@ -774,6 +798,16 @@ namespace BeltsPack.Utils
                     SpazioDiba2 = "",
                     UM = prodotto.UMImballo
                 },
+                   new Nastro // Movimentazione
+                {
+                    SpazioDiba = "",
+                    Codice = prodotto.CodiceMovimentazione,
+                    Descrizione = prodotto.DescrizioneMovimentazione,
+                    QuantitaDiba = 1,
+                    SpazioDiba1 = "",
+                    SpazioDiba2 = "",
+                    UM = prodotto.UMMovimentazione
+                },
                    new Nastro // Trasporto
                 {
                     SpazioDiba = "",
@@ -832,18 +866,33 @@ namespace BeltsPack.Utils
             }
 
             // Faccio comparire il menù per la scelta del logo
-            List<Fornitore> fornitori = new List<Fornitore>();
-            var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
+            try
+            {
+                List<Fornitore> fornitori = new List<Fornitore>();
+                var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
+                // Creo la TDS
+                this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
-            // Creo la TDS
-            this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
-
-            // Creo le note del nastro
-            this.createTXTNastro(path, selectedLogo.Language);
+                // Creo le note del nastro
+                this.createTXTNastro(path, selectedLogo.Language);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
 
             // Creo le note per l'imballo
-            this.createTXTImballo(path, this._numeroConfigurazione);
+            if (this._imballi.Tipologia == TipologiaImballo.Cassa.ToString())
+            {
+                this.createTXTImballoFerro(path, this._numeroConfigurazione);
+            }
+            else
+            {
+                this.createTXTImballoLegno(path, this._numeroConfigurazione);
+            }
+            
 
             // Creo le note per il trasporto
             if (this._prodotto.Destinazione != "")
@@ -1062,7 +1111,7 @@ namespace BeltsPack.Utils
             }
         }
 
-        public void createTXTImballo(string path, int numeroConf)
+        public void createTXTImballoFerro(string path, int numeroConf)
         {
             string fileName = "Dimensioni_Imballo.txt";
             double grossWeight = Math.Round(this._prodotto.PesoTotaleNastro + this._cassaInFerro.PesoFinale[numeroConf]);
@@ -1082,6 +1131,37 @@ namespace BeltsPack.Utils
                 using (StreamWriter sw = fi.CreateText())
                 {
                     sw.WriteLine("L: " + this._imballi.Lunghezza[numeroConf] + " [mm]" + "  -  W:" + 
+                        this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
+                        this._imballi.Altezza[numeroConf] + " [mm]");
+                    sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+                    sw.WriteLine("-");
+                }
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        public void createTXTImballoLegno(string path, int numeroConf)
+        {
+            string fileName = "Dimensioni_Imballo.txt";
+            double grossWeight = Math.Round(this._prodotto.PesoTotaleNastro + this._imballi.Peso[numeroConf]);
+
+            path = path + "\\" + fileName;
+            FileInfo fi = new FileInfo(path);
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.     
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
+                // Create a new file     
+                using (StreamWriter sw = fi.CreateText())
+                {
+                    sw.WriteLine("L: " + this._imballi.Lunghezza[numeroConf] + " [mm]" + "  -  W:" +
                         this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
                         this._imballi.Altezza[numeroConf] + " [mm]");
                     sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");

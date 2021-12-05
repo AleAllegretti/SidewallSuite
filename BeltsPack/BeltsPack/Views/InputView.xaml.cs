@@ -101,7 +101,7 @@ namespace BeltsPack.Views
             }
 
             // Riempio il mneù dei clineti
-           ComboClienti.ItemsSource = this.prodotto.ListaClienti().ToArray();
+            ComboClienti.ItemsSource = this.prodotto.ListaClienti().ToArray();
 
             // Abilito il data binding
             this.DataContext = this;
@@ -471,7 +471,14 @@ namespace BeltsPack.Views
                     // Lunghezza delle tazze
                     this.tazza.SetLunghezzaTotale(this.tazza.Lunghezza);
                     // Caratteristiche
-                    this.tazza.CarattersticheTazza();
+                    try
+                    {
+                        this.tazza.CarattersticheTazza();
+                    }
+                    catch
+                    {
+                        System.Windows.MessageBox.Show("Non sono riuscito a determinare tutte le caratteristiche della tazza, quindi alcune grandezze potrebbero essere errate. \nAssicurarsi che il dB sia aggiornato.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                     // Peso totale tazze [kg]
                     this.tazza.SetPesoTotale();
                 }
@@ -508,6 +515,16 @@ namespace BeltsPack.Views
                         this.ComboBlk.IsEnabled = false;
                         this.ComboFix.IsEnabled = false;
                         this.ComboPassoFix.IsEnabled = false;
+                    }
+                    else if (this.tazza.Forma == "T" || this.tazza.Forma == "TW")
+                    {
+                        this.ComboBlk.IsEnabled = false;
+                    }
+                    else
+                    {
+                        this.ComboBlk.IsEnabled = true;
+                        this.ComboFix.IsEnabled = true;
+                        this.ComboPassoFix.IsEnabled = true;
                     }
                 }
                 
@@ -568,8 +585,16 @@ namespace BeltsPack.Views
         {
             // Assegno l'altezza della tazza
             tazza.Altezza = Convert.ToInt32(this.ComboAltezzaTazze.SelectedValue.ToString());
-            // Determino le caratterstiche della tazza
-            this.tazza.CarattersticheTazza();
+            try
+            {
+                // Determino le caratterstiche della tazza
+                this.tazza.CarattersticheTazza();
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("Non sono riuscito a determinare tutte le caratteristiche della tazza. \nAssicurarsi che il dB sia aggiornato.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
             // Azzero lo spazio tra le tazze
             this.SpazioTazzeFileMultiple.Text = "";
         }
@@ -629,7 +654,12 @@ namespace BeltsPack.Views
 
         private void ComboPassoFix_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.tazza.Passo = Convert.ToInt32(this.ComboPassoFix.Text);
+            try
+            {
+                this.tazza.Passo = Convert.ToInt32(this.ComboPassoFix.Text);
+            }
+            catch 
+            { }   
         }
 
         private void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -785,6 +815,20 @@ namespace BeltsPack.Views
         private void Quantity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.prodotto.Qty = qtyProdotto;
+        }
+
+        private void ComboClienti_DropDownOpened(object sender, EventArgs e)
+        {
+            try
+            {
+                ComboClienti.ItemsSource = this.prodotto.ListaClienti().ToArray();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema: " + ex, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
+            
         }
     }
 }

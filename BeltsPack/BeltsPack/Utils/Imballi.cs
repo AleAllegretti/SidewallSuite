@@ -396,7 +396,7 @@ namespace BeltsPack.Models
             // Se il nastro è solo tazze o solo bordi metto i nastri uno dentro l'altro
             // quindi l'altezza si dimezza e il fattore è uguale a due,
             // Se il nastro è solo bordi con piste laterali pari a zero aumento la larghezza di 2 volte la larghezza del bordo.
-            if (this._tazza.Altezza == 0 || this._bordo.Altezza == 0)
+            if (this._tazza.Altezza == 0 || this._bordo.Altezza == 0 || this._tazza.Forma == "TCW" || this._tazza.Forma == "TW")
             {
                 this._prodotto.FattoreAltezza = 2;
             }

@@ -405,6 +405,12 @@ namespace BeltsPack.Views
                     distinta.SearchCodCommissioni(this._prodotto.NomeAgente, "SPESE EXTRA");
                 }
 
+                // Inserisco la movimentazione se il nastro è più alto di 280
+                if (this._prodotto.AltezzaApplicazioni >= 280)
+                {
+                    distinta.SearchCodMovimentazione("SPESE EXTRA");
+                }
+
                 // Prodotto finito
                 distinta.SearchCodProdotto(this._bordo.Altezza, this._prodotto.Tipologia);
                 // Imballo

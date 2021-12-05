@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using CsvHelper.Configuration;
+using System.Windows;
 
 namespace BeltsPack.Models
 {
@@ -113,26 +114,33 @@ namespace BeltsPack.Models
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
             dbSQL.OpenConnection();
-
-            // Crea il comando SQL
-            SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.CreateSettingNastriCommand();
-            reader = creaComando.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                var temp = reader.GetValue(reader.GetOrdinal("NomeNastro"));
-                var temp1 = reader.GetValue(reader.GetOrdinal("Classe"));
-                if (temp.ToString() == this.Tipo & Convert.ToInt32(temp1.ToString()) == this.Classe)
+                // Crea il comando SQL
+                SqlDataReader reader;
+                SqlCommand creaComando = dbSQL.CreateSettingNastriCommand();
+                reader = creaComando.ExecuteReader();
+                while (reader.Read())
                 {
-                    this.Peso = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMQ")));
-                    this.SpessoreSup = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreSup")));
-                    this.SpessoreInf = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreInf")));
-                    this.NumTele = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTele")));
-                    this.NumTessuti = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTessuti")));
+                    var temp = reader.GetValue(reader.GetOrdinal("NomeNastro"));
+                    var temp1 = reader.GetValue(reader.GetOrdinal("Classe"));
+                    if (temp.ToString() == this.Tipo & Convert.ToInt32(temp1.ToString()) == this.Classe)
+                    {
+                        this.Peso = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMQ")));
+                        this.SpessoreSup = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreSup")));
+                        this.SpessoreInf = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreInf")));
+                        this.NumTele = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTele")));
+                        this.NumTessuti = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTessuti")));
 
-                    break;
+                        break;
+                    }
                 }
             }
+            catch
+            {
+                System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le caratteristiche (Impostazioni)", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+           
         }
         public void SetPeso()
         {

@@ -487,9 +487,15 @@
     <Content Include="Assets\Images\Anonimo_Logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Assets\Images\Empty_Logo.png" />
-    <Resource Include="Assets\Images\English_Flag.png" />
-    <Resource Include="Assets\Images\German_Flag.png" />
+    <Content Include="Assets\Images\Empty_Logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\English_Flag.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\German_Flag.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Images\IconaBordo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -502,17 +508,39 @@
     <Content Include="Assets\Images\Imballo_bobina.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Assets\Images\Logo_Rik.png" />
-    <Resource Include="Assets\Images\Logo_Bud.png" />
-    <Resource Include="Assets\Images\Logo_Bull.png" />
-    <Resource Include="Assets\Images\Logo_Centrobelt.png" />
-    <Resource Include="Assets\Images\Logo_Ersa.png" />
-    <Resource Include="Assets\Images\Logo_Lutze.png" />
-    <Resource Include="Assets\Images\Logo_Martial.png" />
-    <Resource Include="Assets\Images\Logo_MBS.png" />
-    <Resource Include="Assets\Images\Logo_Primogum.png" />
-    <Resource Include="Assets\Images\Logo_Rema.png" />
-    <Resource Include="Assets\Images\Italian_Flag.png" />
+    <Content Include="Assets\Images\Logo_Rik.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Bud.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Bull.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Centrobelt.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Ersa.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Lutze.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Martial.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_MBS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Primogum.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Logo_Rema.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Italian_Flag.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Images\Logo_Sig.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -525,7 +553,9 @@
     <Content Include="Assets\Images\Parameters_Icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Assets\Images\Spanish_Flag.png" />
+    <Content Include="Assets\Images\Spanish_Flag.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Pdf\SchedaTecnicaPaladini.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -541,21 +571,51 @@
     <Content Include="Assets\Pdf\Scheda_Tecnica_Produzione_Legno_Mod.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\Pdf\Cleats_C_x_2.pdf" />
-    <None Include="Assets\Pdf\Cleats_C_x_3.pdf" />
-    <None Include="Assets\Pdf\Cleats_C_x_4.pdf" />
-    <None Include="Assets\Pdf\Cleats_C_x_5.pdf" />
-    <None Include="Assets\Pdf\Cleats_TC_x_2.pdf" />
-    <None Include="Assets\Pdf\Cleats_TC_x_3.pdf" />
-    <None Include="Assets\Pdf\Cleats_TC_x_4.pdf" />
-    <None Include="Assets\Pdf\Cleats_TC_x_5.pdf" />
-    <None Include="Assets\Pdf\Cleats_T_x_2.pdf" />
-    <None Include="Assets\Pdf\Cleats_T_x_3.pdf" />
-    <None Include="Assets\Pdf\Cleats_T_x_4.pdf" />
-    <None Include="Assets\Pdf\Cleats_T_x_5.pdf" />
-    <None Include="Assets\Pdf\Sidewalls_Cleats_C.pdf" />
-    <None Include="Assets\Pdf\Sidewalls_Cleats_T.pdf" />
-    <None Include="Assets\Pdf\Sidewalls_Cleats_TC.pdf" />
+    <Content Include="Assets\Pdf\Cleats_C_x_2.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_C_x_3.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_C_x_4.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_C_x_5.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_TC_x_2.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_TC_x_3.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_TC_x_4.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_TC_x_5.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_T_x_2.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_T_x_3.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_T_x_4.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Cleats_T_x_5.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Sidewalls_Cleats_C.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Sidewalls_Cleats_T.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pdf\Sidewalls_Cleats_TC.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="BeltsPack_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

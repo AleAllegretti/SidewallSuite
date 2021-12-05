@@ -61,6 +61,14 @@ namespace BeltsPack.Models
 	}
     public class Prodotto
     {
+		// Codice movimentazione
+		public string CodiceMovimentazione { get; set; }
+		// Descrizione movimentazione
+		public string DescrizioneMovimentazione { get; set; }
+		// Quantita movimentazione
+		public string QuantitaMovimentazione { get; set; }
+		// UM movimentazione
+		public string UMMovimentazione { get; set; }
 		// Quantità
 		public int Qty { get; set; }
 		// Email cliente
@@ -197,7 +205,7 @@ namespace BeltsPack.Models
 			List<string> Clienti = new List<string>();
 
 			// Crea il wrapper del database
-			DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+			DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
 			dbSQL.OpenConnection();
 
 			// Crea il comando SQL
@@ -219,7 +227,7 @@ namespace BeltsPack.Models
 		public void SetDettagliCliente()
         {
 			// Crea il wrapper del database
-			DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+			DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
 			dbSQL.OpenConnection();
 
 			// Crea il comando SQL
@@ -228,7 +236,6 @@ namespace BeltsPack.Models
 			reader = creaComando.ExecuteReader();
 			while (reader.Read())
 			{
-				this.NomeAgente = reader.GetValue(reader.GetOrdinal("Agente_Descrizione")).ToString();
 				this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
 				this.TipoConsegna = reader.GetValue(reader.GetOrdinal("Cd_DOPorto")).ToString();
 				this.Destinazione = reader.GetValue(reader.GetOrdinal("Localita")).ToString();
