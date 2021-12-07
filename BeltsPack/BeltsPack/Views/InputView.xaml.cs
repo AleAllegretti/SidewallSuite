@@ -656,7 +656,7 @@ namespace BeltsPack.Views
         {
             try
             {
-                this.tazza.Passo = Convert.ToInt32(this.ComboPassoFix.Text);
+                this.tazza.Passo = Convert.ToInt32(this.ComboPassoFix.SelectedItem);
             }
             catch 
             { }   

@@ -824,7 +824,7 @@ namespace BeltsPack.Utils
         public async void creaCSV()
         {
             // Path salvataggio csv
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + this._prodotto.Cliente + "_" + this._prodotto.Codice ;
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + this._prodotto.Cliente + "_" + this._prodotto.Codice;
             try
             {
                 // Se la directory non esiste la creo

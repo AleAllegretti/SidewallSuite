@@ -266,8 +266,8 @@ namespace BeltsPack.Utils
                 "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
                 "' AND  Cd_AR LIKE " + "'%" + trattamento +
-                "%' AND  Cd_AR LIKE " + "'%" + altezza +
-                "%' AND  LarghezzaMKS LIKE " + "'%" + larghezzaString +
+                "%' AND  Altezza LIKE " + "'%" + altezza +
+                "%' AND  LarghezzaMks LIKE " + "'%" + larghezzaString +
                 "%' AND  Cd_AR LIKE " + "'%" + tipo + "%'");
         }
         public static DatabaseSQL CreateDefault()
