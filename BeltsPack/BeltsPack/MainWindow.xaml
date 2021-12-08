@@ -99,25 +99,30 @@
 
                 <DockPanel >
                     <Grid Grid.Column="0" x:Name="GridMenu" MinHeight="657" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,0,0,-11"  Background="#FFFF1F1F" Width="180" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="11*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
-                            <RowDefinition Height="450"/>
+                            <RowDefinition Height="550"/>
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0" Height="44" Background="#FFFF1F1F">
+                        <Grid Grid.Row="0" Height="44" Background="#FFFF1F1F" Grid.ColumnSpan="3" Margin="0,4,0,3">
                             <Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
                                 <md:PackIcon  Foreground="#FFD1D1D1" Kind="ArrowLeft" Width="50" />
                             </Button>
-                            
+
                             <Button x:Name="ButtonOpenMenu" Width="120" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left" Click="ButtonOpenMenu_Click">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-30,0,0,0">
                                     <Label Content="MENU'" FontSize="18" FontWeight="Light" Foreground="White"/>
                                 </StackPanel>
                             </Button>
-                            
+
                         </Grid>
 
-                        <ListView x:Name="Lista" Margin="3" ToolTip="Ritorna nella home" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="WhiteSmoke">
+                        <ListView x:Name="Lista" Margin="3" ToolTip="Ritorna nella home" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="WhiteSmoke" Grid.ColumnSpan="3">
                             <ListViewItem Height="60" Cursor="Hand" x:Name="Home" Selected="Home_Selected">
                                 <StackPanel Orientation="Horizontal">
                                     <md:PackIcon Kind="ViewDashboard" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
@@ -129,6 +134,13 @@
                                 <StackPanel Orientation="Horizontal">
                                     <md:PackIcon Kind="Database" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
                                     <TextBlock Text="Database" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+
+                            <ListViewItem x:Name="Pim" ToolTip="Database totale" Height="60"  Cursor="Hand" Selected="Pim_Selected" >
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Flowchart" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="PIM" VerticalAlignment="Center" Margin="20 10"/>
                                 </StackPanel>
                             </ListViewItem>
 

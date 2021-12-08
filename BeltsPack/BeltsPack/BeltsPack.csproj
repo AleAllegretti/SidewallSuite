@@ -216,6 +216,7 @@
     <Compile Include="Models\CassaInFerro.cs" />
     <Compile Include="Models\DistintaBase.cs" />
     <Compile Include="Models\Nastro.cs" />
+    <Compile Include="Models\Pim.cs" />
     <Compile Include="Models\Prodotto.cs" />
     <Compile Include="Models\Tazza.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -260,6 +261,9 @@
     <Compile Include="Views\Dialogs\AttachmentSelectionDialog.xaml.cs">
       <DependentUpon>AttachmentSelectionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\CategoryNameDialog.xaml.cs">
+      <DependentUpon>CategoryNameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
     </Compile>
@@ -296,6 +300,12 @@
     </Compile>
     <Compile Include="Views\OutputViewCasseInFerro.xaml.cs">
       <DependentUpon>OutputViewCasseInFerro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pim\PimSettingsView.xaml.cs">
+      <DependentUpon>PimSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pim\PimView.xaml.cs">
+      <DependentUpon>PimView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportProduzioneView.xaml.cs">
       <DependentUpon>ReportProduzioneView.xaml</DependentUpon>
@@ -372,6 +382,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Dialogs\CategoryNameDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\ConfirmDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -417,6 +431,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OutputViewCasseInFerro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pim\PimSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pim\PimView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -493,6 +515,7 @@
     <Content Include="Assets\Images\Cassa_Doppia.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\Images\Close_Window.png" />
     <Content Include="Assets\Images\Customization_Logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

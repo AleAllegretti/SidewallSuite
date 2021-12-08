@@ -29,6 +29,7 @@ namespace BeltsPack.Utils
         public readonly string TABELLA_TAZZE = "Tazze";
         public readonly string TABELLA_ARTICOLI = "AR";
         public readonly string TABELLA_CLIENTI = "CFCliEx";
+        public readonly string TABELLA_CATEGORIE = "Categories";
 
         private Nastro _nastro;
         private Bordo _bordo;
@@ -579,6 +580,14 @@ namespace BeltsPack.Utils
 
             //  The article's been eliminated correctly
             await DialogsHelper.ShowMessageDialog("Articolo eliminato correttamente");
+        }
+        public SqlCommand UpdateCategoriesCommand(string catName)
+        {
+            return this.CreateCommand("INSERT INTO " + TABELLA_CATEGORIE + "(CategoryName) VALUES" + "('" + catName + "')");
+        }
+        public SqlCommand CreateCategorieCommand()
+        {
+            return this.CreateCommand("SELECT CategoryName FROM " + TABELLA_CATEGORIE);
         }
     }
 }

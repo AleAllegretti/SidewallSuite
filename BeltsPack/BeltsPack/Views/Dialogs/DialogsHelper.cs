@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BeltsPack.Views.Dialogs;
 using MaterialDesignThemes.Wpf;
+using static BeltsPack.Models.Pim;
 using static BeltsPack.Models.Prodotto;
 using static BeltsPack.Views.Dialogs.AttachmentSelectionDialog;
 
@@ -74,6 +75,12 @@ namespace BeltsPack.Views.Dialogs
             var view = new LogoSelectionDialog();
 
             return (Fornitore)await DialogHost.Show(view, DIALOG_HOST_ID);
+        }
+        public static async Task<Categoria> SelectCatNameDialog(List<Categoria> categoria)
+        {
+            var view = new CategoryNameDialog();
+
+            return (Categoria)await DialogHost.Show(view, DIALOG_HOST_ID);
         }
     }
 }

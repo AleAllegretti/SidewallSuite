@@ -144,5 +144,11 @@ namespace BeltsPack
                 this.WindowState = WindowState.Maximized;
             }
         }
+
+        private void Pim_Selected(object sender, RoutedEventArgs e)
+        {
+            // Navigo alla schermata del PIM
+            this._mainFrame.NavigationService.Navigate(new PimView());
+        }
     }
 }
