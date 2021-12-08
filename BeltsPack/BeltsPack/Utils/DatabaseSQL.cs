@@ -589,5 +589,13 @@ namespace BeltsPack.Utils
         {
             return this.CreateCommand("SELECT CategoryName FROM " + TABELLA_CATEGORIE);
         }
+        public SqlCommand EmptyCategorieCommand()
+        {
+            return this.CreateCommand("SELECT CategoryName FROM " + TABELLA_CATEGORIE + " Where CategoryName like '%zzzzzz123345643%'");
+        }
+        public SqlCommand RemoveCategoriesCommand(string catName)
+        {
+            return this.CreateCommand("DELETE FROM " + TABELLA_CATEGORIE + " Where CategoryName like '%" + catName + "%'");
+        }
     }
 }
