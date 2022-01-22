@@ -1590,12 +1590,12 @@ namespace BeltsPack.Models
                         this.AvvisoImballoCritico = true;
                     }
                 }
-                else if (this._cassainferro.LunghezzaIniziale <= 5800 &
+                else if (this._cassainferro.LunghezzaIniziale <= 5800 & this._cassainferro.LunghezzaIniziale >= 4500 &
                     this._cassainferro.LunghezzaIniziale <= 5800 - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 5800;
                 }
-                else if (this._cassainferro.LunghezzaIniziale <= 5800 &
+                else if (this._cassainferro.LunghezzaIniziale <= 5800 & this._cassainferro.LunghezzaIniziale >= 4500 &
                     this._cassainferro.LunghezzaIniziale >= 5800 - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 5800;
