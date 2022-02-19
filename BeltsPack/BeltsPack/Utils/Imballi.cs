@@ -34,6 +34,7 @@ namespace BeltsPack.Models
         public int LimiteCassaStd { get; set; }
         public int LimiteHighCube { get; set; }
         public int TolleranzaLarghezza { get; set; }
+        public int LimiteLunghezzaNastroCassaLegno { get; set; }
         public string CodiceCorrugato { get; set; }
         public int LunghezzaCorrugato { get; set; }
         public int PrezzoCorrugato { get; set; }
@@ -189,6 +190,10 @@ namespace BeltsPack.Models
                 {
                     this.LimiteHighCube = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Valore")));
                 }
+                else if (temp.ToString() == "LimitePedanaLegno")
+                {
+                    this.LimiteLunghezzaNastroCassaLegno = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
             }
 
             reader.Close();
@@ -255,7 +260,7 @@ namespace BeltsPack.Models
             {
                 limiteLarghezza = 2400 / 1.15;
             }
-            if (this.Larghezza[0] <= limiteLarghezza)
+            if (this.Larghezza[0] <= limiteLarghezza && this.LimiteLunghezzaNastroCassaLegno >= this._nastro.Lunghezza)
             {
 
                 this.Lunghezza[0] = this.Larghezza[0];
