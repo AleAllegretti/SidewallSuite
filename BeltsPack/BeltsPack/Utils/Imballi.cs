@@ -63,6 +63,8 @@ namespace BeltsPack.Models
         public double[] NumeroCurveCorrugati { get; set; }
         public string Note { get; set; }
         public string NotePaladini { get; set; }
+        public int itrasporto { get; set; }
+        public int cassaFattibile { get; set; }
 
         // Oggetti
         private Nastro _nastro;
@@ -80,7 +82,7 @@ namespace BeltsPack.Models
         int ContatoreConfigurazioni = 0;    // Ci serve nei vettori altezza, larghezza e lunghezza per tenere conto delle configurazioni
         int i;
         int j;
- 
+        double altezzaNastroImballatoFinale = 0;
         public Imballi(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, CassaInFerro cassaInFerro)
         {
             this._nastro = nastro;
@@ -123,6 +125,14 @@ namespace BeltsPack.Models
             this._cassainferro.PesoPluriballAlluminio = new double[10];
             this._cassainferro.PrezzoPluriballAlluminio = new double[10];
             this._cassainferro.NumeroTraversiniBase = new int[10];
+            this._cassainferro.LimiteAltezza = new double[10];
+            this._cassainferro.LimiteLarghezza = new double[10];
+            this._cassainferro.LimiteLunghezza = new double[10];
+            this._cassainferro.TipoTrasporto = new string[10];
+            this._cassainferro.FattibilitaTrasporto = new bool[10];
+            this._cassainferro.FattibilitaCamion = new bool[10];
+            this._cassainferro.FattibilitaNave = new bool[10];
+            this._cassainferro.TrasportoDefault = new string[10];
 
             this.Lunghezza = new double[10];
             this.Larghezza = new double[10];
@@ -377,6 +387,7 @@ namespace BeltsPack.Models
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
             dbSQL.OpenConnection();
+            int i = 0;
 
             // Crea il comando SQL
             SqlDataReader reader;
@@ -384,14 +395,24 @@ namespace BeltsPack.Models
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
-                var temp = reader.GetValue(reader.GetOrdinal("Trasporto"));
-                if (temp.ToString() == this._prodotto.TipologiaTrasporto)
+                this._cassainferro.LimiteAltezza[i] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Altezza"))) * 1000;
+                this._cassainferro.LimiteLarghezza[i] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Larghezza"))) * 1000;
+                this._cassainferro.LimiteLunghezza[i] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Lunghezza"))) * 1000;
+                this._cassainferro.TipoTrasporto[i] = reader.GetValue(reader.GetOrdinal("Trasporto")).ToString();
+
+                if (Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Camion"))) == 1 && 
+                    Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Nave"))) == 1)
                 {
-                    this._cassainferro.LimiteAltezza = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Altezza"))) * 1000;
-                    this._cassainferro.LimiteLarghezza = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Larghezza"))) * 1000;
-                    this._cassainferro.LimiteLunghezza = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Lunghezza"))) * 1000;
-                    break;
+                    this._cassainferro.FattibilitaCamion[i] = true;
+                    this._cassainferro.FattibilitaNave[i] = true;
                 }
+                else 
+                {
+                    this._cassainferro.FattibilitaCamion[i] = true;
+                    this._cassainferro.FattibilitaNave[i] = false;
+                }
+
+                i++;
             }
         }
 
@@ -429,8 +450,6 @@ namespace BeltsPack.Models
 
             // Calcola le dimensioni della cassa
             this._nastro.LunghezzaImballato = 0;
-            int i = 0;
-            int j = 0;
 
             // Stabilisce i limiti dell'imballo
             this.StabilisceLimitiImballo();
@@ -440,12 +459,12 @@ namespace BeltsPack.Models
 
             if (this._prodotto.AltezzaApplicazioni <= 160)
             {
-                // CONFGURAZIONE 1
+                // CONFGURAZIONE 1 - Configurazione principale
                 this.CalcolaImballoConfigurazione1();
                 // CONFIGURAZIONE 3
-                this.CalcolaImballoConfigurazione3();
+                // this.CalcolaImballoConfigurazione3();
                 // CONFIGURAZIONE 5
-                this.CalcolaImballoConfigurazione5();
+                // this.CalcolaImballoConfigurazione5();
 
                 // Considero la configurazione 6 solamente se il nastro è solo bordi o solo tazze
                 if (Math.Min(this._tazza.Altezza,this._bordo.Altezza)<20)
@@ -458,11 +477,11 @@ namespace BeltsPack.Models
            else
             {
                 // CONFIGURAZIONE 2
-                this.CalcolaImballoConfigurazione2();
+                // this.CalcolaImballoConfigurazione2();
                 // CONFIGURAZIONE 4
-                this.CalcolaImballoConfigurazione4();
+                // this.CalcolaImballoConfigurazione4();
                 // CONFIGURAZIONE 6
-                this.CalcolaImballoConfigurazione6();
+                // this.CalcolaImballoConfigurazione6();
                 // CONFIGURAZIONE 7
                 this.CalcolaImballoConfigurazione7();
             }
@@ -714,87 +733,103 @@ namespace BeltsPack.Models
         }
         private void CalcolaImballoConfigurazione1()
         {
-            // Inizializza variabili
-            this.InizializzaVariabili();
+            // PER NASTRI CON BORDI DA 120MM E 160MM
 
-            while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this.Fattibilita[ContatoreConfigurazioni] == true)
+            // Scorro le varie tipologie di trasporto x vedere qual'è la migliore per questo imballo
+            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
             {
-                // Calcola la lunghezza di ciascun strato
-                Strati[i, j] = contatorestrati;
-                j += 1;
+                // Inizializza variabili
+                this.InizializzaVariabili();
 
-                if (contatorestrati == 1)
+                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
                 {
-                    // Calcola la lunghezza del primo strato
-                    Strati[i, j] = Math.Abs(this._cassainferro.LunghezzaIniziale) - this.DiametroPolistirolo / 2;
+                    // Calcola la lunghezza di ciascun strato
+                    Strati[i, j] = contatorestrati;
+                    j += 1;
+
+                    if (contatorestrati == 1)
+                    {
+                        // Calcola la lunghezza del primo strato
+                        Strati[i, j] = Math.Abs(this._cassainferro.LunghezzaIniziale) - this.DiametroPolistirolo / 2;
+                    }
+                    else if (contatorestrati % 2 == 0) // Strati pari
+                    {
+                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato * 0.5 - this._prodotto.AltezzaApplicazioni;
+                    }
+                    else if (contatorestrati % 2 != 0) // Strati dispari
+                    {
+                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato * 0.5 - this.DiametroPolistirolo / 2;
+                    }
+
+                    // Calcola la lunghezza del nastro fino ad ora imballato
+                    if (Strati[i, j] % 2 == 0 && Strati[i, j] != 2)
+                    {
+                        this._nastro.LunghezzaImballato = Math.Abs(this._nastro.LunghezzaImballato) + (Strati[i, j] + this.LunghezzaCurvaEsterna) * this.Numerofile;
+                    }
+                    else if (Strati[i, j] % 2 != 0)
+                    {
+                        this._nastro.LunghezzaImballato = Math.Abs(this._nastro.LunghezzaImballato) + (Strati[i, j] + this.LunghezzaCurvaInterna) * this.Numerofile;
+                    }
+
+                    // Calcola l'oridinata del punto
+                    j += 1;
+                    if (contatorestrati != 1)
+                    {
+                        Strati[i, j] = this._prodotto.AltezzaApplicazioni * (contatorestrati) / this._prodotto.FattoreAltezza;
+                    }
+                    else
+                    {
+                        Strati[i, j] = 0;
+                    }
+
+                    // Controlla che l'altezza della cassa sia dentro i limiti
+                    // Se il numero di strati è di numero pari moltiplico la metà del numero degli strati per il diametro
+                    // del polistirolo e trovo l'altezza massima della parte in polistirolo. Se il numero di strati è dispari,
+                    // sottraggo 1 al numero di strati, lo divido per due e lo moltiplico per il diametro del corrugato
+                    if (contatorestrati % 2 == 0)
+                    {
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
+
+                        // Ci dice quanti strati di polistirolo ha l'imballo
+                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
+                    }
+                    else
+                    {
+                        altezzacorrugati = (contatorestrati + 1) * this._prodotto.AltezzaApplicazioni / this._prodotto.FattoreAltezza + 0.5 * this.DiametroCorrugato;
+
+                        // Ci dice quanti strati di polistirolo ha l'imballo
+                        this.NumeroCurveCorrugati[ContatoreConfigurazioni] = (contatorestrati - 1) / 2;
+                    }
+
+                    // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
+                    this.ControllaLimitiImballo(counter);
+
+                    // Se il nastro non ci sta nell'attuale trasporto (fattibilita = -1) passo al tipo di trasporto successivo
+                    if (this.cassaFattibile == -1 || this.cassaFattibile == 1)
+                    {
+                        break;
+                    }
                 }
-                else if (contatorestrati % 2 == 0) // Strati pari
+
+                // Assegna le dimensioni al vettore solo se la cassa è fattibile
+                if (this.cassaFattibile == 1)
                 {
-                    Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato * 0.5 - this._prodotto.AltezzaApplicazioni;
+                    this.AssegnaDimensioni();
                 }
-                else if (contatorestrati % 2 != 0) // Strati dispari
+                
+                // Assegna il numero di configurazione
+                if (this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
                 {
-                    Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato * 0.5 - this.DiametroPolistirolo / 2;
+                    this.NumeroConfigurazione[ContatoreConfigurazioni] = 1;
+                    this._cassainferro.Configurazione = 1;
                 }
 
-                // Calcola la lunghezza del nastro fino ad ora imballato
-                if (Strati[i, j] % 2 == 0 && Strati[i, j] != 2)
-                {
-                    this._nastro.LunghezzaImballato = Math.Abs(this._nastro.LunghezzaImballato) + (Strati[i, j] + this.LunghezzaCurvaEsterna) * this.Numerofile;
-                }
-                else if (Strati[i, j] % 2 != 0)
-                {
-                    this._nastro.LunghezzaImballato = Math.Abs(this._nastro.LunghezzaImballato) + (Strati[i, j] + this.LunghezzaCurvaInterna) * this.Numerofile;
-                }
+                // Calcola la criticità dell'imballo
+                this.CalcoloCriticitaImballo();
 
-                // Calcola l'oridinata del punto
-                j += 1;
-                if (contatorestrati != 1)
-                {
-                    Strati[i, j] = this._prodotto.AltezzaApplicazioni * (contatorestrati) / this._prodotto.FattoreAltezza;
-                }
-                else
-                {
-                    Strati[i, j] = 0;
-                }
-
-                // Controlla che l'altezza della cassa sia dentro i limiti
-                // Se il numero di strati è di numero pari moltiplico la metà del numero degli strati per il diametro
-                // del polistirolo e trovo l'altezza massima della parte in polistirolo. Se il numero di strati è dispari,
-                // sottraggo 1 al numero di strati, lo divido per due e lo moltiplico per il diametro del corrugato
-                if (contatorestrati % 2 == 0)
-                {
-                    altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
-
-                    // Ci dice quanti strati di polistirolo ha l'imballo
-                    this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
-                }
-                else
-                {
-                    altezzacorrugati = (contatorestrati +1 ) * this._prodotto.AltezzaApplicazioni / this._prodotto.FattoreAltezza + 0.5 * this.DiametroCorrugato;
-
-                    // Ci dice quanti strati di polistirolo ha l'imballo
-                    this.NumeroCurveCorrugati[ContatoreConfigurazioni] = (contatorestrati - 1) / 2;
-                }
-
-                // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
-                this.ControllaLimitiImballo();
-
-            }
-            // Assegna le dimensioni al vettore
-            this.AssegnaDimensioni();
-
-            // Assegna il numero di configurazione
-            if (this.Fattibilita[ContatoreConfigurazioni] == true)
-            {
-                this.NumeroConfigurazione[ContatoreConfigurazioni] = 1;
-            }
-
-            // Calcola la criticità dell'imballo
-            this.CalcoloCriticitaImballo();
-
-            // Calcola peso e prezzo della configurazione
-            this.CalcolaPesoCassa();
+                // Calcola peso e prezzo della configurazione
+                this.CalcolaPesoCassa();
+            }  
         }
         private void CalcolaImballoConfigurazione2()
         {
@@ -865,7 +900,7 @@ namespace BeltsPack.Models
                 }
 
                 // Controllo che siamo dentro i limiti
-                this.ControllaLimitiImballo();
+                //this.ControllaLimitiImballo();
             }
             // Assegna le dimensioni al vettore
             this.AssegnaDimensioni();
@@ -955,7 +990,7 @@ namespace BeltsPack.Models
                 }
 
                 // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
-                this.ControllaLimitiImballo();
+                //this.ControllaLimitiImballo();
             }
             // Assegna le dimensioni al vettore
             this.AssegnaDimensioni();
@@ -1056,7 +1091,7 @@ namespace BeltsPack.Models
                     }
 
                     // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
-                    this.ControllaLimitiImballo();
+                    //this.ControllaLimitiImballo();
                 }
             // Assegna le dimensioni al vettore
             this.AssegnaDimensioni();
@@ -1165,7 +1200,7 @@ namespace BeltsPack.Models
                     }
 
                 // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
-                this.ControllaLimitiImballo();
+                //this.ControllaLimitiImballo();
 
             }
             // Assegna le dimensioni al vettore
@@ -1191,7 +1226,7 @@ namespace BeltsPack.Models
                 // Resetta i limiti dell'imballo
                 this.StabilisceLimitiImballo();
 
-            while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this.Fattibilita[ContatoreConfigurazioni] == true)
+            while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
                 {
                     // Calcola la lunghezza di ciascun strato
                     Strati[i, j] = contatorestrati;
@@ -1307,7 +1342,7 @@ namespace BeltsPack.Models
                     }
 
                 // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
-                this.ControllaLimitiImballo();
+                //this.ControllaLimitiImballo();
 
                 }
             // Assegna le dimensioni al vettore
@@ -1333,7 +1368,7 @@ namespace BeltsPack.Models
             // Resetta i limiti dell'imballo
             this.StabilisceLimitiImballo();
 
-            while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this.Fattibilita[ContatoreConfigurazioni] == true)
+            while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
             {
                 // Calcola la lunghezza di ciascun strato
                 Strati[i, j] = contatorestrati;
@@ -1417,7 +1452,7 @@ namespace BeltsPack.Models
                 }
 
                 // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
-                this.ControllaLimitiImballo();
+                //this.ControllaLimitiImballo();
 
             }
             // Assegna le dimensioni al vettore
@@ -1438,115 +1473,119 @@ namespace BeltsPack.Models
             // Calcola peso e prezzo della configurazione
             this.CalcolaPesoCassa();
         }
-        private void ControllaLimitiImballo()
+        private void ControllaLimitiImballo(int contTrasporto)
         {
             // Calcolo l'altezza dell'imballo in base al massimo tra polistirolo e corrugati
             altezzanastroimballato = Math.Max(altezzacorrugati, altezzapolistirolo);
 
-            // Stabilisco se questo nastro ha la priorità della cassa singola o doppia
-            if (this._cassainferro.LunghezzaIniziale < 5000)
-            {
-                this.GetPriorityCassaDoppia();
-            }
-            
             // Stabilisco la tolleranza: altezza longheroni inf + altezza longh sup + traversini base = 240 [mm]
             // Se il nastro è chiuso aggiungo anche l'altezza del nastro alla tolleranza
             double tolleranza = 80;
 
+            // Mi dice se la cassa è ancora trasportabile con il tipo di trasporto selezionato
+            // -1 --> Infattibile
+            // 0 --> C'è ancora possibilità
+            // 1 --> Soluzione
+
+            // Inizializzo il contatore per il tipo di trasporto
+            this.itrasporto = contTrasporto;
+            
+            // Stabilisco la tolleranza in base al fatto che il nastro sia aperto o chiuso
             if (this._nastro.Aperto == false)
             {
                 tolleranza = tolleranza + this._prodotto.Altezza;
             }
 
-            // Aumento la lunghezza fino a saturazione
-            if (this._cassainferro.LimiteLunghezza >= this._cassainferro.LunghezzaIniziale + 100 
-                & altezzanastroimballato + tolleranza > this._cassainferro.LimiteAltezza || contatorestrati == 20)
-            {               
-                // Aumenta la lunghezza della cassa di 10 cm                   
-                this._cassainferro.LunghezzaIniziale = this._cassainferro.LunghezzaIniziale + 100;
-
-                // Inizializzo contatori
-                this.InizializzaContatori();               
-            }
-            // Come seconda soluzione provo a disporre il nastro in doppia fila
-            else if (this._cassainferro.DoppiaFila & this.LimiteLunghezzaCassaDoppia == this._cassainferro.LunghezzaIniziale &
-                this.Numerofile != 2 & (this._nastro.Larghezza + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia + 
-                this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza)
+            // Stabilisco se questo nastro ha la priorità della cassa singola o doppia
+            if (this._cassainferro.LunghezzaIniziale < 5000)
             {
-                // Stabilisco il limite della cassa doppia come il limite della cassa
-                this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza;
-
-                // Stabilisco il numero di file
-                this.Numerofile = 2;
-
-                // Inizializzo contatori
-                this.InizializzaVariabili();
-            }
-            // Come terza soluzione aumento l'altezza fino a saturazione
-            else if (this._cassainferro.LimiteLunghezza == this._cassainferro.LunghezzaIniziale
-                && this._cassainferro.LimiteAltezza != 2530 && this._cassainferro.LimiteAltezza != 2800)
-            {
-                this._cassainferro.LimiteAltezza = 2530;
-
-                // Provo a disporre su una fila e basta
-                this.Numerofile = 1;
-
-                // Inizializzo le variabili
-                this.InizializzaVariabili();
-
-            }
-            // Come quarta soluzione aumento l'altezza fino a saturazione
-            else if (this._cassainferro.LimiteLunghezza == this._cassainferro.LunghezzaIniziale
-                && this._cassainferro.LimiteAltezza != 2800 && altezzanastroimballato > 2530 & this._prodotto.TipologiaTrasporto == "Camion")
-            {
-                // Aumento il limite dell'altezza
-                this._cassainferro.LimiteAltezza = 2800;
-
-                // Provo a disporre su una fila e basta
-                this.Numerofile = 1;
-
-                // Inizializzo le variabili
-                this.InizializzaVariabili();
-            }
-            // Come quinta soluzione provo a disporre il nastro in doppia fila su una cassa altaa 2800
-            else if (this._cassainferro.DoppiaFila & this._cassainferro.LimiteLunghezza == this._cassainferro.LunghezzaIniziale &&
-                 this._prodotto.TipologiaTrasporto == "Nave standard" && 
-                 this._cassainferro.LimiteAltezza == 2800 && 
-                 this.Numerofile != 2 &&
-                 (this._nastro.Larghezza + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia +
-                 this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza)
-            {
-                // Stabilisco il numero di file
-                this.Numerofile = 2;
-
-                // Inizializzo contatori
-                this.InizializzaVariabili();
+                this.GetPriorityCassaDoppia(this.itrasporto);
             }
 
-            else if (altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza
-                && this._nastro.LunghezzaImballato < this._nastro.Lunghezza)
+            // Capisco se posso passare allo strato successivo mantenendo
+            // COSTANTE sia l'altezza che la lunghezza
+            if (altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto]
+                        && this._nastro.LunghezzaImballato < this._nastro.Lunghezza)
             {
                 // Passiamo allo strato successivo
                 j = 0;
                 i += 1;
                 contatorestrati += 1;
-            } 
-            else if (altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza
-                && this._nastro.LunghezzaImballato >= this._nastro.Lunghezza
-                && this._cassainferro.LimiteLunghezza >= this._cassainferro.LunghezzaIniziale)
+
+                // Ancora non so se la cassa sia fattibile o meno
+                cassaFattibile = 0;
+            }
+            // Nell'attuale cassa il nastro non ci sta
+            // Azzero tutto ed AUMENTO LA LUNGHEZZA INIZIALE della cassa
+            else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
+                        && altezzanastroimballato + tolleranza > this._cassainferro.LimiteAltezza[this.itrasporto]))
             {
-                this.Fattibilita[ContatoreConfigurazioni] = true;
+                // Aumenta la lunghezza della cassa di 10 cm                   
+                this._cassainferro.LunghezzaIniziale = this._cassainferro.LunghezzaIniziale + 100;
+
+                // Inizializzo contatori
+                this.InizializzaContatori();
+            }
+
+            // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
+            else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
+                        && altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto]))
+            {
+                // La configurazione è valida su questo imballo
+                this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
+                this.cassaFattibile = 1;
+                altezzaNastroImballatoFinale = altezzanastroimballato;
+
+                // Inizializzo contatori
+                this.InizializzaContatori();
             }
             else
             {
-                // Ci dice che l'imballo non è fattibile
-                this.Fattibilita[ContatoreConfigurazioni] = false;
-            }
+                // Su questo trasporto il nastro non ci sta
+                this.cassaFattibile = -1;
 
+                // Comunico che il nastro non può stare su questo trasporto
+                this._cassainferro.FattibilitaTrasporto[this.itrasporto] = false;
+
+                // Inizializzo contatori
+                this.InizializzaContatori();
+
+                //// Scorro tutti i trasporti per vedere in quale il nastro ci sta
+                //foreach (string tipotrasporto in this._cassainferro.TipoTrasporto)
+                //{
+
+                //    // Come seconda soluzione provo a disporre il nastro in doppia fila
+                //    if (this._cassainferro.DoppiaFila & this.LimiteLunghezzaCassaDoppia == this._cassainferro.LunghezzaIniziale &
+                //        this.Numerofile != 2 & (this._nastro.Larghezza + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia +
+                //        this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza[itrasporto])
+                //    {
+                //        // Stabilisco il limite della cassa doppia come il limite della cassa
+                //        this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza[itrasporto];
+
+                //        // Stabilisco il numero di file
+                //        this.Numerofile = 2;
+
+                //        // Inizializzo contatori
+                //        this.InizializzaVariabili();
+                //    }
+                //    else if (altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[itrasporto]
+                //        && this._nastro.LunghezzaImballato >= this._nastro.Lunghezza
+                //        && this._cassainferro.LimiteLunghezza[itrasporto] >= this._cassainferro.LunghezzaIniziale)
+                //    {
+                //        this.Fattibilita[ContatoreConfigurazioni] = true;
+                //    }
+                //    else
+                //    {
+                //        // Ci dice che l'imballo non è fattibile
+                //        this.Fattibilita[ContatoreConfigurazioni] = false;
+                //    }
+                //}
+            }
+            
         }
         private void InizializzaVariabili()
         {
-            this.Fattibilita[ContatoreConfigurazioni] = true;
+            this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] = true;
             this._nastro.LunghezzaImballato = 0;
             Strati = new double[30, 3];
             i = 0;
@@ -1559,17 +1598,17 @@ namespace BeltsPack.Models
         private void AssegnaDimensioni()
         {
 
-            if (this.Fattibilita[ContatoreConfigurazioni])
+            if (this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni])
             {
                 // Arrotondamento lunghezza x container 11.8m nel caso c'è il margine di sicurezza
-                if (this._cassainferro.LunghezzaIniziale >= 11000 & this._cassainferro.LimiteLunghezza == 11800 &
-                    this._cassainferro.LunghezzaIniziale <= this._cassainferro.LimiteLunghezza - this.TolleranzaLunghezza)
+                if (this._cassainferro.LunghezzaIniziale >= 11000 & this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] == 11800 &
+                    this._cassainferro.LunghezzaIniziale <= this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 11800;
                 }
                 // Arrotondamento lunghezza x container 11.8m nel caso in cui non c'è il margine di sicurezza in lunghezza
-                else if (this._cassainferro.LunghezzaIniziale >= 11000 & this._cassainferro.LimiteLunghezza == 11800 & 
-                    this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza - this.TolleranzaLunghezza)
+                else if (this._cassainferro.LunghezzaIniziale >= 11000 & this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] == 11800 & 
+                    this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 11800;
                     if(this.AvvisoImballoCritico == false)
@@ -1579,13 +1618,13 @@ namespace BeltsPack.Models
                         this.AvvisoImballoCritico = true;
                     }                 
                 }
-                else if(this._cassainferro.LunghezzaIniziale >= 12000 & this._cassainferro.LimiteLunghezza == 13600 &
-                    this._cassainferro.LunghezzaIniziale <= this._cassainferro.LimiteLunghezza - this.TolleranzaLunghezza)
+                else if(this._cassainferro.LunghezzaIniziale >= 12000 & this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] == 13600 &
+                    this._cassainferro.LunghezzaIniziale <= this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 13600;
                 }
-                else if (this._cassainferro.LunghezzaIniziale >= 12000 & this._cassainferro.LimiteLunghezza == 13600 &
-                    this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza - this.TolleranzaLunghezza)
+                else if (this._cassainferro.LunghezzaIniziale >= 12000 & this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] == 13600 &
+                    this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[ContatoreConfigurazioni] - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 13600;
                     if (this.AvvisoImballoCritico == false)
@@ -1617,21 +1656,21 @@ namespace BeltsPack.Models
                 }
                 
                 // Arrotondamento altezza
-                if (altezzanastroimballato >= this.LimiteCassaStd & altezzanastroimballato <= this.LimiteHighCube)
+                if (altezzaNastroImballatoFinale >= this.LimiteCassaStd & altezzaNastroImballatoFinale <= this.LimiteHighCube)
                 {
                     this.Altezza[ContatoreConfigurazioni] = 2240;
                 }
-                else if (altezzanastroimballato >= this.LimiteHighCube & altezzanastroimballato <= this.LimiteOpenTop)
+                else if (altezzaNastroImballatoFinale >= this.LimiteHighCube & altezzaNastroImballatoFinale <= this.LimiteOpenTop)
                 {
                     this.Altezza[ContatoreConfigurazioni] = 2530;
                 }
-                else if (altezzanastroimballato >= this.LimiteOpenTop)
+                else if (altezzaNastroImballatoFinale >= this.LimiteOpenTop)
                 {
                     this.Altezza[ContatoreConfigurazioni] = 2800;
                 }
                 else
                 {
-                    this.Altezza[ContatoreConfigurazioni] = altezzanastroimballato + 240;
+                    this.Altezza[ContatoreConfigurazioni] = altezzaNastroImballatoFinale + 240;
                 }     
                 
                 // Calcolo la larghezza in base al numero di file
@@ -1649,9 +1688,9 @@ namespace BeltsPack.Models
         private async void ControllaFattibilitaTotale()
         {
             // Controlla se c'è almeno una configurazione fattibile
-            for (int i = 0; i <= this.Fattibilita.Length - 1; i++)
+            for (int i = 0; i <= this._cassainferro.FattibilitaTrasporto.Length - 1; i++)
             {
-                if (this.Fattibilita[i] == true)
+                if (this._cassainferro.FattibilitaTrasporto[i] == true)
                 {
                     this.ImballoCalcolabile = true;
                 }
@@ -1685,7 +1724,7 @@ namespace BeltsPack.Models
         private void PossibilitaCassaDoppia()
         {
             // Controllo se la doppia fila mi ci sta in termini di larghezza
-            if (this._nastro.Larghezza * 2 + this.TolleranzaCassaDoppia + this.TolleranzaLarghezza < this._cassainferro.LimiteLarghezza)
+            if (this._nastro.Larghezza * 2 + this.TolleranzaCassaDoppia + this.TolleranzaLarghezza < this._cassainferro.LimiteLarghezza[i])
             {
                 this._cassainferro.DoppiaFila = true;
             }
@@ -1695,17 +1734,17 @@ namespace BeltsPack.Models
             }
             
         }
-        private void GetPriorityCassaDoppia()
+        private void GetPriorityCassaDoppia(int itrasporto)
         {
             // Se la alrghezza del nastro è <600 do priorità alla cassa doppia
             if (this._nastro.Larghezza <= 600)
             {
                 this.PriorityCassaDoppia = true;
-                this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza;
+                this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza[itrasporto];
             }
             else
             {
-                this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza;
+                this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza[itrasporto];
                 this.PriorityCassaDoppia = false;
             }
 
@@ -1713,13 +1752,65 @@ namespace BeltsPack.Models
         private void InizializzaContatori()
         {
             this._nastro.LunghezzaImballato = 0;
-            this.Fattibilita[ContatoreConfigurazioni] = true;
+            if (this.itrasporto < this._cassainferro.FattibilitaTrasporto.Length - 1)
+            {
+                this._cassainferro.FattibilitaTrasporto[this.itrasporto + 1] = true;
+            }
+            
             i = 0;
             j = 0;
             contatorestrati = 1;
             altezzacorrugati = 0;
             altezzapolistirolo = 0;
             altezzanastroimballato = 0;
+        }
+        public List<string> ListaTipologieTrasporto(bool camion)
+        {
+            List<string> TipologieTrasporto = new List<string>();
+
+            // Mi dice se l'imballo suggerito è già stato comunicato
+            bool suggerito = false;
+
+            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
+            {
+                if (camion == true)
+                {
+                    if (this._cassainferro.FattibilitaTrasporto[counter] == true &&
+                        this._cassainferro.FattibilitaCamion[counter] == true )
+                    {
+                        // Se è il primo, allora suggerisco quello perchè il più conveniente
+                        if (this._cassainferro.FattibilitaNave[counter] == false && suggerito == false)
+                        {
+                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter] + " (Suggerito)");
+                            suggerito = true;
+                        }
+                        else
+                        {
+                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter]);
+                        }                      
+                    }
+                }
+                // Vuol dire che ho selezionato la nave come trasporto
+                else
+                {
+                    if (this._cassainferro.FattibilitaTrasporto[counter] == true &&
+                        this._cassainferro.FattibilitaNave[counter] == true )
+                    {
+                        // Se è il primo, allora suggerisco quello perchè il più conveniente
+                        if (suggerito == false)
+                        {
+                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter] + " (Suggerito)");
+                            suggerito = true;
+                        }
+                        else
+                        {
+                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter]);
+                        }
+                    }
+                }
+
+            }
+            return TipologieTrasporto;
         }
     }
 }

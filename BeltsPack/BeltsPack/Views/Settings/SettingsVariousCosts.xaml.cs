@@ -71,7 +71,7 @@ namespace BeltsPack.Views
 
                 // Controlla che i valori inseriti siano conformi con il database
                 if (e.Column.Header.ToString() == "Lunghezza" || e.Column.Header.ToString() == "Larghezza" ||
-                e.Column.Header.ToString() == "Altezza")
+                e.Column.Header.ToString() == "Altezza" || e.Column.Header.ToString() == "Trasporto")
                 {
                     if (float.TryParse(((System.Windows.Controls.TextBox)e.EditingElement).Text.ToString(), out float _))
                     {

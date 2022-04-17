@@ -12,31 +12,24 @@ namespace BeltsPack.Models
 		public int Configurazione { get; set; }
 
 		// Limite in lunghezza
-		private double limitelunghezza;
-
-		public double LimiteLunghezza
-		{
-			get { return limitelunghezza; }
-			set { limitelunghezza = value; }
-		}
+		public double[] LimiteLunghezza { get; set; }
 
 		// Limite in larghezza
-		private double limitelarghezza;
-
-		public double LimiteLarghezza
-		{
-			get { return limitelarghezza; }
-			set { limitelarghezza = value; }
-		}
+		public double[] LimiteLarghezza { get; set; }
 
 		// Limite in altezza
-		private double limitealtezza;
+		public double[] LimiteAltezza { get; set; }
 
-		public double LimiteAltezza
-		{
-			get { return limitealtezza; }
-			set { limitealtezza = value; }
-		}
+		// Tipo Trasporto
+		public string[] TipoTrasporto { get; set; }
+		// Determino il trasporto di default
+		public string[] TrasportoDefault { get; set; }
+		// Fattibilità nave
+		public bool[] FattibilitaNave { get; set; }
+		// Fattibilità camion
+		public bool[] FattibilitaCamion { get; set; }
+		// Fattibilità imballo
+		public bool[] FattibilitaTrasporto { get; set; }
 
 		// Lunghezza
 		private double lunghezza;

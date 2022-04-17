@@ -581,24 +581,6 @@ namespace BeltsPack.Views
             }
         }
 
-        private void ComboAltezzaTazze_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            // Assegno l'altezza della tazza
-            tazza.Altezza = Convert.ToInt32(this.ComboAltezzaTazze.SelectedValue.ToString());
-            try
-            {
-                // Determino le caratterstiche della tazza
-                this.tazza.CarattersticheTazza();
-            }
-            catch
-            {
-                System.Windows.MessageBox.Show("Non sono riuscito a determinare tutte le caratteristiche della tazza. \nAssicurarsi che il dB sia aggiornato.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            
-            // Azzero lo spazio tra le tazze
-            this.SpazioTazzeFileMultiple.Text = "";
-        }
-
         private void ComboFix_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.prodotto.PresenzaFix = this.ComboFix.SelectedValue.ToString();

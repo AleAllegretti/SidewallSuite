@@ -54,7 +54,9 @@
         </Grid.Resources>
         
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.34*"/>
+            <RowDefinition Height="0.17*"/>
+            <RowDefinition Height="0.14*"/>
+            <RowDefinition Height="0.3*"/>
             <RowDefinition Height="0.3*"/>
             <RowDefinition Height="0.4*"/>
             <RowDefinition Height="0.3*"/>
@@ -68,20 +70,42 @@
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
 
-        <!--Tipologia imballo-->
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" >
+        <!--Selezione tipologia di trasporto-->
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+            <Label FontWeight="Bold" Content="Seleziona tipologia di trasporto" 
+                   HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" FontSize="20" Width="400"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Row="1" Grid.Column="0">
+            <Label Content="Camion" Width="70"></Label>
+            <md:PackIcon Kind="Truck"  Width="30" Margin="0,0,0,0" Foreground="Black" VerticalAlignment="Center"></md:PackIcon>
+            <CheckBox Cursor="Hand" x:Name="CKCamion" Margin="5,0,0,0" IsChecked="False" Checked="CKCamion_Checked"  ></CheckBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" Grid.Column="1">
+            <Label Content="Nave" Width="70"></Label>
+            <md:PackIcon  Kind="Ship" Width="30" Margin="0,0,0,0" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Left"></md:PackIcon>
+            <CheckBox Cursor="Hand" x:Name="CKNave" Margin="5,0,0,0" IsChecked="False" Checked="CKNave_Checked"  ></CheckBox>
+        </StackPanel>
+
+        <!--Tipologia imballo-->       
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" >
             <Label FontWeight="Bold" x:Name="labelTipologiaImballo"  Content="Tipologia imballo" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="TBTipologiaImballo" Width="160" Margin="20,0,0,0" HorizontalAlignment="Left" ></TextBox>
+            <ComboBox  HorizontalAlignment="Left"
+                        SelectedValue="{Binding tipologiaTrasporto, Mode=TwoWay}"
+                        Name="ComboTipologiaTrasporto"  Margin="20,0,0,0" 
+                       SelectionChanged="ComboTipologiaTrasporto_SelectionChanged" >
+            </ComboBox>
         </StackPanel>
             
         <!--Peso imballo-->
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" >
+        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="0" >
             <Label FontWeight="Bold" x:Name="labelPesoImballo"  Content="Peso imballo  [kg]" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="TBPesoImballo" Width="160" Margin="20,0,0,0" HorizontalAlignment="Left"></TextBox>
         </StackPanel>
             
         <!--Note produzione-->
-        <StackPanel Margin="100,0,0,0" Orientation="Vertical" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="top" HorizontalAlignment="Left">
+        <StackPanel Margin="100,0,0,0" Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="top" HorizontalAlignment="Left">
             <Label HorizontalAlignment="Left" FontWeight="Bold" x:Name="labelNote"  Content="Note produzione" Margin="0,10,0,0" VerticalAlignment="Top"/>
             <Border Margin="0,0,0,0" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
                 <TextBox IsReadOnly="False" Background="{DynamicResource MaterialDesignPaper}" BorderThickness="0" x:Name="TBNote" Width="380" Height="60"  Margin="20,0,0,0" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
@@ -89,19 +113,19 @@
         </StackPanel>
 
         <!--Lunghezza imballo-->
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" >
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" >
             <Label FontWeight="Bold" x:Name="labelLunghezzaImballo"  Content="Lunghezza imballo [mm]" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBLunghezzaImballo" Width="160" Margin="0,0,0,0"></TextBox>
         </StackPanel>
 
         <!--Costo imballo-->
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1">
             <Label FontWeight="Bold" x:Name="labelCostoImballo" Content="Costo imballo  [€]" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBCostoImballo" Width="160" Margin="0,0,0,0" Loaded="TBCostoImballo_Loaded"></TextBox>
         </StackPanel>
 
         <!--Configurazione imballo-->
-        <StackPanel  Margin="100,0,0,0" Orientation="Vertical" Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" Visibility="Collapsed">
+        <StackPanel  Margin="100,0,0,0" Orientation="Vertical" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Visibility="Collapsed">
             <Label FontWeight="Bold" x:Name="labelConfigurazione" Content="Scegli configurazione" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="0,10,0,0"/>
             <StackPanel Orientation="Horizontal" >
                 <ComboBox ToolTip="N° configurazione" Cursor="Hand" Name="ComboNumeroConfigurazioni" Width="80" HorizontalAlignment="Left" SelectedValuePath="Content" md:HintAssist.Hint="N° config." Margin="0,0,0,0" SelectionChanged="ComboNumeroConfigurazioni_SelectionChanged" >
@@ -111,19 +135,19 @@
         </StackPanel>
 
         <!--Larghezza imballo-->       
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" >
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" >
                   <Label FontWeight="Bold" x:Name="labelLarghezzaImballo"  Content="Larghezza imballo [mm]" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBLarghezzaImballo" Width="160" Margin="20,0,0,0"></TextBox>
         </StackPanel>
       
         <!--Altezza imballo-->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1">
             <Label FontWeight="Bold" x:Name="labelAltezzaImballo"  Content="Altezza imballo [mm]" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBAltezzaImballo" Width="160" Margin="0,0,0,0"></TextBox>
         </StackPanel>
         
         <!--Note Paladini-->
-        <StackPanel Margin="100,0,0,0" Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center"  HorizontalAlignment="Left">
+        <StackPanel Margin="100,0,0,0" Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center"  HorizontalAlignment="Left">
             <Label HorizontalAlignment="Left" FontWeight="Bold" x:Name="labelNotePaladini"  Content="Note Paladini" Margin="0,10,0,0" VerticalAlignment="Top"/>
             <Border Margin="0,0,0,0" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
                 <TextBox IsReadOnly="False" Background="{DynamicResource MaterialDesignPaper}" BorderThickness="0" x:Name="TBNotePaladini" Width="380" Height="60"  Margin="20,0,0,0" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
@@ -131,36 +155,36 @@
         </StackPanel>
 
         <!--Peso nastro-->
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0">
+        <StackPanel Orientation="Vertical" Grid.Row="5" Grid.Column="0">
             <Label FontWeight="Bold"   Content="Peso nastro [kg]" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBPesoNastro" Width="160" Margin="20,0,0,0"></TextBox>
         </StackPanel>
 
         <!--Peso totale-->
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1" >
+        <StackPanel Orientation="Vertical" Grid.Row="5" Grid.Column="1" >
             <Label FontWeight="Bold"   Content="Peso totale [kg]" HorizontalAlignment="Left" Margin="00,10,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBPesoTotale" Width="160" Margin="0,0,0,0"></TextBox>
         </StackPanel>
 
         <!--Bottone per il cambio di immmagine-->
-        <StackPanel Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical">
+        <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="100,0,0,0">
                 <Label Content="Immagine nastro" Width="130"></Label>
                 <md:PackIcon Kind="Show" x:Name="IconaNastro" Width="30" Margin="0,5,0,0" Foreground="Black"></md:PackIcon>
-                <CheckBox Cursor="Hand" x:Name="CKNastro" Margin="10,0,0,0" IsChecked="False" Checked="CKNastro_Checked" ></CheckBox>
+                <CheckBox Cursor="Hand" x:Name="CKNastro" Margin="10,0,0,0" IsChecked="False" Checked="CKNastro_Checked" IsEnabled="False" ></CheckBox>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="100,0,0,0">
                 <Label Content="Immagine cassa" Width="130"></Label>
                 <md:PackIcon x:Name="IconaCassa" Kind="Hide" Width="30" Margin="0,5,0,0" Foreground="Black"></md:PackIcon>
-                <CheckBox Cursor="Hand" x:Name="CKCassa" Margin="10,0,0,0" IsChecked="False" Checked="CKCassa_Checked" ></CheckBox>
+                <CheckBox Cursor="Hand" x:Name="CKCassa" Margin="10,0,0,0" IsChecked="False" Checked="CKCassa_Checked" IsEnabled="False" ></CheckBox>
             </StackPanel>
         </StackPanel>
-        
+
         <!--Bottone materiale-->
-        <StackPanel Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2"  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="117,0,0,0">
+        <StackPanel Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2"  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="117,0,0,0">
             <Button  Name="buttonMaterialeUtilizzato" Margin="0,0,0,0" Width="120"  Height="120" HorizontalAlignment="Left" Click="buttonMaterialeUtilizzato_Click"
-                     Background="#F6F6F6">
+                     Background="#F6F6F6" IsEnabled="False">
                 <StackPanel Orientation="Vertical">
                     <md:PackIcon Kind="FormatListBulleted" Width="60" Height="60" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="16" Text="Materiali e costi" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
@@ -168,7 +192,8 @@
                 </StackPanel>
             </Button>
 
-            <Button Background="#40EE93" Name="buttonSalvaDb" Margin="60,0,0,0" Width="120"  Height="120" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="buttonSalvaDb_Click"  >
+            <Button Background="#40EE93" Name="buttonSalvaDb" Margin="60,0,0,0" Width="120"  Height="120" VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Right" Click="buttonSalvaDb_Click" IsEnabled="False" >
                 <StackPanel Orientation="Vertical">
                     <md:PackIcon Kind="ContentSave" Width="60" Height="60" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="16" Text="Salva" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,0" 
@@ -179,7 +204,7 @@
         </StackPanel>
 
         <!--Immagine imballo-->
-        <StackPanel Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="100,0,0,0">
+        <StackPanel Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="100,0,0,0">
             <Image x:Name="imagePack" Source="/Assets/Images/Configurazione1.png"  />
             <Label x:Name="LBCassaDoppia" Content="*Cassa doppia"  HorizontalAlignment="Left" Visibility="Hidden"/>
         </StackPanel>

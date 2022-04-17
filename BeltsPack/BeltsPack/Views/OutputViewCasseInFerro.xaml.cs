@@ -37,6 +37,7 @@ namespace BeltsPack.Views
         private Tazza _tazza;
         private Prodotto _prodotto;
         int NumeroConfigurazione = 0;
+        public string tipologiaTrasporto { get; set; }
         public string configurazioneconveniente { get; set; }
         public ChartValues<ObservablePoint> NastroImballato { get; set; }
         public OutputViewCasseInFerro(Imballi imballi, CassaInFerro cassaInFerro, InputView inputView, Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto)
@@ -59,7 +60,7 @@ namespace BeltsPack.Views
 
             // Riempie la combobox con il numero delle configurazioni
             int i = 0;
-            for (i = 0; i <= this._imballi.NumeroConfigurazione.Length -1; i++)
+            for (i = 0; i <= this._imballi.NumeroConfigurazione.Length - 1; i++)
             {
                 if (this._imballi.Fattibilita[i] == true)
                 {
@@ -67,51 +68,51 @@ namespace BeltsPack.Views
                 }
             }
 
-            // Assegna il numero di configurazione in base all'altezza del bordo
-            int confPrincipale;
-            int confSecondaria;
-            int indexConf = 100;
-            if (this._bordo.Altezza != 0 && this._tazza.Altezza != 0)
-            {
-                if (this._bordo.Altezza <= 160)
-                {
-                    confPrincipale = 1;
-                    confSecondaria = 5;
-                }
-                else
-                {
-                    confPrincipale = 7;
-                    confSecondaria = 6;
-                }
-            }
-            else
-            {
-                confPrincipale = 6;
-                confSecondaria = 3;
-            }
+            //// Assegna il numero di configurazione in base all'altezza del bordo
+            //int confPrincipale;
+            //int confSecondaria;
+            //int indexConf = 100;
+            //if (this._bordo.Altezza != 0 && this._tazza.Altezza != 0)
+            //{
+            //    if (this._bordo.Altezza <= 160)
+            //    {
+            //        confPrincipale = 1;
+            //        confSecondaria = 5;
+            //    }
+            //    else
+            //    {
+            //        confPrincipale = 7;
+            //        confSecondaria = 6;
+            //    }
+            //}
+            //else
+            //{
+            //    confPrincipale = 6;
+            //    confSecondaria = 3;
+            //}
 
 
-            // Controllo se è presente la configurazione principale
-            for (i = 0; i <= this._imballi.NumeroConfigurazione.Length - 1; i++)
-            {
-                if (this._imballi.NumeroConfigurazione[i] == confPrincipale)
-                {
-                    indexConf = i;
-                }
-                else if (this._imballi.NumeroConfigurazione[i] == confSecondaria && indexConf == 100)
-                {
-                    indexConf = i;
-                }
-            }
-            this.ComboNumeroConfigurazioni.Text = this._imballi.NumeroConfigurazione[indexConf].ToString();
-            this._cassaInFerro.Configurazione = int.Parse(this.ComboNumeroConfigurazioni.Text.ToString());
+            //// Controllo se è presente la configurazione principale
+            //for (i = 0; i <= this._imballi.NumeroConfigurazione.Length - 1; i++)
+            //{
+            //    if (this._imballi.NumeroConfigurazione[i] == confPrincipale)
+            //    {
+            //        indexConf = i;
+            //    }
+            //    else if (this._imballi.NumeroConfigurazione[i] == confSecondaria && indexConf == 100)
+            //    {
+            //        indexConf = i;
+            //    }
+            //}
+            //this.ComboNumeroConfigurazioni.Text = this._imballi.NumeroConfigurazione[indexConf].ToString();
+            //this._cassaInFerro.Configurazione = int.Parse(this.ComboNumeroConfigurazioni.Text.ToString());
 
-            // Assegno il peso del nastro
-            this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
+            //// Assegno il peso del nastro
+            //this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
 
-            // Chekko l'immagine del nastro
-            this.CKNastro.IsChecked = true;
-           }
+            //// Chekko l'immagine del nastro
+            //this.CKNastro.IsChecked = true;
+        }
 
         private void ReturnHome_Click(object sender, RoutedEventArgs e)
         {
@@ -224,8 +225,7 @@ namespace BeltsPack.Views
                 if (this._imballi.Fattibilita[i] == true && this._imballi.NumeroConfigurazione[i] == int.Parse(this.ComboNumeroConfigurazioni.SelectedItem.ToString()))
                 {
                     NumeroConfigurazione = i;
-                    // Quando cambio il numero della configurazione vado a cambiare anche tutti i valori calcolati per quella configurazione
-                    this.TBTipologiaImballo.Text = this._imballi.Tipologia;
+                    // Quando cambio il numero della configurazione vado a cambiare anche tutti i valori calcolati per quella configurazione                    
                     this.TBLunghezzaImballo.Text = Convert.ToString(this._imballi.Lunghezza[i]);
                     this.TBLarghezzaImballo.Text = Convert.ToString(this._imballi.Larghezza[i]);
                     this.TBAltezzaImballo.Text = Convert.ToString(this._imballi.Altezza[i]);
@@ -454,7 +454,7 @@ namespace BeltsPack.Views
             this.CKCassa.IsChecked = false;
 
             // Carico l'immagine del nastro
-            this.imagePack.Source = new BitmapImage(new Uri(@"\Assets\Images\Configurazione" + this.ComboNumeroConfigurazioni.SelectedItem.ToString() + ".png", UriKind.Relative));
+            this.imagePack.Source = new BitmapImage(new Uri(@"\Assets\Images\Configurazione" + this._cassaInFerro.Configurazione + ".png", UriKind.Relative));
 
         }
 
@@ -491,6 +491,71 @@ namespace BeltsPack.Views
             }
             
 
+        }
+
+        private void CKCamion_Checked(object sender, RoutedEventArgs e)
+        {
+            // Uncheck della nave
+            this.CKNave.IsChecked = false;
+
+            // Abilito i bottono che erano stati disattivati
+            this.buttonMaterialeUtilizzato.IsEnabled = true;
+            this.buttonSalvaDb.IsEnabled = true;
+            this.CKCassa.IsEnabled = true;
+            this.CKNastro.IsEnabled = true;
+
+            // Riempio la combobox in base alle tipologie di trasporto disponibili
+            this.ComboTipologiaTrasporto.ItemsSource = this._imballi.ListaTipologieTrasporto(true).ToArray();          
+        }
+
+        private void CKNave_Checked(object sender, RoutedEventArgs e)
+        {
+            // Uncheck della nave
+            this.CKCamion.IsChecked = false;
+
+            // Abilito i bottono che erano stati disattivati
+            this.buttonMaterialeUtilizzato.IsEnabled = true;
+            this.buttonSalvaDb.IsEnabled = true;
+            this.CKCassa.IsEnabled = true;
+            this.CKNastro.IsEnabled = true;
+
+            // Riempio la combobox in base alle tipologie di trasporto disponibili
+            this.ComboTipologiaTrasporto.ItemsSource = this._imballi.ListaTipologieTrasporto(true).ToArray();
+        }
+
+        private void ComboTipologiaTrasporto_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Al check mostro a schermo le grandezze dell'imballo iù conveniente su camion
+            for (int counter = 0; counter < this._cassaInFerro.FattibilitaTrasporto.Length; counter++)
+            {
+                // Capisco se l'imballo è adatto al camion ed è fattibile ed in caso stampo le grandezze a schermo
+                if (this.ComboTipologiaTrasporto.SelectedItem.ToString().Contains(this._cassaInFerro.TipoTrasporto[counter]))
+                {
+                    // Lunghezza imballo
+                    this.TBLunghezzaImballo.Text = this._imballi.Lunghezza[counter].ToString();
+
+                    // Larghezza imballo
+                    this.TBLarghezzaImballo.Text = Convert.ToString(this._imballi.Larghezza[counter]);
+
+                    // Altezza imballo
+                    this.TBAltezzaImballo.Text = Convert.ToString(this._imballi.Altezza[counter]);
+
+                    // Costo imballo
+                    this.TBCostoImballo.Text = Convert.ToString(this._cassaInFerro.PrezzoCassaFinale[counter]);
+
+                    // Peso imballo
+                    this.TBPesoImballo.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter]);
+
+                    // Peso del nastro
+                    this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
+
+                    // Peso totale
+                    this.TBPesoTotale.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter] + this._prodotto.PesoTotaleNastro);
+
+                    //Dato che ho trovato l'imballo corretto, esco dal ciclo
+                    break;
+                }
+            }
         }
     }
 }

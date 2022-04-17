@@ -465,7 +465,8 @@ namespace BeltsPack.Utils
 
         public SqlCommand CreateSettingLimitiTrasportoCommand()
         {
-            return this.CreateCommand("SELECT ID,Trasporto,Lunghezza,Larghezza, Altezza,DataUltimoAggiornamento FROM " + TABELLA_LIMITI_TRASPORTO);
+            return this.CreateCommand("SELECT ID,Trasporto,Lunghezza,Larghezza, Altezza, Camion, Nave, DataUltimoAggiornamento, Priorita" +
+                " FROM " + TABELLA_LIMITI_TRASPORTO + " ORDER BY Priorita" );
         }
 
         public SqlCommand UpdateDbCommand(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Imballi imballi, int i)
