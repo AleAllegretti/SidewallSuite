@@ -522,7 +522,7 @@ namespace BeltsPack.Utils
                 "TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett) VALUES" +
                 "('" + prodotto.Codice + "', '" + prodotto.Cliente.ToString() + "' ,'" + cassaInFerro.Stato.ToString() + "','" + DateTime.Now.Date.ToString("d/M/yyyy") + "'," + nastro.Lunghezza + "," + nastro.Larghezza +
                 "," + bordo.Altezza + "," + tazza.Altezza + ", '" + nastro.TipologiaNastro() + "', '" + this._imballi.Tipologia + " ','" + cassaInFerro.PrezzoCassaFinale[i] + "€" + "'," +
-                Math.Round(cassaInFerro.PesoFinale[i],0) + "," + _imballi.Larghezza[i] + "," + _imballi.Lunghezza[i] + "," + _imballi.Altezza[i] + "," + cassaInFerro.Configurazione + ",'" + cassaInFerro.Personalizzazione.ToString() + "','" + 
+                Math.Round(cassaInFerro.PesoFinale[i],0) + "," + Math.Round(_imballi.Larghezza[i],0) + "," + Math.Round(_imballi.Lunghezza[i],0) + "," + Math.Round(_imballi.Altezza[i],0) + "," + cassaInFerro.Configurazione + ",'" + cassaInFerro.Personalizzazione.ToString() + "','" + 
                 imballi.Criticita[i] + "','" + this._prodotto.TipologiaTrasporto.ToString() + "'," + this._prodotto.VersioneCodice + "," + this._imballi.NumeroCurveCorrugati[i]
                 + "," + this._imballi.NumeroCurvePolistirolo[i] + "," + this._imballi.DiametroCorrugato + "," + this._imballi.DiametroPolistirolo + "," + this._nastro.Larghezza + ",'" +
                 this._imballi.Note.ToString() + "','" + this._imballi.NotePaladini.ToString() + "','" + presenzaincroci + "','" + presenzaganci +

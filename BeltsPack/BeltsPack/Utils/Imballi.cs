@@ -1539,7 +1539,8 @@ namespace BeltsPack.Models
 
             // Provo a disporre, se possibile il nastro in doppia fila
             else if (this.Numerofile != 2 & (this._nastro.Larghezza + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia +
-                        this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza[this.itrasporto])
+                        this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza[this.itrasporto] &&
+                        this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[this.itrasporto])
             {
                 // Stabilisco il numero di file
                 this.Numerofile = 2;
@@ -1570,37 +1571,6 @@ namespace BeltsPack.Models
 
                 // Inizializzo contatori
                 this.InizializzaContatori();
-
-                //// Scorro tutti i trasporti per vedere in quale il nastro ci sta
-                //foreach (string tipotrasporto in this._cassainferro.TipoTrasporto)
-                //{
-
-                //    // Come seconda soluzione provo a disporre il nastro in doppia fila
-                //    if (this._cassainferro.DoppiaFila & this.LimiteLunghezzaCassaDoppia == this._cassainferro.LunghezzaIniziale &
-                //        this.Numerofile != 2 & (this._nastro.Larghezza + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia +
-                //        this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza[itrasporto])
-                //    {
-                //        // Stabilisco il limite della cassa doppia come il limite della cassa
-                //        this.LimiteLunghezzaCassaDoppia = this._cassainferro.LimiteLunghezza[itrasporto];
-
-                //        // Stabilisco il numero di file
-                //        this.Numerofile = 2;
-
-                //        // Inizializzo contatori
-                //        this.InizializzaVariabili();
-                //    }
-                //    else if (altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[itrasporto]
-                //        && this._nastro.LunghezzaImballato >= this._nastro.Lunghezza
-                //        && this._cassainferro.LimiteLunghezza[itrasporto] >= this._cassainferro.LunghezzaIniziale)
-                //    {
-                //        this.Fattibilita[ContatoreConfigurazioni] = true;
-                //    }
-                //    else
-                //    {
-                //        // Ci dice che l'imballo non è fattibile
-                //        this.Fattibilita[ContatoreConfigurazioni] = false;
-                //    }
-                //}
             }
             
         }

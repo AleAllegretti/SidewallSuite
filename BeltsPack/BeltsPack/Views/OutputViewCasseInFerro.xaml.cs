@@ -522,6 +522,9 @@ namespace BeltsPack.Views
                         // Assegno il dettaglio della tipologia di trasporto
                         this._prodotto.tipologiaTrasportoDett = this.ComboTipologiaTrasporto.SelectedItem.ToString();
 
+                        // Memorizzo il numero di configurazione di mio interesse
+                        NumeroConfigurazione = counter;
+
                         //Dato che ho trovato l'imballo corretto, esco dal ciclo
                         break;
                     }
