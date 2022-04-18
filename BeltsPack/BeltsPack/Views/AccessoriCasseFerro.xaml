@@ -44,8 +44,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="33"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="1.6*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.6*"/>
         </Grid.RowDefinitions>
 
         <!--Intestazione-->
@@ -56,7 +57,7 @@
         </StackPanel>
         
         <!--Diagonali ad incrocio-->
-        <md:Card Margin="60,40,60,0" Grid.Row="1" Grid.Column="0">
+        <md:Card Margin="60,40,60,0" Grid.Row="2" Grid.Column="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -80,58 +81,8 @@
             </Grid>
         </md:Card>
 
-        <!--Tamponatura laterale-->
-        <md:Card Margin="60,40,60,0" Grid.Row="1" Grid.Column="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="34"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="0.3*"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel Margin="0,10,0,0"  Grid.Row="0">
-                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
-                    Tamponatura laterale
-                    </TextBlock>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <Image x:Name="imagereteLaterale"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform"  Source="/Assets/Images/ReteLaterale.png" />
-                </StackPanel>
-                <StackPanel Grid.Row="2">
-                    <CheckBox x:Name="TamponaturaConRete" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
-                </StackPanel>
-
-            </Grid>
-        </md:Card>
-
-        <!--Verniciatura-->
-        <md:Card Margin="60,40,60,0" Grid.Row="1" Grid.Column="3">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="34"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="0.3*"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel Margin="0,10,0,0"  Grid.Row="0">
-                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
-                    Verniciatura
-                    </TextBlock>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <md:PackIcon Kind="FormatPaint" Foreground="DimGray" Width="100" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Grid.Row="2">
-                    <CheckBox x:Name="Verniciatura" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
-                </StackPanel>
-
-            </Grid>
-        </md:Card>
-
         <!--Fondo in lamiera-->
-        <md:Card Margin="60,60,60,20" Grid.Row="2" Grid.Column="0">
+        <md:Card Margin="60,40,60,0" Grid.Row="2" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -155,37 +106,8 @@
             </Grid>
         </md:Card>
 
-        <!--Solo ritti-->
-        <md:Card x:Name="CardRitti" Margin="60,60,60,20" Grid.Row="2" Grid.Column="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="0.3*"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel Margin="0,10,0,0"  Grid.Row="0" Orientation="Vertical">
-                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light">
-                    Cassa solo ritti
-                    </TextBlock>
-                    <TextBlock HorizontalAlignment="Center" FontSize="11" FontWeight="Light">
-                    (solo per casse con lunghezza minore di 6 [m])
-                    </TextBlock>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <Image x:Name="imagesoloritti"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform"  Source="/Assets/Images/SoloRitti.png" />
-                </StackPanel>
-                <StackPanel Grid.Row="2">
-                    <CheckBox x:Name="SoloRitti" Cursor="Hand" HorizontalAlignment="Center"></CheckBox>
-                </StackPanel>
-
-            </Grid>
-        </md:Card>
-
-        
         <!--Selezione logo-->
-        <md:Card Margin="60,60,60,20" Grid.Row="2" Grid.Column="2">
+        <md:Card Margin="60,40,60,0" Grid.Row="2" Grid.Column="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -230,7 +152,7 @@
         </md:Card>
 
         <!--Bottone avanti-->
-        <StackPanel HorizontalAlignment="Right"  Margin="15,0,60,0" Grid.Column="2" Grid.Row="3">
+        <StackPanel HorizontalAlignment="Right"  Margin="15,0,60,0" Grid.Column="2" Grid.Row="4">
             <Button Background="#F6F6F6" ToolTip="Crea documentazione in pdf" Name="Creadocumentazione" Height="100" Width="100" Click="Calcola_Click">
                 <StackPanel Orientation="Vertical">
                     <md:PackIcon Kind="EyeOutline" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>

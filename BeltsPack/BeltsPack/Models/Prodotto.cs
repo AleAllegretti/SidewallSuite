@@ -168,9 +168,11 @@ namespace BeltsPack.Models
 			get { return pistaLaterale; }
 			set { pistaLaterale = value; }
 		}
+        // Tipologia di trasporto al dettaglio (container 40ft, 20ft ecc...)+
+        public string tipologiaTrasportoDett { get; set; }
 
-		// Tipologia di trasporto
-		private string tipologiatrasporto;
+        // Tipologia di trasporto
+        private string tipologiatrasporto;
 
 		public string TipologiaTrasporto
 		{

@@ -83,7 +83,13 @@ namespace BeltsPack.Views
                 this.ComboAltezzaTazze.ItemsSource = this.ListaAltezzeTazze().ToArray();
             }          
             this.altezzaTazza = this.prodotto.AltezzaTazze;
-            this.tipologiaNastro = this.prodotto.TipoNastro;
+
+            if (!String.IsNullOrEmpty(this.prodotto.TipoNastro))
+            {
+                this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
+            }
+            
+            this.tipologiaNastro = this.prodotto.TipoNastro;          
             this.classeNastro = this.prodotto.ClasseNastro;
             this.baseBordo = this.prodotto.LarghezzaBordo;
             this.pistaLaterale = this.prodotto.PistaLaterale;
@@ -100,7 +106,7 @@ namespace BeltsPack.Views
                 this.passonoFix = this.prodotto.PassoTazze;
             }
 
-            // Riempio il mneù dei clineti
+            // Riempio il mneù dei clienti
             ComboClienti.ItemsSource = this.prodotto.ListaClienti().ToArray();
 
             // Abilito il data binding
@@ -363,26 +369,6 @@ namespace BeltsPack.Views
             }
 
             return Classi;
-        }
-
-        private void ComboStrutturaNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Assegno il tipo di nastro
-            this.nastro.Tipo = this.ComboStrutturaNastro.SelectedValue.ToString();
-            if (this.nastro.Tipo != "NON CODIFICATO")
-            {
-                // Popola la combo delle classi in base al tipo di nastro
-                this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
-                // Abilito la combo della classe nel caso in cui fosse stata disabilitata
-                this.ComboClasseNastro.IsEnabled = true;
-            }
-            else
-            {
-                var view = new NastroNonCodDialog(this.nastro);
-                DialogHost.Show(view);
-                // Diasibilito la combo della classe
-                this.ComboClasseNastro.IsEnabled = false;
-            }
         }
 
         private async void Calcola_Click_1(object sender, RoutedEventArgs e)
@@ -811,6 +797,43 @@ namespace BeltsPack.Views
             }
             
             
+        }
+
+        private void CBTipologiaNastro_DropDownOpened(object sender, EventArgs e)
+        {
+            // Riempio il menù a tendina
+            this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
+        }
+
+        private void CBTipologiaNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.nastro.Tipo = this.tipologiaNastro;
+            // Assegno il tipo di nastro
+            try
+            {
+                if (this.CBTipologiaNastro.SelectedItem.ToString() != null)
+                {
+                    this.nastro.Tipo = this.CBTipologiaNastro.SelectedItem.ToString();
+                    if (this.nastro.Tipo != "NON CODIFICATO")
+                    {
+                        // Popola la combo delle classi in base al tipo di nastro
+                        this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
+                        // Abilito la combo della classe nel caso in cui fosse stata disabilitata
+                        this.ComboClasseNastro.IsEnabled = true;
+                    }
+                    else
+                    {
+                        var view = new NastroNonCodDialog(this.nastro);
+                        DialogHost.Show(view);
+                        // Diasibilito la combo della classe
+                        this.ComboClasseNastro.IsEnabled = false;
+                    }
+                }
+            }
+            catch
+            {
+                return;
+            }
         }
     }
 }

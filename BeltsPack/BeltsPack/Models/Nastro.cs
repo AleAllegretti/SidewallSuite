@@ -64,7 +64,7 @@ namespace BeltsPack.Models
         // Trattamento
         public string Trattamento { get; set; }
         // Quantità DiBa
-        public  double QuantitaDiba { get; set; }
+        public double QuantitaDiba { get; set; }
         // Sigla trattamento
         public string SiglaTrattamento { get; set; }
         // Peso totale
@@ -140,13 +140,13 @@ namespace BeltsPack.Models
             {
                 System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le caratteristiche (Impostazioni)", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-           
+
         }
         public void SetPeso()
         {
             this.PesoTotale = this.Larghezza * this.Lunghezza * Math.Pow(10, -6) * this.Peso;
         }
-        
+
         public void SetTrattamentoSigla(string key)
         {
             IDictionary<string, string> siglaTrattamento = new Dictionary<string, string>();
@@ -177,8 +177,32 @@ namespace BeltsPack.Models
             // Determino la sigla del trattamento
             this.RangeTemperatura = tempTrattamento[key];
         }
-    }
+        public List<string> ListaTiplogieNastro()
+        {
+            List<string> TipologieNastro = new List<string>();
 
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingDistinctNastriCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("NomeNastro"));
+                if (temp.ToString() != null)
+                {
+                    TipologieNastro.Add(reader.GetValue(reader.GetOrdinal("NomeNastro")).ToString());
+                }
+            }
+
+            // Metto gli elementi della lista in ordine crescente
+
+            return TipologieNastro;
+    }
+    }
     
     enum ApertoChiuso
     {

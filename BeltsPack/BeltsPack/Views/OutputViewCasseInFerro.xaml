@@ -94,7 +94,8 @@
             <ComboBox  HorizontalAlignment="Left"
                         SelectedValue="{Binding tipologiaTrasporto, Mode=TwoWay}"
                         Name="ComboTipologiaTrasporto"  Margin="20,0,0,0" 
-                       SelectionChanged="ComboTipologiaTrasporto_SelectionChanged" >
+                       SelectionChanged="ComboTipologiaTrasporto_SelectionChanged" 
+                       FontSize="13">
             </ComboBox>
         </StackPanel>
             
@@ -205,8 +206,8 @@
 
         <!--Immagine imballo-->
         <StackPanel Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="100,0,0,0">
-            <Image x:Name="imagePack" Source="/Assets/Images/Configurazione1.png"  />
-            <Label x:Name="LBCassaDoppia" Content="*Cassa doppia"  HorizontalAlignment="Left" Visibility="Hidden"/>
+            <Image x:Name="imagePack"  />
+            <Label x:Name="LBCassaDoppia" Content="*Cassa doppia"  HorizontalAlignment="Left" Visibility="Hidden" Background="Yellow" Width="auto"/>
         </StackPanel>
 
     </Grid>

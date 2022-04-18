@@ -44,14 +44,14 @@ namespace BeltsPack.Views
             this._prodotto = prodotto;
 
             this.DataContext = this;
+
             // Inizializza
             InitializeComponent();
 
-            // 
-            if(this._imballi.Lunghezza.Max() > 6000)
+            // Se la SIG seleziono il logo della SIG
+            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
             {
-                this.SoloRitti.IsEnabled = false;
-                this.CardRitti.Background = Brushes.LightGray;
+                this.RadioSig.IsChecked = true;
             }
         }
 
@@ -88,8 +88,8 @@ namespace BeltsPack.Views
                 this._cassaInFerro.DiagonaliIncrocio = false;
             }
 
-            // Tamponatura con rete fianchi
-            if (this.TamponaturaConRete.IsChecked == true)
+            // Tamponatura con rete fianchi - la metto solo se il cliente è la SIG
+            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
             {
                 prezzotamponatura = this.InterrogaListinoPaladini("RETE20001000", true);
                 this._cassaInFerro.TamponaturaConRete = true;
@@ -108,7 +108,7 @@ namespace BeltsPack.Views
             }
 
             // Verniciatura
-            if (this.Verniciatura.IsChecked == true & this._imballi.Lunghezza[0] <= 9000)
+            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma") & this._imballi.Lunghezza[0] <= 9000)
             {
                 int i = 0;
                 while (this._imballi.Lunghezza[i] != 0)
@@ -118,7 +118,7 @@ namespace BeltsPack.Views
                     i += 1;
                 }
             }
-            else if (this.Verniciatura.IsChecked == true & this._imballi.Lunghezza[0] > 9000)
+            else if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma") & this._imballi.Lunghezza[0] > 9000)
             {
                 int i = 0;
                 while (this._imballi.Lunghezza[i] != 0)
@@ -143,8 +143,8 @@ namespace BeltsPack.Views
                 this._cassaInFerro.FondoLamiera = false;
             }
 
-            // Solo ritti
-            if (this.SoloRitti.IsChecked == true)
+            // Solo ritti - solo se la lunghezza della cassa è inferiore a 6 metri
+            if (this._imballi.Lunghezza.Max() <= 6000)
             {
                 int i = 0;
                 while (this._cassaInFerro.PrezzoReteTamponatura[i] != 0)
@@ -194,8 +194,15 @@ namespace BeltsPack.Views
                 ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati di aver inserito il tipo di personalizazione", ConfirmDialog.ButtonConf.OK_ONLY);
                 checkcompletamento = false;
             }
-            
-            if(checkcompletamento)
+
+
+            // Comunico gli accessori nel caso il cliente sia la SIG
+            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Verniciatura e tamponatura laterale sono state inserite in automatico per la SIG.", ConfirmDialog.ButtonConf.OK_ONLY);
+            }
+
+            if (checkcompletamento)
             {
                 // Calcolo il prezzo finale della cassa
                 this.CalcoloPrezzoFinale(prezzoincrocio, prezzotamponatura, prezzovernicitura, prezzoetichetteganci, prezzodiagonali);
@@ -375,23 +382,6 @@ namespace BeltsPack.Views
 
             // Output
             return Prezzo;
-        }
-
-        private async void SoloRitti_Click(object sender, RoutedEventArgs e)
-        {
-            for (int i = 0; i < this._imballi.Lunghezza.Length; i++)
-            {
-                if (this.SoloRitti.IsChecked == true && this._imballi.Lunghezza[i] > 4000)
-                {
-                    // Mostra il messaggio di avviso
-                    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa con 'solo i ritti' è prevista per lunghezze minori o uguali di 4 [m].", ConfirmDialog.ButtonConf.OK_ONLY);
-
-                    // Cambia lo stato della presenza dei ritti a false
-                    this.SoloRitti.IsChecked = false;
-                    this._cassaInFerro.SoloRitti = false;
-                }
-            }
-                     
         }
 
         private void RadioSidewall_Checked(object sender, RoutedEventArgs e)

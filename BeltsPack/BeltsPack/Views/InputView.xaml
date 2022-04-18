@@ -205,18 +205,10 @@
                 <!--Nastro base-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
                     <Label  Content="Tipo" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox  HorizontalAlignment="Left" ToolTip="Tiplogia nastro base" Name="ComboStrutturaNastro"  
-                               SelectedValuePath="Content" Margin="15,0,0,0" 
-                               SelectedValue="{Binding tipologiaNastro, Mode=TwoWay}" SelectionChanged="ComboStrutturaNastro_SelectionChanged" >
-                        <ComboBoxItem >TEXRIGID</ComboBoxItem>
-                        <ComboBoxItem >TEXTER</ComboBoxItem>
-                        <ComboBoxItem >XE</ComboBoxItem>
-                        <ComboBoxItem >CROSSRIGID</ComboBoxItem>
-                        <ComboBoxItem >CROSSBEL-O</ComboBoxItem>
-                        <ComboBoxItem >EP</ComboBoxItem>
-                        <ComboBoxItem >EP-FLAT</ComboBoxItem>
-                        <ComboBoxItem >EPBRK</ComboBoxItem>
-                        <ComboBoxItem >NON CODIFICATO</ComboBoxItem>
+                    <ComboBox  HorizontalAlignment="Left" ToolTip="Tipologia nastro base" Name="CBTipologiaNastro"  
+                               SelectedValuePath="Content" Margin="15,0,0,0"  md:HintAssist.Hint="-"
+                               SelectedValue="{Binding tipologiaNastro, Mode=TwoWay}" DropDownOpened="CBTipologiaNastro_DropDownOpened" SelectionChanged="CBTipologiaNastro_SelectionChanged" 
+                              >
                     </ComboBox>
                 </StackPanel>
 
