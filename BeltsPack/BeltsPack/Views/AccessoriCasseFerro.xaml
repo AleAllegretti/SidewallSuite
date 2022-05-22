@@ -39,6 +39,7 @@
             <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -50,14 +51,40 @@
         </Grid.RowDefinitions>
 
         <!--Intestazione-->
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" >
             <TextBlock Margin="0,10,0,0" FontSize="22" FontWeight="DemiBold">
                 SELEZIONARE ACCESSORI CASSA
             </TextBlock>
         </StackPanel>
+
+        <!--Cassa solo ritti-->
+        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,10,0,0" Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" FontWeight="Light" >
+                    Cassa solo ritti
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Image x:Name="imageSoloRitti"  HorizontalAlignment="Center" VerticalAlignment="Top"  Stretch="Uniform" Source="/Assets/Images/SoloRitti.png" />
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <CheckBox Cursor="Hand" x:Name="SoloRitti" HorizontalAlignment="Center" IsEnabled="False"></CheckBox>
+                    <TextBlock HorizontalAlignment="Center" FontSize="10">(*) Lunghezza cassa inferiore ai 6m e trasporto EU non SIG</TextBlock>
+                </StackPanel>
+
+            </Grid>
+        </md:Card>
         
         <!--Diagonali ad incrocio-->
-        <md:Card Margin="60,40,60,0" Grid.Row="2" Grid.Column="0">
+        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -82,7 +109,7 @@
         </md:Card>
 
         <!--Fondo in lamiera-->
-        <md:Card Margin="60,40,60,0" Grid.Row="2" Grid.Column="1">
+        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -107,7 +134,7 @@
         </md:Card>
 
         <!--Selezione logo-->
-        <md:Card Margin="60,40,60,0" Grid.Row="2" Grid.Column="2">
+        <md:Card Margin="30,40,60,0" Grid.Row="2" Grid.Column="3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -152,7 +179,7 @@
         </md:Card>
 
         <!--Bottone avanti-->
-        <StackPanel HorizontalAlignment="Right"  Margin="15,0,60,0" Grid.Column="2" Grid.Row="4">
+        <StackPanel HorizontalAlignment="Right"  Margin="15,0,60,0" Grid.Column="3" Grid.Row="4">
             <Button Background="#F6F6F6" ToolTip="Crea documentazione in pdf" Name="Creadocumentazione" Height="100" Width="100" Click="Calcola_Click">
                 <StackPanel Orientation="Vertical">
                     <md:PackIcon Kind="EyeOutline" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>

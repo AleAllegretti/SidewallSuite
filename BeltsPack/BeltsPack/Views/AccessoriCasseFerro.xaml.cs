@@ -48,8 +48,17 @@ namespace BeltsPack.Views
             // Inizializza
             InitializeComponent();
 
-            // Se la SIG seleziono il logo della SIG
-            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
+            // Abilito l'opzione dei solo ritti
+            if (this._imballi.Lunghezza.Max() <= 6000
+                && this._prodotto.ProvenienzaClienteContinente == "EU"
+                && this._prodotto.Cliente.ToLower().Contains("italiana gomma") == false)
+            {
+                // Abilito il checkbox
+                this.SoloRitti.IsEnabled = true;
+            }
+
+                // Se la SIG seleziono il logo della SIG
+                if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
             {
                 this.RadioSig.IsChecked = true;
             }
@@ -144,10 +153,12 @@ namespace BeltsPack.Views
             }
 
             // Solo ritti - solo se la lunghezza della cassa è inferiore a 6 metri
-            if (this._imballi.Lunghezza.Max() <= 6000)
+            if (this.SoloRitti.IsChecked == true)
             {
+
+                // Ricalcolo il prezzo dei longheroni
                 int i = 0;
-                while (this._cassaInFerro.PrezzoReteTamponatura[i] != 0)
+                while (this._cassaInFerro.PrezzoLongheroni[i] != 0)
                 {
                     this._cassaInFerro.PrezzoLongheroni[i] = this._cassaInFerro.PrezzoLongheroni[i] / 2;
                     this._cassaInFerro.PesoLongheroni[i] = this._cassaInFerro.PesoLongheroni[i] / 2;
