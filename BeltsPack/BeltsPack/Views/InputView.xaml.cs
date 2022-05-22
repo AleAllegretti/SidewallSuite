@@ -10,6 +10,7 @@ using System.Reflection;
 using System.IO;
 using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace BeltsPack.Views
 {
@@ -89,7 +90,7 @@ namespace BeltsPack.Views
                 this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
             }
             
-            this.tipologiaNastro = this.prodotto.TipoNastro;          
+            this.tipologiaNastro = this.prodotto.TipoNastro;
             this.classeNastro = this.prodotto.ClasseNastro;
             this.baseBordo = this.prodotto.LarghezzaBordo;
             this.pistaLaterale = this.prodotto.PistaLaterale;
@@ -477,7 +478,8 @@ namespace BeltsPack.Views
                 }
                
                 // Calcolo il peso totale del nastro finito
-                this.prodotto.SetPesoTotale(this.nastro.PesoTotale, this.tazza.PesoTotale, this.bordo.PesoTotale);
+                this.prodotto.SetPesoTotale(this.nastro.PesoTotale, this.tazza.PesoTotale, this.bordo.PesoTotale, this.prodotto.Tipologia);
+
                 // Calcolo le dimensioni dell'imballo
                 this.CalcolaImballo();
             }
@@ -778,6 +780,85 @@ namespace BeltsPack.Views
         private void ComboClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.prodotto.Cliente = this.cliente;
+
+            //// Capisco la nazionalità del cliente
+            //DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            //dbSQL.OpenConnection();
+
+            //// Crea il comando SQL
+            //SqlDataReader reader;
+            //SqlCommand creaComando = dbSQL.ClienteSearchCommand(this.cliente);
+            //reader = creaComando.ExecuteReader();
+
+            //// Trovo la sigla della nazione di provenienza del cliente
+            //while (reader.Read())
+            //{
+            //    this.prodotto.ProvenienzaClienteSigla = reader.GetValue(reader.GetOrdinal("Cd_Nazione")).ToString();
+            //}
+
+            //reader.Close();
+
+            //// In base alla sigla del cliente mi trovo le info della nazione
+            //try
+            //{
+            //    RegionInfo info = new RegionInfo(this.prodotto.ProvenienzaClienteSigla);
+            //    this.prodotto.ProvenienzaClienteNazione = info.EnglishName;
+            //}
+            //catch (ArgumentException argEx)
+            //{
+            //    // The code was not a valid country code
+            //}
+
+            //// Capisco se il paese è in europa o meno
+            //if (this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("russia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("germany") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("united kingdom") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("france") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("italy") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("spain") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("ukraine") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("poland") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("netherlands") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("belgium") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("czech republic") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("greece") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("portugal") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("sweden") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("hungary") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("belarus") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("austria") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("switzerland") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("bulgaria") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("denmark") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("finland") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("slovakia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("norway") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("ireland") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("croatia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("moldova") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("bosnia and herzegovina") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("albania") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("lithuania") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("north macedonia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("slovenia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("latvia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("estonia") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("montenegro") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("luxembourg") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("malta") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("iceland") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("andorra") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("monaco") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("liechtestein") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("san marino") ||
+            //    this.prodotto.ProvenienzaClienteNazione.ToLower().Contains("holy see"))
+            //{
+            //    this.prodotto.ProvenienzaClienteContinente = "EU";
+            //}
+            //else
+            //{
+            //    this.prodotto.ProvenienzaClienteContinente = "EXTRA-EU";
+            //}
         }
 
         private void Quantity_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -807,13 +888,14 @@ namespace BeltsPack.Views
 
         private void CBTipologiaNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.nastro.Tipo = this.tipologiaNastro;
+            this.nastro.Tipo = this.prodotto.TipoNastro;
+            this.CBTipologiaNastro.SelectedItem = this.nastro.Tipo;
+
             // Assegno il tipo di nastro
             try
             {
                 if (this.CBTipologiaNastro.SelectedItem.ToString() != null)
                 {
-                    this.nastro.Tipo = this.CBTipologiaNastro.SelectedItem.ToString();
                     if (this.nastro.Tipo != "NON CODIFICATO")
                     {
                         // Popola la combo delle classi in base al tipo di nastro

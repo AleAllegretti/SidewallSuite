@@ -293,20 +293,27 @@ namespace BeltsPack.Utils
                 lunghezzaTazza = lunghezzaTazza.Replace("X", "");
 
                 // Converto la string in numero per vederne la lunghezza corretta
-                lunghezzaTazzaNum = Convert.ToInt32(lunghezzaTazza);
-
-                // Vedo se la lunghezza della mia tazza è minore di quella che sto leggendo a dB
-                if (lunghezzaTazzaNum >= this._tazza.Lunghezza && lunghezzaTazzaNum <lunghezzaMin)
+                try
                 {
-                    // Mi tengo buono questo valore
-                    lunghezzaMin = lunghezzaTazzaNum;
+                    lunghezzaTazzaNum = Convert.ToInt32(lunghezzaTazza);
 
-                    // Prendo le caratteristiche del nastro
-                    this._tazza.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
-                    this._tazza.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
+                    // Vedo se la lunghezza della mia tazza è minore di quella che sto leggendo a dB
+                    if (lunghezzaTazzaNum >= this._tazza.Lunghezza && lunghezzaTazzaNum < lunghezzaMin)
+                    {
+                        // Mi tengo buono questo valore
+                        lunghezzaMin = lunghezzaTazzaNum;
 
-                    break;
+                        // Prendo le caratteristiche del nastro
+                        this._tazza.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                        this._tazza.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
+
+                        break;
+                    }
                 }
+                catch 
+                {
+
+                }              
             }
             // Controllo che il codice del nastro sia presente
             this.PresenzaCodice(this._tazza.CodiceApplicazione, 6);
@@ -956,11 +963,22 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            if (this._tazza.NumeroFile == 1)
+                            if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "No" && this._prodotto.PresenzaBlinkers == "No")
                             {
-                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (Not screwed to sidewall)");
                             }
-                            else
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "No")
+                            {
+                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + 
+                                    this._tazza.Lunghezza + " [mm] - (Screwed to sidewall)");
+                            }
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "Si")
+                            {
+                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (Screwed to sidewall with blinkers)");
+                            }
+                            else if(this._tazza.NumeroFile !=1)
                             {
                                 sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
                                     this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " rows");
@@ -996,11 +1014,22 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            if (this._tazza.NumeroFile == 1)
+                            if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "No" && this._prodotto.PresenzaBlinkers == "No")
                             {
-                                sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                                sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (Non avvitate al bordo)");
                             }
-                            else
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "No")
+                            {
+                                sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (Avvitate al bordo)");
+                            }
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "Si")
+                            {
+                                sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (Avvitate al bordo con blinkers)");
+                            }
+                            else if (this._tazza.NumeroFile != 1)
                             {
                                 sw.WriteLine("Tipo tazze: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
                                     this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " file");
@@ -1050,7 +1079,23 @@ namespace BeltsPack.Utils
                         sw.WriteLine("Randzone: " + this._prodotto.PistaLaterale + " [mm]");
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            sw.WriteLine("Stollenabstand : " + this._tazza.Passo + " [mm]");
+                            if(this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "No" && this._prodotto.PresenzaBlinkers == "No")
+                            {
+                                sw.WriteLine("Stollenabstand : " + this._tazza.Passo + " [mm] - (nicht an den Wellkanten schrauben)");
+                            }
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "No")
+                            {
+                                sw.WriteLine("Stollenabstand : " + this._tazza.Passo + " [mm] - (Wellkanten schrauben)");
+                            }
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "Si")
+                            {
+                                sw.WriteLine("Stollenabstand : " + this._tazza.Passo + " [mm] - (Wellkanten schrauben mit Blinkers)");
+                            }
+                            else if (this._tazza.NumeroFile != 1)
+                            {
+                                sw.WriteLine("Stollenabstand : " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " Datei");
+                            }
                         }
                         if (this._nastro.Aperto)
                         {
@@ -1076,11 +1121,22 @@ namespace BeltsPack.Utils
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {
-                            if (this._tazza.NumeroFile == 1)
+                            if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "No" && this._prodotto.PresenzaBlinkers == "No")
                             {
-                                sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " + this._tazza.Lunghezza + " [mm]");
+                                sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (No atornillar hasta el borde)");
                             }
-                            else
+                            else if(this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "No")
+                            {
+                                sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (atornillado al borde)");
+                            }
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == "Si" && this._prodotto.PresenzaBlinkers == "Si")
+                            {
+                                sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm] - (atornillado al borde con blinkers)");
+                            }
+                            else if (this._tazza.NumeroFile != 1)
                             {
                                 sw.WriteLine("Tipo de taco: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
                                     this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " filas");
@@ -1165,6 +1221,10 @@ namespace BeltsPack.Utils
                         this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
                         this._imballi.Altezza[numeroConf] + " [mm]");
                     sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+                    if (this._prodotto.ProvenienzaClienteContinente == "EXTRA-EU")
+                    {
+                        sw.WriteLine("Certified pallet required.");
+                    }
                     sw.WriteLine("-");
                 }
             }

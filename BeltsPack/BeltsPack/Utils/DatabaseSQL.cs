@@ -414,10 +414,11 @@ namespace BeltsPack.Utils
         }
         public SqlCommand ClienteSearchCommand(string nomeCliente)
         {
-            return this.CreateCommand("SELECT Descrizione,Provvigione,Cd_DOPorto,Localita,Email FROM " +
+            return this.CreateCommand("SELECT Descrizione,Provvigione,Cd_DOPorto,Localita,Email,Cd_Nazione FROM " +
                 TABELLA_CLIENTI +
                 " Where Descrizione LIKE " + "'%" + nomeCliente + "%'");
         }
+
         public SqlCommand CreateSettingNastriCommand()
         {
             return this.CreateCommand("SELECT ID,NomeNastro,Classe,PesoMQ,SpessoreSup,SpessoreInf,NumeroTele,NumeroTessuti,MinimoDiametroPulley,DataUltimoAggiornamento FROM " + TABELLA_NASTRI);

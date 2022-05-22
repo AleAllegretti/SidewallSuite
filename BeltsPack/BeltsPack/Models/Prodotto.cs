@@ -144,6 +144,12 @@ namespace BeltsPack.Models
 		public int VersioneCodice { get; set; }
 		// Cliente
 		public string Cliente { get; set; }
+		// Sigla provenienza cliente
+		public string ProvenienzaClienteSigla { get; set; }
+		// Nazione provenienza cliente
+		public string ProvenienzaClienteNazione { get; set; }
+		// Continente provenienza cliente
+		public string ProvenienzaClienteContinente { get; set; }
 
 		// Codice articolo
 		public string Codice { get; set; }
@@ -198,8 +204,14 @@ namespace BeltsPack.Models
 			}
 			return nomeutente;
 		}
-		public void SetPesoTotale(double pesoNastro, double pesoTazze, double pesoBordi)
+		public void SetPesoTotale(double pesoNastro, double pesoTazze, double pesoBordi, string configurazione)
 		{
+			bool pesoValido = true;
+			if(configurazione == "Bordi e tazze" && (pesoNastro == 0 || pesoTazze ==0 || pesoBordi == 0))
+            {
+				pesoValido = false;
+            }
+			else
 			this.PesoTotaleNastro = Math.Round(pesoNastro + pesoTazze + pesoBordi,1);
 		}
 		public List<string> ListaClienti()

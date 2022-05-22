@@ -462,6 +462,9 @@ namespace BeltsPack.Views
             // Uncheck della nave
             this.CKNave.IsChecked = false;
 
+            // Stabilisco che il trasporto è via camion
+            this._prodotto.TipologiaTrasporto = "Camion";
+
             // Abilito i bottono che erano stati disattivati
             this.buttonMaterialeUtilizzato.IsEnabled = true;
             this.buttonSalvaDb.IsEnabled = true;
@@ -476,6 +479,9 @@ namespace BeltsPack.Views
         {
             // Uncheck della nave
             this.CKCamion.IsChecked = false;
+
+            // Stabilisco che il trasporto è via camion
+            this._prodotto.TipologiaTrasporto = "Nave";
 
             // Abilito i bottono che erano stati disattivati
             this.buttonMaterialeUtilizzato.IsEnabled = true;
