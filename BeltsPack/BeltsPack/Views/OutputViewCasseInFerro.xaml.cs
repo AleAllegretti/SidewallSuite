@@ -38,6 +38,7 @@ namespace BeltsPack.Views
         private Prodotto _prodotto;
         int NumeroConfigurazione = 0;
         public string tipologiaTrasporto { get; set; }
+        public bool pesoNullo { get; set; }
         public string configurazioneconveniente { get; set; }
         public ChartValues<ObservablePoint> NastroImballato { get; set; }
         public OutputViewCasseInFerro(Imballi imballi, CassaInFerro cassaInFerro, InputView inputView, Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto)
@@ -51,6 +52,9 @@ namespace BeltsPack.Views
             this._prodotto = prodotto;
 
             this.DataContext = this;
+
+            // Inizializzo il fattore che mi dice se uno dei pesi dei componenti è nullo o meno
+            this.pesoNullo = false;
 
             // Configurazione più conveniente
             this.configurazioneconveniente = "N° configurazione più ottimizzata: " + this._imballi.NumeroConfigurazione[this._cassaInFerro.IndiceConfConveniente];
@@ -76,8 +80,30 @@ namespace BeltsPack.Views
             {
                 this.LBCassaDoppia.Visibility = Visibility.Visible;
             }
-        }
 
+            // COntrollo se i pesi sono presenti, altrimenti lo comunico
+            this.CheckPesi();
+            
+        }
+        private async void CheckPesi()
+        {
+            // Capisco se i pesi del nastro ci sono tutti
+            if (this._nastro.Peso == 0)
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("ATTENZIONE, il peso del nastro è nullo.", ConfirmDialog.ButtonConf.OK_ONLY);
+                pesoNullo = true;
+            }
+            else if (this._bordo.Peso == 0 && (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi"))
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("ATTENZIONE, il peso del bordo è nullo.", ConfirmDialog.ButtonConf.OK_ONLY);
+                pesoNullo = true;
+            }
+            else if (this._tazza.Peso == 0 && (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze"))
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("ATTENZIONE, il peso delle tazze è nullo.", ConfirmDialog.ButtonConf.OK_ONLY);
+                pesoNullo = true;
+            }
+        }
         private void ReturnHome_Click(object sender, RoutedEventArgs e)
         {
             // Ritorna alla home
@@ -520,10 +546,24 @@ namespace BeltsPack.Views
                         this.TBPesoImballo.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter]);
 
                         // Peso del nastro
-                        this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
+                        if (this.pesoNullo == false)
+                        {
+                            this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
+                        }
+                        else
+                        {
+                            this.TBPesoNastro.Text = "Non disp.";
+                        }
 
                         // Peso totale
-                        this.TBPesoTotale.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter] + this._prodotto.PesoTotaleNastro);
+                        if (this.pesoNullo == false)
+                        {
+                            this.TBPesoTotale.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter] + this._prodotto.PesoTotaleNastro);
+                        }
+                        else
+                        {
+                            this.TBPesoTotale.Text = "Non disp.";
+                        }
 
                         // Assegno il dettaglio della tipologia di trasporto
                         this._prodotto.tipologiaTrasportoDett = this.ComboTipologiaTrasporto.SelectedItem.ToString();

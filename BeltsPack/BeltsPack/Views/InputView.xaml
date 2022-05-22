@@ -206,18 +206,19 @@
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
                     <Label  Content="Tipo" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left" ToolTip="Tipologia nastro base" Name="CBTipologiaNastro"  
-                               SelectedValuePath="Content" Margin="15,0,0,0"  md:HintAssist.Hint="-"
-                               SelectedValue="{Binding tipologiaNastro, Mode=TwoWay}" DropDownOpened="CBTipologiaNastro_DropDownOpened" 
-                               SelectionChanged="CBTipologiaNastro_SelectionChanged" 
-                              >
+                               Margin="15,0,0,0"
+                               DropDownOpened="CBTipologiaNastro_DropDownOpened_1" 
+                               SelectionChanged="CBTipologiaNastro_SelectionChanged_1" 
+>
                     </ComboBox>
                 </StackPanel>
 
                 <!--Classe nastro-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label  Content="Classe nastro" HorizontalAlignment="Left" Margin="36,5,0,0" VerticalAlignment="Top"/>
-                    <ComboBox SelectedValue="{Binding classeNastro, Mode=TwoWay}" HorizontalAlignment="Left" ToolTip="Classe nastro base" Name="ComboClasseNastro" 
-                               Margin="40,0,0,0" SelectionChanged="ComboClasseNastro_SelectionChanged">
+                    <ComboBox HorizontalAlignment="Left" ToolTip="Classe nastro base" 
+                              Name="ComboClasseNastro" 
+                              Margin="40,0,0,0" SelectionChanged="ComboClasseNastro_SelectionChanged">
 
                     </ComboBox>
                 </StackPanel>
@@ -384,7 +385,8 @@
                 <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top">
                     <Label Name="labelAltBordi"  Content="Altezza bordo" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left"  Margin="15,0,0,0"  md:HintAssist.Hint="[mm]" ToolTip="Imposta altezza del bordo"  
-                              SelectedValue="{Binding altezzaBordo, Mode=TwoWay}" Name="ComboAltezzaBordi" SelectionChanged="ComboAltezzaBordi_SelectionChanged"  DropDownOpened="ComboAltezzaBordi_DropDownOpened" >
+                              SelectedValue="{Binding altezzaBordo, Mode=TwoWay}" Name="ComboAltezzaBordi" 
+                              SelectionChanged="ComboAltezzaBordi_SelectionChanged"  DropDownOpened="ComboAltezzaBordi_DropDownOpened" >
 
                     </ComboBox>
                 </StackPanel>

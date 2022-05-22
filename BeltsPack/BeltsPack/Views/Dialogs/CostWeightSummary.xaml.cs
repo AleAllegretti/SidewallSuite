@@ -28,6 +28,7 @@ namespace BeltsPack.Views.Dialogs
             DistintaBaseViewModel distintaBaseViewModel = new DistintaBaseViewModel(imballi, cassaInFerro, numeroConfigurazione, nastro,
                 bordo, tazza, prodotto);
             gridelencomateriale.ItemsSource = distintaBaseViewModel.DistintaBase;
+
         }
 
         private void EsportaExcel_Click(object sender, RoutedEventArgs e)

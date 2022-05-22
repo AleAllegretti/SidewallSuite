@@ -138,7 +138,7 @@ namespace BeltsPack.Models
             }
             catch
             {
-                System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le caratteristiche (Impostazioni)", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le CARATTERISTICHE (peso, costo ecc...) nel menù impostazioni.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
         }

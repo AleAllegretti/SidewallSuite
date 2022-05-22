@@ -85,13 +85,11 @@ namespace BeltsPack.Views
             }          
             this.altezzaTazza = this.prodotto.AltezzaTazze;
 
-            if (!String.IsNullOrEmpty(this.prodotto.TipoNastro))
-            {
-                this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
-            }
+            // Riempio il ombo con tutte le tipologie di nastro
+            this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
+            this.CBTipologiaNastro.SelectedItem = this.prodotto.TipoNastro;
             
-            this.tipologiaNastro = this.prodotto.TipoNastro;
-            this.classeNastro = this.prodotto.ClasseNastro;
+            this.ComboClasseNastro.SelectedItem = this.prodotto.ClasseNastro;
             this.baseBordo = this.prodotto.LarghezzaBordo;
             this.pistaLaterale = this.prodotto.PistaLaterale;
             this.presenzaFix = this.prodotto.PresenzaFix;
@@ -634,7 +632,7 @@ namespace BeltsPack.Views
 
         private void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.nastro.Classe = this.classeNastro;
+            this.nastro.Classe = Convert.ToInt32(this.ComboClasseNastro.SelectedValue);
         }
 
         private void ComboAltezzaTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -880,41 +878,31 @@ namespace BeltsPack.Views
             
         }
 
-        private void CBTipologiaNastro_DropDownOpened(object sender, EventArgs e)
+        private void CBTipologiaNastro_DropDownOpened_1(object sender, EventArgs e)
         {
             // Riempio il menù a tendina
             this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
         }
 
-        private void CBTipologiaNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CBTipologiaNastro_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            this.nastro.Tipo = this.prodotto.TipoNastro;
-            this.CBTipologiaNastro.SelectedItem = this.nastro.Tipo;
+            // Assegno la tipologia di nastro
+            this.nastro.Tipo = this.CBTipologiaNastro.SelectedItem.ToString();
 
             // Assegno il tipo di nastro
-            try
+            if (this.CBTipologiaNastro.SelectedItem.ToString() != "NON CODIFICATO")
             {
-                if (this.CBTipologiaNastro.SelectedItem.ToString() != null)
-                {
-                    if (this.nastro.Tipo != "NON CODIFICATO")
-                    {
-                        // Popola la combo delle classi in base al tipo di nastro
-                        this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
-                        // Abilito la combo della classe nel caso in cui fosse stata disabilitata
-                        this.ComboClasseNastro.IsEnabled = true;
-                    }
-                    else
-                    {
-                        var view = new NastroNonCodDialog(this.nastro);
-                        DialogHost.Show(view);
-                        // Diasibilito la combo della classe
-                        this.ComboClasseNastro.IsEnabled = false;
-                    }
-                }
+                // Popola la combo delle classi in base al tipo di nastro
+                this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
+                // Abilito la combo della classe nel caso in cui fosse stata disabilitata
+                this.ComboClasseNastro.IsEnabled = true;
             }
-            catch
+            else
             {
-                return;
+                var view = new NastroNonCodDialog(this.nastro);
+                DialogHost.Show(view);
+                // Diasibilito la combo della classe
+                this.ComboClasseNastro.IsEnabled = false;
             }
         }
     }
