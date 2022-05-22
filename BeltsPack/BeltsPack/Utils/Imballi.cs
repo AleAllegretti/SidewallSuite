@@ -460,18 +460,23 @@ namespace BeltsPack.Models
             if (this._prodotto.AltezzaApplicazioni <= 160)
             {
                 // CONFGURAZIONE 1 - Configurazione principale
-                this.CalcolaImballoConfigurazione1();
+                //if (this._prodotto.Tipologia == "Bordi e tazze")
+                //{
+                    this.CalcolaImballoConfigurazione1();
+                //}
+                
+                
                 // CONFIGURAZIONE 3
                 // this.CalcolaImballoConfigurazione3();
                 // CONFIGURAZIONE 5
                 // this.CalcolaImballoConfigurazione5();
 
                 // Considero la configurazione 6 solamente se il nastro è solo bordi o solo tazze
-                if (Math.Min(this._tazza.Altezza,this._bordo.Altezza)<20)
-                {
-                    // CONFIGURAZIONE 6
-                    this.CalcolaImballoConfigurazione6();
-                }
+                //if (Math.Min(this._tazza.Altezza,this._bordo.Altezza)<20 && (this._prodotto.Tipologia == "Solo bordi" || this._prodotto.Tipologia == "Solo tazze"))
+                //{
+                //    // CONFIGURAZIONE 6
+                //    this.CalcolaImballoConfigurazione6();
+                //}
 
             }
            else
@@ -736,7 +741,7 @@ namespace BeltsPack.Models
             // PER NASTRI CON BORDI DA 120MM E 160MM
 
             // Scorro le varie tipologie di trasporto x vedere qual'è la migliore per questo imballo
-            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
+            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length - 1; counter++)
             {
                 // Inizializza variabili
                 this.InizializzaVariabili();
@@ -1218,7 +1223,7 @@ namespace BeltsPack.Models
             // PER NASTRI SOLO BORDI E SOLO TAZZE
 
             // Scorro le varie tipologie di trasporto x vedere qual'è la migliore per questo imballo
-            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
+            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length-1; counter++)
             {
                 // Inizializza variabili
                 this.InizializzaVariabili();
@@ -1277,7 +1282,7 @@ namespace BeltsPack.Models
                     j += 1;
                     if (contatorestrati != 1)
                     {
-                        Strati[i, j] = this._prodotto.AltezzaApplicazioni * (contatorestrati);
+                        Strati[i, j] = this._prodotto.AltezzaApplicazioni * (contatorestrati) / this._prodotto.FattoreAltezza;
                     }
                     else
                     {
@@ -1366,7 +1371,7 @@ namespace BeltsPack.Models
         private void CalcolaImballoConfigurazione7()
         {
             // Scorro le varie tipologie di trasporto x vedere qual'è la migliore per questo imballo
-            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
+            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length -1; counter++)
             {
                 // Inizializza variabili
                 this.InizializzaVariabili();
@@ -1526,8 +1531,8 @@ namespace BeltsPack.Models
             }
             // Nell'attuale cassa il nastro non ci sta
             // Azzero tutto ed AUMENTO LA LUNGHEZZA INIZIALE della cassa
-            else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
-                        && altezzanastroimballato + tolleranza > this._cassainferro.LimiteAltezza[this.itrasporto]))
+            else if (this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
+                        && altezzanastroimballato + tolleranza > this._cassainferro.LimiteAltezza[this.itrasporto])
             {
                 // Aumenta la lunghezza della cassa di 10 cm                   
                 this._cassainferro.LunghezzaIniziale = this._cassainferro.LunghezzaIniziale + 100;

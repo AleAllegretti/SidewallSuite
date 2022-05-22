@@ -491,16 +491,36 @@ namespace BeltsPack.Views
             // Stabilisco che il trasporto è via camion
             this._prodotto.TipologiaTrasporto = "Camion";
 
-            // Abilito i bottono che erano stati disattivati
-            this.buttonMaterialeUtilizzato.IsEnabled = true;
-            this.buttonSalvaDb.IsEnabled = true;
-            this.CKCassa.IsEnabled = true;
-            this.CKNastro.IsEnabled = true;
-
             // Riempio la combobox in base alle tipologie di trasporto disponibili
-            this.ComboTipologiaTrasporto.ItemsSource = this._imballi.ListaTipologieTrasporto(true).ToArray();          
+            this.ComboTipologiaTrasporto.ItemsSource = this._imballi.ListaTipologieTrasporto(true).ToArray();
+
+            // Azzerro tutti i textbox
+            this.AzzeraTextBox();
         }
 
+        private void AzzeraTextBox()
+        {
+            // Lunghezza imballo
+            this.TBLunghezzaImballo.Text = "";
+
+            // Larghezza imballo
+            this.TBLarghezzaImballo.Text = "";
+
+            // Altezza imballo
+            this.TBAltezzaImballo.Text = "";
+
+            // Costo imballo
+            this.TBCostoImballo.Text = "";
+
+            // Peso imballo
+            this.TBPesoImballo.Text = "";
+
+            // Peso del nastro
+                this.TBPesoNastro.Text = "";
+
+            // Peso totale
+                this.TBPesoTotale.Text = "";
+        }
         private void CKNave_Checked(object sender, RoutedEventArgs e)
         {
             // Uncheck della nave
@@ -509,18 +529,21 @@ namespace BeltsPack.Views
             // Stabilisco che il trasporto è via camion
             this._prodotto.TipologiaTrasporto = "Nave";
 
+            // Riempio la combobox in base alle tipologie di trasporto disponibili
+            this.ComboTipologiaTrasporto.ItemsSource = this._imballi.ListaTipologieTrasporto(false).ToArray();
+
+            // Azzerro tutti i textbox
+            this.AzzeraTextBox();
+        }
+
+        private void ComboTipologiaTrasporto_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
             // Abilito i bottono che erano stati disattivati
             this.buttonMaterialeUtilizzato.IsEnabled = true;
             this.buttonSalvaDb.IsEnabled = true;
             this.CKCassa.IsEnabled = true;
             this.CKNastro.IsEnabled = true;
 
-            // Riempio la combobox in base alle tipologie di trasporto disponibili
-            this.ComboTipologiaTrasporto.ItemsSource = this._imballi.ListaTipologieTrasporto(false).ToArray();
-        }
-
-        private void ComboTipologiaTrasporto_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
             // Controllo che la selezione non sia nulla
             if (this.ComboTipologiaTrasporto.SelectedItem != null)
             {
