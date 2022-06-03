@@ -256,7 +256,8 @@ namespace BeltsPack.Utils
                 TABELLA_ARTICOLI +
                 " Where Cd_Ar LIKE " + "'%" + codice + "%'");
         }
-        public SqlCommand BordoSearchCommand(string tipo, double altezza, double larghezza, string trattamento, string famiglia, string gruppo, string sottogruppo)
+        public SqlCommand BordoSearchCommand(string tipo, double altezza, double larghezza, string trattamento, 
+            string famiglia, string gruppo, string sottogruppo)
         {
             string larghezzaString;
             larghezzaString = larghezza.ToString().Replace(",", ".");
@@ -270,6 +271,20 @@ namespace BeltsPack.Utils
                 "%' AND  Altezza LIKE " + "'%" + altezza +
                 "%' AND  LarghezzaMks LIKE " + "'%" + larghezzaString +
                 "%' AND  Cd_AR LIKE " + "'%" + tipo + "%'");
+        }
+        public SqlCommand TazzeSearchCommand(string tipo, double altezza, double larghezza, string trattamento,
+            string famiglia, string gruppo, string sottogruppo, string tele, string forma)
+        {
+            string larghezzaString;
+            larghezzaString = larghezza.ToString().Replace(",", ".");
+
+            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARMisura,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARGruppo3,Obsoleto FROM " +
+                TABELLA_ARTICOLI +
+                " Where Cd_ARGruppo1 = " + "'" + famiglia +
+                "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
+                "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
+                "' AND  Obsoleto = " + "'" + 0 +
+                "' AND  Cd_AR LIKE " + "'" + forma + altezza + trattamento + tele + "'");
         }
         public static DatabaseSQL CreateDefault()
         {

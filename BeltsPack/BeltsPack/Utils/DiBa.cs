@@ -64,6 +64,7 @@ namespace BeltsPack.Utils
             mapCodici.Add(15, "Commissioni");
             mapCodici.Add(16, "Giunzione bordo");
             mapCodici.Add(17, "Movimentazione");
+            mapCodici.Add(18, "Tazze");
 
         }
 
@@ -153,6 +154,46 @@ namespace BeltsPack.Utils
             }
             // Controllo che il codice del nastro sia presente
             this.PresenzaCodice(this._bordo.Codice, 1);
+        }
+
+        public void searchCodTazza(int altezza,
+                                    double larghezza,
+                                    string trattamento,
+                                    string tele,
+                                    string forma,
+                                    string tipo = "Listello",
+                                    string famiglia = "LIS",
+                                    string gruppo = "LIS",
+                                    string sottogruppo = "LIS")
+        {
+            // Determino la sigla delle tele
+            string siglaTele = "";
+            if (tele == "Si")
+            {
+                siglaTele = "HBF";
+            }
+
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.TazzeSearchCommand(tipo, altezza, larghezza * 0.001, trattamento, 
+                famiglia, gruppo, sottogruppo, siglaTele, forma);
+
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                // Prendo le caratteristiche del nastro
+                this._tazza.Codice = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._tazza.Descrizione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
+                this._tazza.UM = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
+
+                break;
+            }
+            // Controllo che il codice del nastro sia presente
+            this.PresenzaCodice(this._tazza.Codice, 18);
         }
 
         public void searchCodRaspaturaBordo(string gruppo,
@@ -315,7 +356,7 @@ namespace BeltsPack.Utils
 
                 }              
             }
-            // Controllo che il codice del nastro sia presente
+            // Controllo che il codice sia presente
             this.PresenzaCodice(this._tazza.CodiceApplicazione, 6);
         }
 
@@ -674,6 +715,16 @@ namespace BeltsPack.Utils
                     SpazioDiba1 = "",
                     SpazioDiba2 = "",
                     UM = bordo.UMRaspatura
+                },
+            new Nastro // Tazze
+                {
+                    SpazioDiba = "",
+                    Codice = tazza.Codice,
+                    Descrizione = tazza.Descrizione,
+                    QuantitaDiba = tazza.LunghezzaTotale * 0.001,
+                    SpazioDiba1 = "",
+                    SpazioDiba2 = "",
+                    UM = tazza.UM
                 },
                  new Nastro // Raspatura tazze
                 {

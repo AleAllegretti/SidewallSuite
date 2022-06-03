@@ -212,6 +212,10 @@ namespace BeltsPack.Models
 				this.PesoTotaleNastro = Math.Round(pesoNastro + pesoTazze + pesoBordi, 1);
 				pesoValido = false;
             }
+			else
+            {
+				this.PesoTotaleNastro = Math.Round(pesoNastro + pesoTazze + pesoBordi, 1);
+			}
 		}
 		public List<string> ListaClienti()
 		{

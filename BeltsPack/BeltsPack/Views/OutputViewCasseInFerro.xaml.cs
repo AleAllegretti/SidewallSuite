@@ -329,7 +329,7 @@ namespace BeltsPack.Views
                         this._bordo.SetLunghezzaTotaleBordo(this._nastro.Lunghezza);
 
                         // Codice Bordo
-                        distinta.searchCodBordo(this._bordo.Altezza, this._bordo.Larghezza, this._nastro.SiglaTrattamento);
+                        distinta.searchCodBordo(this._bordo.Altezza, this._bordo.Larghezza, this._bordo.SiglaTrattamento);
 
                         // Raspatura bordo
                         distinta.searchCodRaspaturaBordo("RAB", this._bordo.Altezza, this._bordo.SiglaTrattamento);
@@ -349,9 +349,11 @@ namespace BeltsPack.Views
                         this._tazza.SetLunghezzaTotale(this._nastro.LarghezzaUtile);
                         // Caratteristiche
                         this._tazza.CarattersticheTazza();
+                        // Tazze
+                        distinta.searchCodTazza(this._tazza.Altezza, this._nastro.LarghezzaUtile,
+                            this._tazza.SiglaTrattamento, this._tazza.Telata, this._tazza.Forma);
                         // Raspatura tazze
                         distinta.searchCodRaspaturaTazze("RAT", this._tazza.Altezza, this._bordo.Trattamento, this._tazza.Forma);
-
                         // Applicazione tazze
                         distinta.searchCodApplicazioneTazze("LAV", "APT", "APT", this._tazza.Altezza, this._tazza.Forma);
                     }

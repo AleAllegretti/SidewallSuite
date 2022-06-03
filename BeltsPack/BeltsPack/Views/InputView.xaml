@@ -246,7 +246,6 @@
                               SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoNastro, Mode=TwoWay}"
                               SelectionChanged="ComboQuality_SelectionChanged"
                              >
-                        <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
                         <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
                         <ComboBoxItem >HR 130</ComboBoxItem>
                         <ComboBoxItem >HR 150</ComboBoxItem>
@@ -415,7 +414,6 @@
                     <ComboBox HorizontalAlignment="Left" ToolTip="Imposta la qualità del materiale" Name="ComboQualityBordo"  
                               SelectedValuePath="Content" Margin="40,0,0,0" SelectedValue="{Binding trattamentoBordo, Mode=TwoWay}"
                               SelectionChanged="ComboQualityBordo_SelectionChanged" >
-                        <ComboBoxItem >AY Abrasion Resistant</ComboBoxItem>
                         <ComboBoxItem >AW Extra Abr. Resistant</ComboBoxItem>
                         <ComboBoxItem >HR 130</ComboBoxItem>
                         <ComboBoxItem >HR 150</ComboBoxItem>

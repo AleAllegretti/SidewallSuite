@@ -22,6 +22,14 @@ namespace BeltsPack.Models
         public int SpazioFileMultiple { get; set; }
         // Numero tazze x fila
         public int NumeroFile { get; set; }
+        // Codice
+        public string Codice { get; set; }
+        // Descrizione
+        public string Descrizione { get; set; }
+        // Quantita
+        public string Quantita { get; set; }
+        // UM
+        public string UM { get; set; }
         // Codice Applicazione
         public string CodiceApplicazione { get; set; }
         // Descrizione Applicazione
