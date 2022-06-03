@@ -209,10 +209,9 @@ namespace BeltsPack.Models
 			bool pesoValido = true;
 			if(configurazione == "Bordi e tazze" && (pesoNastro == 0 || pesoTazze ==0 || pesoBordi == 0))
             {
+				this.PesoTotaleNastro = Math.Round(pesoNastro + pesoTazze + pesoBordi, 1);
 				pesoValido = false;
             }
-			else
-			this.PesoTotaleNastro = Math.Round(pesoNastro + pesoTazze + pesoBordi,1);
 		}
 		public List<string> ListaClienti()
 		{

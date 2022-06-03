@@ -569,24 +569,10 @@ namespace BeltsPack.Views
                         this.TBPesoImballo.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter]);
 
                         // Peso del nastro
-                        if (this.pesoNullo == false)
-                        {
-                            this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
-                        }
-                        else
-                        {
-                            this.TBPesoNastro.Text = "Non disp.";
-                        }
+                        this.TBPesoNastro.Text = this._prodotto.PesoTotaleNastro.ToString();
 
                         // Peso totale
-                        if (this.pesoNullo == false)
-                        {
-                            this.TBPesoTotale.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter] + this._prodotto.PesoTotaleNastro);
-                        }
-                        else
-                        {
-                            this.TBPesoTotale.Text = "Non disp.";
-                        }
+                        this.TBPesoTotale.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter] + this._prodotto.PesoTotaleNastro);
 
                         // Assegno il dettaglio della tipologia di trasporto
                         this._prodotto.tipologiaTrasportoDett = this.ComboTipologiaTrasporto.SelectedItem.ToString();

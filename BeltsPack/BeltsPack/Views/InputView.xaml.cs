@@ -226,6 +226,27 @@ namespace BeltsPack.Views
             if (int.TryParse(this.Larghezza.Text, out int _))
             {
                 nastro.Larghezza = Convert.ToInt32(this.Larghezza.Text);
+
+                // Calcolo la larghezza di ogni singola tazza
+                if (this.tazza.NumeroFile != 0)
+                {
+                    if (this.prodotto.Tipologia == "Bordi e tazze")
+                    {
+                        this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1) - 2 * this.bordo.Larghezza) / this.tazza.NumeroFile;
+                        this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                    }
+                    else if (this.prodotto.Tipologia == "Solo tazze")
+                    {
+                        this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1)) / this.tazza.NumeroFile;
+                        this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                    }
+                    else
+                    {
+                        this.LarghezzaTazza.Text = "0";
+                    }
+                    // Determino la lunghezza della tazza come se fosse una unica
+                    this.tazza.Lunghezza = this.larghezzaTazze * this.tazza.NumeroFile;
+                }
             }
             else if (this.Larghezza.Text == "")
             {
@@ -254,6 +275,9 @@ namespace BeltsPack.Views
             bordo.Altezza = this.altezzaBordo;
             // Creo la lista delle larghezze delle basi disponibili
             this.ComboBaseBordi.ItemsSource = this.bordo.ListaBasiBordo().ToArray();
+            // Azzero la parte delle tazze
+            this.ComboAltezzaTazze.Text = "";
+            this.ComboFormaTazze.Text = "";
         }
 
         private async void TBPistaLaterale_TextChanged(object sender, TextChangedEventArgs e)
@@ -262,6 +286,27 @@ namespace BeltsPack.Views
             if (int.TryParse(this.TBPistaLaterale.Text, out int _))
             {
                 this.prodotto.PistaLaterale = Convert.ToInt32(this.TBPistaLaterale.Text);
+
+                // Calcolo la larghezza di ogni singola tazza
+                if (this.tazza.NumeroFile != 0)
+                {
+                    if (this.prodotto.Tipologia == "Bordi e tazze")
+                    {
+                        this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1) - 2 * this.bordo.Larghezza) / this.tazza.NumeroFile;
+                        this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                    }
+                    else if (this.prodotto.Tipologia == "Solo tazze")
+                    {
+                        this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1)) / this.tazza.NumeroFile;
+                        this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                    }
+                    else
+                    {
+                        this.LarghezzaTazza.Text = "0";
+                    }
+                    // Determino la lunghezza della tazza come se fosse una unica
+                    this.tazza.Lunghezza = this.larghezzaTazze * this.tazza.NumeroFile;
+                }
             }
             else if (this.TBPistaLaterale.Text == "")
             {
@@ -501,6 +546,8 @@ namespace BeltsPack.Views
                         this.ComboBlk.IsEnabled = false;
                         this.ComboFix.IsEnabled = false;
                         this.ComboPassoFix.IsEnabled = false;
+                        this.ComboFix.Text = "No";
+                        this.ComboBlk.Text = "No";
                     }
                     else if (this.tazza.Forma == "T" || this.tazza.Forma == "TW")
                     {
@@ -644,6 +691,26 @@ namespace BeltsPack.Views
         {
             // Determino la larghezza della base del bordo
             this.bordo.Larghezza = this.baseBordo;
+            // Calcolo la larghezza di ogni singola tazza
+            if (this.tazza.NumeroFile != 0)
+            {
+                if (this.prodotto.Tipologia == "Bordi e tazze")
+                {
+                    this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1) - 2 * this.bordo.Larghezza) / this.tazza.NumeroFile;
+                    this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                }
+                else if (this.prodotto.Tipologia == "Solo tazze")
+                {
+                    this.larghezzaTazze = (this.nastro.Larghezza - this.prodotto.PistaLaterale * 2 - this.spazioTazzeFileMultiple * (this.tazza.NumeroFile - 1)) / this.tazza.NumeroFile;
+                    this.LarghezzaTazza.Text = this.larghezzaTazze.ToString();
+                }
+                else
+                {
+                    this.LarghezzaTazza.Text = "0";
+                }
+                // Determino la lunghezza della tazza come se fosse una unica
+                this.tazza.Lunghezza = this.larghezzaTazze * this.tazza.NumeroFile;
+            }
             // Determino le grandezze principali del bordo
             this.bordo.GetInfoBordo();
             // Vado a riempire la lista dei passi con fix in base al passo onda del bordo

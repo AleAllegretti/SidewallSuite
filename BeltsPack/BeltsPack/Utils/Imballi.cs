@@ -1796,7 +1796,7 @@ namespace BeltsPack.Models
                         // Se è il primo, allora suggerisco quello perchè il più conveniente
                         if (this._cassainferro.FattibilitaNave[counter] == false && suggerito == false)
                         {
-                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter] + " (Suggerito)");
+                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter] + " (Sugg.)");
                             suggerito = true;
                         }
                         else
@@ -1814,7 +1814,7 @@ namespace BeltsPack.Models
                         // Se è il primo, allora suggerisco quello perchè il più conveniente
                         if (suggerito == false)
                         {
-                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter] + " (Suggerito)");
+                            TipologieTrasporto.Add(this._cassainferro.TipoTrasporto[counter] + " (Sugg.)");
                             suggerito = true;
                         }
                         else
