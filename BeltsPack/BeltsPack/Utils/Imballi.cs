@@ -1545,7 +1545,8 @@ namespace BeltsPack.Models
             // Provo a disporre, se possibile il nastro in doppia fila
             else if (this.Numerofile != 2 && (this._nastro.Larghezza * this.Numerofile + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia +
                         this._prodotto.LarghezzaAggSoloBordi * 2) < this._cassainferro.LimiteLarghezza[this.itrasporto] &&
-                        this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[this.itrasporto])
+                        this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[this.itrasporto]
+                        && this._nastro.LunghezzaImballato < this._nastro.Lunghezza)
             {
                 // Stabilisco il numero di file
                 this.Numerofile = 2;
