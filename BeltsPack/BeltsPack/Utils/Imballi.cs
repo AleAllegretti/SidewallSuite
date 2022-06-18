@@ -1572,7 +1572,7 @@ namespace BeltsPack.Models
                 this.InizializzaContatori();
             }
             // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
-            // inoltre in questo caso il nastro è disposto su due file
+            // inoltre in questo caso il nastro è disposto su una fila
             else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
                         && altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto])
                         && this.Numerofile == 1

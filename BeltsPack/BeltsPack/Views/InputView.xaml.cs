@@ -176,6 +176,11 @@ namespace BeltsPack.Views
                 this.ComboQualityBordo.SelectedItem = null;
                 this.ComboQualityBordo.IsEnabled = false;
                 this.ComboQualityTazze.IsEnabled = true;
+                this.ComboTeleTazze.SelectedItem = null;
+                this.ComboTeleTazze.IsEnabled = true;
+                this.ComboNTazzexFila.IsEnabled = true;
+                this.ComboNTazzexFila.SelectedItem = null;
+                this.SpazioTazzeFileMultiple.IsEnabled = true;
             }
             else if (prodotto.Tipologia == "Solo bordi")
             {
@@ -187,9 +192,13 @@ namespace BeltsPack.Views
                 this.ComboFormaTazze.SelectedItem = null;
                 this.tazza.Altezza = 0;
                 this.ComboTeleTazze.SelectedItem = null;
+                this.ComboTeleTazze.IsEnabled = false;
                 this.ComboQualityTazze.SelectedItem = null;
                 this.ComboQualityTazze.IsEnabled = false;
                 this.ComboQualityBordo.IsEnabled = true;
+                this.ComboNTazzexFila.IsEnabled = false;
+                this.ComboNTazzexFila.SelectedItem = null;
+                this.SpazioTazzeFileMultiple.IsEnabled = false;
             }
             else if (prodotto.Tipologia == "Bordi e tazze")
             {
@@ -202,6 +211,11 @@ namespace BeltsPack.Views
                 this.ComboBaseBordi.IsEnabled = true;
                 this.ComboQualityBordo.IsEnabled = true;
                 this.ComboQualityTazze.IsEnabled = true;
+                this.ComboTeleTazze.SelectedItem = null;
+                this.ComboTeleTazze.IsEnabled = true;
+                this.ComboNTazzexFila.IsEnabled = true;
+                this.ComboNTazzexFila.SelectedItem = null;
+                this.SpazioTazzeFileMultiple.IsEnabled = true;
             }
         }
 
@@ -250,6 +264,10 @@ namespace BeltsPack.Views
             }
             else if (this.Larghezza.Text == "")
             {
+            }
+            else if (Convert.ToInt32(this.Larghezza.Text) > 2000)
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Sei sicuro che il valore che hai inserito sia corretto e non troppo alto?", ConfirmDialog.ButtonConf.OK_ONLY);
             }
             else
             {
@@ -472,15 +490,15 @@ namespace BeltsPack.Views
             }
 
             // Check se il tipo di trasporto è stato specificato
-            if (this.tipologiaTrasporto != "" || formfilled == false)
-            {
-                formfilled = true;
-            }
-            else
-            {
-                formfilled = false;
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati che il tipo di trasporto sia stato selezionato", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
+            //if (this.tipologiaTrasporto != "" || formfilled == false)
+            //{
+            //    formfilled = true;
+            //}
+            //else
+            //{
+            //    formfilled = false;
+            //    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati che il tipo di trasporto sia stato selezionato", ConfirmDialog.ButtonConf.OK_ONLY);
+            //}
             
 
             if (formfilled == true)
