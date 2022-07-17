@@ -51,6 +51,7 @@ namespace BeltsPack.Views
         public int pistaLaterale { get; set; }
         public int classeNastro { get; set; }
         public int qtyProdotto { get; set; }
+        public bool larghezzaValidity { get; set; }
         public UserControl ParentControl { get; set; }
         public InputView(Prodotto prodotto)
         {
@@ -73,6 +74,9 @@ namespace BeltsPack.Views
             this.spazioTazzeFileMultiple = this.prodotto.SpazioFile;
             this.tazzeTelate = this.prodotto.TazzeTelate;
             this.qtyProdotto = this.prodotto.Qty;
+
+            // Azzero i controllori
+            this.larghezzaValidity = false;
 
             // Riempio il menù a tendina dell'altezza dei bordi
             this.ComboAltezzaBordi.ItemsSource = this.bordo.ListaAltezzeBordi().ToArray();
@@ -240,6 +244,13 @@ namespace BeltsPack.Views
             if (int.TryParse(this.Larghezza.Text, out int _))
             {
                 nastro.Larghezza = Convert.ToInt32(this.Larghezza.Text);
+
+                // Controllo che la larghezza non sia troppo alta
+                if (nastro.Larghezza > 2500 && this.larghezzaValidity == false)
+                {
+                    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Sei sicuro che il valore che hai inserito sia corretto e non troppo alto?", ConfirmDialog.ButtonConf.OK_ONLY);
+                    this.larghezzaValidity = true;
+                }
 
                 // Calcolo la larghezza di ogni singola tazza
                 if (this.tazza.NumeroFile != 0)

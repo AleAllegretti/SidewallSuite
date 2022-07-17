@@ -553,7 +553,7 @@ namespace BeltsPack.Views
                 for (int counter = 0; counter < this._cassaInFerro.FattibilitaTrasporto.Length; counter++)
                 {
                     // Capisco se l'imballo è adatto al camion ed è fattibile ed in caso stampo le grandezze a schermo
-                    if (this.ComboTipologiaTrasporto.SelectedItem.ToString().Contains(this._cassaInFerro.TipoTrasporto[counter]))
+                    if(this._cassaInFerro.TipoTrasporto[counter].ToString() == this.ComboTipologiaTrasporto.SelectedItem.ToString().Replace(" (Sugg.)", string.Empty))
                     {
                         // Lunghezza imballo
                         this.TBLunghezzaImballo.Text = this._imballi.Lunghezza[counter].ToString();
