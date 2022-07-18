@@ -457,38 +457,21 @@ namespace BeltsPack.Models
             // Verifico se è possibile disporre il nastro in doppia fila
             this.PossibilitaCassaDoppia();
 
-            if (this._prodotto.AltezzaApplicazioni <= 160)
+            if (this._prodotto.AltezzaApplicazioni == 160 && this._prodotto.AltezzaApplicazioni == 120)
             {
-                // CONFGURAZIONE 1 - Configurazione principale
-                //if (this._prodotto.Tipologia == "Bordi e tazze")
-                //{
-                    this.CalcolaImballoConfigurazione1();
-                //}
-                
-                
-                // CONFIGURAZIONE 3
-                // this.CalcolaImballoConfigurazione3();
-                // CONFIGURAZIONE 5
-                // this.CalcolaImballoConfigurazione5();
-
-                // Considero la configurazione 6 solamente se il nastro è solo bordi o solo tazze
-                //if (Math.Min(this._tazza.Altezza,this._bordo.Altezza)<20 && (this._prodotto.Tipologia == "Solo bordi" || this._prodotto.Tipologia == "Solo tazze"))
-                //{
-                //    // CONFIGURAZIONE 6
-                //    this.CalcolaImballoConfigurazione6();
-                //}
+                // CONFGURAZIONE 1 - Configurazione principale               
+                this.CalcolaImballoConfigurazione1();
 
             }
-           else
+           else if (this._prodotto.AltezzaApplicazioni <= 120)
             {
-                // CONFIGURAZIONE 2
-                // this.CalcolaImballoConfigurazione2();
-                // CONFIGURAZIONE 4
-                // this.CalcolaImballoConfigurazione4();
-                // CONFIGURAZIONE 6
-                // this.CalcolaImballoConfigurazione6();
                 // CONFIGURAZIONE 7
                 this.CalcolaImballoConfigurazione7();
+            }
+            else
+            {
+                // CONFIGURAZIONE 6
+                this.CalcolaImballoConfigurazione6();
             }
 
             // Controlla se c'è almeno una configurazione valida
@@ -1236,36 +1219,73 @@ namespace BeltsPack.Models
 
                     if (contatorestrati == 1)
                     {
-                        // Calcola la lunghezza del primo strato
                         Strati[i, j] = this._cassainferro.LunghezzaIniziale - this.DiametroPolistirolo / 2;
                     }
                     else if (contatorestrati == 2)
                     {
-                        Strati[i, j] = Strati[0, 1] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
+                        Strati[i, j] = Strati[i - 1, 1] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
+                        // Altezza polistirolo
+                        altezzapolistirolo = this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati == 3)
+                    {
+                        Strati[i, j] = Strati[i - 1, j];
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
                     }
                     else if (contatorestrati == 4)
                     {
-                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
+                        Strati[i, j] = Strati[i - 1, 1] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
+                        // Altezza polistirolo
+                        altezzapolistirolo = 2 * this.DiametroPolistirolo;
                     }
                     else if (contatorestrati == 5)
                     {
-                        Strati[i, j] = Strati[3, j] + this.DiametroPolistirolo * 2;
+                        Strati[i, j] = Strati[i - 1, j];
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
                     }
-                    else if (contatorestrati % 2 != 0 && contatorestrati != 1 && contatorestrati != 7) // Strati dispari (3, 5 ecc...)
+                    else if (contatorestrati == 6)
                     {
-                        Strati[i, j] = Strati[i - 1, j] - (this.DiametroPolistirolo * 0.5);
+                        Strati[i, j] = Strati[i - 1, j] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
+                        // Altezza polistirolo
+                        altezzapolistirolo = 3 * this.DiametroPolistirolo;
                     }
-                    else if (contatorestrati == 6 || contatorestrati == 7)
+                    else if (contatorestrati == 7)
                     {
-                        Strati[i, j] = Strati[2, j] * 1.1;
+                        Strati[i, j] = Strati[i - 1, j];
+                        // Altezza corrugato
+                        altezzacorrugati = contatorestrati * this._prodotto.AltezzaApplicazioni + DiametroCorrugato;
                     }
-                    else if (contatorestrati == 8 || contatorestrati == 9)
+                    else if (contatorestrati == 8)
                     {
-                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato;
+                        Strati[i, j] = Strati[i - 3, j] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
+                        // Altezza polistirolo
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati == 9)
+                    {
+                        Strati[i, j] = Strati[i - 1, j];
+                        // Altezza corrugato
+                        altezzacorrugati = contatorestrati * this._prodotto.AltezzaApplicazioni + DiametroCorrugato;
+                    }
+                    else if (contatorestrati == 10)
+                    {
+                        Strati[i, j] = Strati[i - 8, j] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
+                        // Altezza polistirolo
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati % 2 == 0)
+                    {
+                        Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
+                        // Altezza polistirolo
+                        altezzapolistirolo = contatorestrati * this.altezzapolistirolo;
                     }
                     else
                     {
-                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato;
+                        Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
+                        // Altezza corrugato
+                        altezzacorrugati = contatorestrati * this.altezzacorrugati;
                     }
 
                     // Calcola la lunghezza del nastro fino ad ora imballato
@@ -1287,60 +1307,6 @@ namespace BeltsPack.Models
                     else
                     {
                         Strati[i, j] = 0;
-                    }
-
-                    // Controlla che l'altezza della cassa sia dentro i limiti
-                    // Se il numero di strati è di numero pari moltiplico la metà del numero degli strati per il diametro
-                    // del polistirolo e trovo l'altezza massima della parte in polistirolo. Se il numero di strati è dispari,
-                    // sottraggo 1 al numero di strati, lo divido per due e lo moltiplico per il diametro del corrugato
-                    if (contatorestrati == 2)
-                    {
-                        altezzapolistirolo = (contatorestrati) / 2 * this.DiametroPolistirolo;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
-                    }
-                    else if (contatorestrati == 4)
-                    {
-                        altezzapolistirolo = (contatorestrati - 1) / 2 * this.DiametroPolistirolo;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
-                    }
-                    else if (contatorestrati == 6 || contatorestrati == 8)
-                    {
-                        altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
-                    }
-                    else if (contatorestrati == 3 || contatorestrati == 5 || contatorestrati == 9)
-                    {
-                        altezzacorrugati = this.DiametroCorrugato + contatorestrati * this._prodotto.AltezzaApplicazioni / this._prodotto.FattoreAltezza;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurveCorrugati[ContatoreConfigurazioni] = (contatorestrati - 1) / 2;
-                    }
-                    else if (contatorestrati == 7)
-                    {
-                        altezzacorrugati = 2 * this.DiametroCorrugato + (contatorestrati - 2) * this._prodotto.AltezzaApplicazioni / this._prodotto.FattoreAltezza;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurveCorrugati[ContatoreConfigurazioni] = (contatorestrati - 1) / 2;
-                    }
-                    else if (contatorestrati == 10 || contatorestrati == 12)
-                    {
-                        altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
-                    }
-                    else if (contatorestrati == 14 || contatorestrati == 16)
-                    {
-                        altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo;
-
-                        // Ci dice quanti strati di polistirolo ha l'imballo
-                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
                     }
 
                     // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
@@ -1370,6 +1336,9 @@ namespace BeltsPack.Models
         }
         private void CalcolaImballoConfigurazione7()
         {
+            // Il nastro viene disposto scalando sia il polistirolo che il corrugato
+            // Prendere come riferimento l'imballo della commessa: 5501780338
+
             // Scorro le varie tipologie di trasporto x vedere qual'è la migliore per questo imballo
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length -1; counter++)
             {
@@ -1389,30 +1358,92 @@ namespace BeltsPack.Models
                     else if (contatorestrati == 2)
                     {
                         Strati[i, j] = Strati[i - 1, 1] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
+                        // Altezza polistirolo
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
                     }
                     else if (contatorestrati == 3)
                     {
-                        Strati[i, j] = Strati[i - 1, j] - 1.5 * this.DiametroPolistirolo - this._prodotto.AltezzaApplicazioni;
+                        Strati[i, j] = Strati[i - 1, j];
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
                     }
                     else if (contatorestrati == 4)
                     {
-                        Strati[i, j] = Strati[i - 1, 1] - this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni;
+                        Strati[i, j] = Strati[i - 1, 1] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
+                        // Altezza polistirolo
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
                     }
                     else if (contatorestrati == 5)
                     {
-                        Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
+                        Strati[i, j] = Strati[i - 1, j] - this.DiametroPolistirolo;
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
                     }
                     else if (contatorestrati == 6)
                     {
-                        Strati[i, j] = Strati[i - 1, j] + this.DiametroCorrugato;
+                        Strati[i, j] = Strati[i - 1, j] + this.DiametroCorrugato + 2 * this._prodotto.AltezzaApplicazioni;
+                        // Altezza polistirolo
+                        altezzapolistirolo = 2.5 * this.DiametroPolistirolo;
                     }
                     else if (contatorestrati == 7)
                     {
-                        Strati[i, j] = Strati[i - 1, j];
+                        Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 5 + DiametroCorrugato * 2;
                     }
                     else if (contatorestrati == 8)
                     {
+                        Strati[i, j] = Strati[i - 3, j];
+                        // Altezza polistirolo
+                        altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati == 9)
+                    {
+                        Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
+                    }
+                    else if (contatorestrati == 10)
+                    {
+                        Strati[i, j] = Strati[i - 8, j];
+                        // Altezza polistirolo
+                        altezzapolistirolo = 3.8 * this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati == 11)
+                    {
                         Strati[i, j] = Strati[i - 1, j];
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 7 + DiametroCorrugato * 3;
+                    }
+                    else if (contatorestrati == 12)
+                    {
+                        Strati[i, j] = Strati[i - 1, j];
+                        // Altezza polistirolo
+                        altezzapolistirolo = 4.8 * this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati == 13)
+                    {
+                        Strati[i, j] = Strati[i - 4, j];
+                        // Altezza corrugato
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 13 + DiametroCorrugato * 2;
+                    }
+                    else if (contatorestrati == 14)
+                    {
+                        Strati[i, j] = Strati[i - 1, j] - 3 * this.DiametroCorrugato;
+                        // Altezza polistirolo
+                        altezzapolistirolo = 4 * this.DiametroPolistirolo;
+                    }
+                    else if (contatorestrati % 2 == 0)
+                    {
+                        Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
+                        // Altezza polistirolo
+                        altezzapolistirolo = contatorestrati * this.altezzapolistirolo;
+                    }
+                    else
+                    {
+                        Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
+                        // Altezza corrugato
+                        altezzacorrugati = contatorestrati * this.altezzacorrugati;
                     }
 
                     // Calcola la lunghezza del nastro fino ad ora imballato
@@ -1427,7 +1458,7 @@ namespace BeltsPack.Models
 
                     }
 
-                    // Calcola l'oridinata del punto
+                    // Calcola l'ordinata del punto
                     j += 1;
                     if (contatorestrati != 1)
                     {
@@ -1436,27 +1467,6 @@ namespace BeltsPack.Models
                     else
                     {
                         Strati[i, j] = 0;
-                    }
-
-                    // Controlla che l'altezza della cassa sia dentro i limiti
-                    // Se il numero di strati è di numero pari moltiplico la metà del numero degli strati per il diametro
-                    // del polistirolo e trovo l'altezza massima della parte in polistirolo. Se il numero di strati è dispari,
-                    // sottraggo 1 al numero di strati, lo divido per due e lo moltiplico per il diametro del corrugato
-                    if (contatorestrati % 2 == 0 & contatorestrati != 8)
-                    {
-                        altezzapolistirolo = ((contatorestrati - 2) / 2) * this.DiametroPolistirolo;
-                    }
-                    else if (contatorestrati == 4)
-                    {
-                        altezzapolistirolo = this._prodotto.AltezzaApplicazioni * 2 * this.DiametroPolistirolo / this._prodotto.FattoreAltezza;
-                    }
-                    else if (contatorestrati == 8)
-                    {
-                        altezzacorrugati = (this._prodotto.AltezzaApplicazioni * 8 + this.DiametroCorrugato) / this._prodotto.FattoreAltezza;
-                    }
-                    else
-                    {
-                        altezzacorrugati = this.DiametroCorrugato + contatorestrati * this._prodotto.AltezzaApplicazioni / this._prodotto.FattoreAltezza;
                     }
 
                     // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
@@ -1519,7 +1529,8 @@ namespace BeltsPack.Models
             // Capisco se posso passare allo strato successivo mantenendo
             // COSTANTE sia l'altezza che la lunghezza
             if (altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto]
-                        && this._nastro.LunghezzaImballato < this._nastro.Lunghezza)
+                        && this._nastro.LunghezzaImballato < this._nastro.Lunghezza 
+                        && this.contatorestrati <= 12)
             {
                 // Passiamo allo strato successivo
                 j = 0;
@@ -1531,8 +1542,9 @@ namespace BeltsPack.Models
             }
             // Nell'attuale cassa il nastro non ci sta
             // Azzero tutto ed AUMENTO LA LUNGHEZZA INIZIALE della cassa
-            else if (this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
+            else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
                         && altezzanastroimballato + tolleranza > this._cassainferro.LimiteAltezza[this.itrasporto])
+                        || this.contatorestrati > 12)
             {
                 // Aumenta la lunghezza della cassa di 10 cm                   
                 this._cassainferro.LunghezzaIniziale = this._cassainferro.LunghezzaIniziale + 100;
@@ -1650,12 +1662,12 @@ namespace BeltsPack.Models
                         this.AvvisoImballoCritico = true;
                     }
                 }
-                else if (this._cassainferro.LunghezzaIniziale <= 5800 & this._cassainferro.LunghezzaIniziale >= 4500 &
+                else if (this._cassainferro.LunghezzaIniziale <= 5800 & this._cassainferro.LunghezzaIniziale >= 4800 &
                     this._cassainferro.LunghezzaIniziale <= 5800 - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 5800;
                 }
-                else if (this._cassainferro.LunghezzaIniziale <= 5800 & this._cassainferro.LunghezzaIniziale >= 4500 &
+                else if (this._cassainferro.LunghezzaIniziale <= 5800 & this._cassainferro.LunghezzaIniziale >= 4800 &
                     this._cassainferro.LunghezzaIniziale >= 5800 - this.TolleranzaLunghezza)
                 {
                     this.Lunghezza[ContatoreConfigurazioni] = 5800;
