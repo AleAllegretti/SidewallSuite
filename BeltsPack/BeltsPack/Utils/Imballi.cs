@@ -1642,7 +1642,7 @@ namespace BeltsPack.Models
                     if(this.AvvisoImballoCritico == false)
                     {
                         // Faccio comparire l'avviso che l'imballo è critico perchè non c'è il margine di sicurezza
-                        System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        //System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                         this.AvvisoImballoCritico = true;
                     }                 
                 }
@@ -1658,7 +1658,7 @@ namespace BeltsPack.Models
                     if (this.AvvisoImballoCritico == false)
                     {
                         // Faccio comparire l'avviso che l'imballo è critico perchè non c'è il margine di sicurezza
-                        System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        //System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                         this.AvvisoImballoCritico = true;
                     }
                 }
@@ -1674,7 +1674,7 @@ namespace BeltsPack.Models
                     if (this.AvvisoImballoCritico == false)
                     {
                         // Faccio comparire l'avviso che l'imballo è critico perchè non c'è il margine di sicurezza
-                        System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        //System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                         this.AvvisoImballoCritico = true;
                     }
                 }

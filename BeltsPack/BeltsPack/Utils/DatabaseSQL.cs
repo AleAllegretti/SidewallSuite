@@ -30,6 +30,7 @@ namespace BeltsPack.Utils
         public readonly string TABELLA_ARTICOLI = "AR";
         public readonly string TABELLA_CLIENTI = "CFCliEx";
         public readonly string TABELLA_CATEGORIE = "Categories";
+        public readonly string TABELLA_TEST = "DatabaseTest";
 
         private Nastro _nastro;
         private Bordo _bordo;
@@ -47,6 +48,10 @@ namespace BeltsPack.Utils
         /// <param name="connectionString"></param>
         public DatabaseSQL(string connectionString)
         {
+            if (connectionString.Length < 7)
+            {
+                connectionString = "Server=DELLALE\\SQLEXPRESS;Database=DBSidewall;Trusted_Connection=True;  Min Pool Size=10; Max Pool Size=1000";
+            }
             this.ConnectionString = connectionString;
 
             // connect at creation
@@ -456,6 +461,11 @@ namespace BeltsPack.Utils
         public SqlCommand CreateSettingParametriCommand()
         {
             return this.CreateCommand("SELECT ID,Elemento,Valore,Note,DataUltimoAggiornamento FROM " + TABELLA_IMPOSTAZIONI);
+        }
+
+        public SqlCommand CreateDbTestCommand()
+        {
+            return this.CreateCommand("SELECT INPUT, F2, F3, F4, F5, F6, F7, CALCOLATA, F9, F10, F11, F12, F13, REALE, F15, F16, F17, F18, F19, RISULTATO, NOTE FROM " + TABELLA_TEST);
         }
 
         public SqlCommand ConsultaListinoPaladini()
