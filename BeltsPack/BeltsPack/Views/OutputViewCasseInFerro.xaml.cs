@@ -85,22 +85,22 @@ namespace BeltsPack.Views
             this.CheckPesi();
             
         }
-        private async void CheckPesi()
+        private void CheckPesi()
         {
             // Capisco se i pesi del nastro ci sono tutti
             if (this._nastro.Peso == 0)
             {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("ATTENZIONE, il peso del nastro è nullo.", ConfirmDialog.ButtonConf.OK_ONLY);
+                System.Windows.MessageBox.Show("ATTENZIONE, il peso del nastro è nullo.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 pesoNullo = true;
             }
             else if (this._bordo.Peso == 0 && (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi"))
             {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("ATTENZIONE, il peso del bordo è nullo.", ConfirmDialog.ButtonConf.OK_ONLY);
+                System.Windows.MessageBox.Show("ATTENZIONE, il peso del bordo è nullo.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 pesoNullo = true;
             }
             else if (this._tazza.Peso == 0 && (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze"))
             {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("ATTENZIONE, il peso delle tazze è nullo.", ConfirmDialog.ButtonConf.OK_ONLY);
+                System.Windows.MessageBox.Show("ATTENZIONE, il peso delle tazze è nullo.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 pesoNullo = true;
             }
         }
@@ -502,6 +502,9 @@ namespace BeltsPack.Views
 
         private void AzzeraTextBox()
         {
+            // Note di produzione
+            this.TBNote.Text = "";
+
             // Lunghezza imballo
             this.TBLunghezzaImballo.Text = "";
 
@@ -555,6 +558,9 @@ namespace BeltsPack.Views
                     // Capisco se l'imballo è adatto al camion ed è fattibile ed in caso stampo le grandezze a schermo
                     if(this._cassaInFerro.TipoTrasporto[counter].ToString() == this.ComboTipologiaTrasporto.SelectedItem.ToString().Replace(" (Sugg.)", string.Empty))
                     {
+                        // Tipologia cassa
+                        this.TBNote.Text = "Cassa di " + this._cassaInFerro.TipologiaCassa[counter];
+
                         // Lunghezza imballo
                         this.TBLunghezzaImballo.Text = this._imballi.Lunghezza[counter].ToString();
 

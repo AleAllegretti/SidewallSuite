@@ -143,6 +143,15 @@
                    TextWrapping="Wrap" TextAlignment="Center" />
             </StackPanel>
         </Button>
-        
+
+        <!-- Tipologia casse-->
+        <Button Width="160" Height="160" ToolTip="Parametri tipologia casse" Name="Tipo_Casse" Grid.Row="1" Grid.Column="3"  Margin="0,0,0,0" Click="Tipo_Casse_Click" >
+            <StackPanel>
+                <Image Source="/Assets/Images/IncrociRinforzi8metri.png" Width="100" Height="80"/>
+                <TextBlock Text="Parametri casse" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,10,0,0" 
+                   TextWrapping="Wrap" TextAlignment="Center" />
+            </StackPanel>
+        </Button>
+
     </Grid>
 </Page>

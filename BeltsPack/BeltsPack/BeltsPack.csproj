@@ -339,6 +339,9 @@
     <Compile Include="Views\Settings\SettingsTazze.xaml.cs">
       <DependentUpon>SettingsTazze.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\SettingsTipologiaCasse.xaml.cs">
+      <DependentUpon>SettingsTipologiaCasse.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\SettingsVariousCosts.xaml.cs">
       <DependentUpon>SettingsVariousCosts.xaml</DependentUpon>
     </Compile>
@@ -482,6 +485,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\SettingsTazze.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\SettingsTipologiaCasse.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -859,6 +866,7 @@
     <Content Include="Assets\SQL\CreateCategoriesTable.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\SQL\Create_Tabella_Tipologia_Casse.sql" />
     <Content Include="Assets\XML\InfoCustomer.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

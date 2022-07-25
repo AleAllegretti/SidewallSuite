@@ -31,6 +31,7 @@ namespace BeltsPack.Utils
         public readonly string TABELLA_CLIENTI = "CFCliEx";
         public readonly string TABELLA_CATEGORIE = "Categories";
         public readonly string TABELLA_TEST = "DatabaseTest";
+        public readonly string TABELLA_CASSE = "Tipologia_Casse";
 
         private Nastro _nastro;
         private Bordo _bordo;
@@ -442,6 +443,12 @@ namespace BeltsPack.Utils
         public SqlCommand CreateSettingNastriCommand()
         {
             return this.CreateCommand("SELECT ID,NomeNastro,Classe,PesoMQ,SpessoreSup,SpessoreInf,NumeroTele,NumeroTessuti,MinimoDiametroPulley,DataUltimoAggiornamento FROM " + TABELLA_NASTRI);
+        }
+
+        public SqlCommand CreateSettingCasseCommand()
+        {
+            return this.CreateCommand("SELECT Nome_Cassa, L_Min, L_Max, P_Min, P_Max, W_Longherone, H_Longherone, S_Longherone, " +
+                "Presenza_Ganci, Rinforzo_Longherone, L_Rinforzo_Longherone, Solo_Ritti, Incroci_Spalle FROM " + TABELLA_CASSE);
         }
         public SqlCommand CreateSettingDistinctNastriCommand()
         {

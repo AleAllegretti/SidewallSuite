@@ -77,25 +77,10 @@ namespace BeltsPack.Views
             prezzoetichetteganci = this.InterrogaListinoAccessori("ETICHETTEGANCI", true);
             
             // Diagonali singole se la cassa è maggiore o uguale di 8 metri
-            if (this._imballi.Lunghezza[0] >= 8000)
-            {
-                prezzodiagonali = this.InterrogaListinoPaladini("DIAGONALI", true);
-            }
+            prezzodiagonali = this.InterrogaListinoPaladini("DIAGONALI", true);
 
-            //Diagonali ad incrocio
-            if (this.DiagonaliIncrocio.IsChecked == true)
-            {
-                // Calcolo il prezzo della manodopera dal listino di paladini
-                prezzoincrocio = this.InterrogaListinoPaladini("INCROCIO", true);
-
-                // Confermo la presenza delle diagonali nella cassa
-                this._cassaInFerro.DiagonaliIncrocio = true;
-            }
-            else
-            {
-                // Confermo l'assenza di diagonali
-                this._cassaInFerro.DiagonaliIncrocio = false;
-            }
+            // Calcolo il prezzo della manodopera dal listino di paladini
+            prezzoincrocio = this.InterrogaListinoPaladini("INCROCIO", true);
 
             // Tamponatura con rete fianchi - la metto solo se il cliente è la SIG
             if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
@@ -150,26 +135,6 @@ namespace BeltsPack.Views
             else
             {
                 this._cassaInFerro.FondoLamiera = false;
-            }
-
-            // Solo ritti - solo se la lunghezza della cassa è inferiore a 6 metri
-            if (this.SoloRitti.IsChecked == true)
-            {
-
-                // Ricalcolo il prezzo dei longheroni
-                int i = 0;
-                while (this._cassaInFerro.PrezzoLongheroni[i] != 0)
-                {
-                    this._cassaInFerro.PrezzoLongheroni[i] = this._cassaInFerro.PrezzoLongheroni[i] / 2;
-                    this._cassaInFerro.PesoLongheroni[i] = this._cassaInFerro.PesoLongheroni[i] / 2;
-                    i += 1;
-                }
-                    
-                this._cassaInFerro.SoloRitti = true;
-            }
-            else
-            {
-                this._cassaInFerro.SoloRitti = false;
             }
 
             // Check completamento
@@ -233,86 +198,91 @@ namespace BeltsPack.Views
 
             for (int i = 0; i < this._imballi.Lunghezza.Length; i++)
             {
-                // Definisco il codice della cassa
-                if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.SoloRitti == true)
+                if(this._imballi.Lunghezza[i] != 0)
                 {
-                    CodiceGabbia = "CASSA24RITTI";
-                }
-                else if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.SoloRitti == false)
-                {
-                    CodiceGabbia = "CASSA24SPALLE";
-                }
-                else if (this._imballi.Lunghezza[i] > 4000 && this._imballi.Lunghezza[i] <= 6000)
-                {
-                    CodiceGabbia = "CASSA46SPALLE";
-                }
-                else if (this._imballi.Lunghezza[i] > 6000 && this._imballi.Lunghezza[i] <= 9000)
-                {
-                    CodiceGabbia = "CASSA69SPALLE";
-                }
-                else if (this._imballi.Lunghezza[i] > 9000 && this._imballi.Lunghezza[i] <= 13600)
-                {
-                    CodiceGabbia = "CASSA69SPALLE";
-                }
-                else
-                {
-                    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa in ferro non rientra in nessuna categoria, conttatare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
-                }
+                    // Definisco il codice della cassa
+                    if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.PresenzaSoloRitti[i] == "Si")
+                    {
+                        CodiceGabbia = "CASSA24RITTI";
+                    }
+                    else if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.PresenzaSoloRitti[i] == "No")
+                    {
+                        CodiceGabbia = "CASSA24SPALLE";
+                    }
+                    else if (this._imballi.Lunghezza[i] > 4000 && this._imballi.Lunghezza[i] <= 6000)
+                    {
+                        CodiceGabbia = "CASSA46SPALLE";
+                    }
+                    else if (this._imballi.Lunghezza[i] > 6000 && this._imballi.Lunghezza[i] <= 9000)
+                    {
+                        CodiceGabbia = "CASSA69SPALLE";
+                    }
+                    else if (this._imballi.Lunghezza[i] > 9000 && this._imballi.Lunghezza[i] <= 13600)
+                    {
+                        CodiceGabbia = "CASSA69SPALLE";
+                    }
+                    else
+                    {
+                        ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa in ferro non rientra in nessuna categoria, conttatare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                        break;
+                    }
 
-                // Calcolo il prezzo base della cassa
-                prezzocassasenzacc = this.InterrogaListinoPaladini(CodiceGabbia, true);
+                    // Calcolo il prezzo base della cassa
+                    prezzocassasenzacc = this.InterrogaListinoPaladini(CodiceGabbia, true);
 
-                // Calcolo il prezzo dei ganci
-                this._cassaInFerro.PrezzoGanci = this.InterrogaListinoPaladini("GANCI", true);
+                    if (this._cassaInFerro.PresenzaGanci[i] == "Si")
+                    {
+                        // Calcolo il peso dei ganci
+                        this._cassaInFerro.PesoGanci = this.InterrogaListinoPaladini("GANCI", false) * 4;
 
-                // Calcolo il peso dei ganci
-                this._cassaInFerro.PesoGanci = this.InterrogaListinoPaladini("GANCI", false) * 4;
+                        // Calcolo il prezzo delle etichette dei ganci
+                        this._cassaInFerro.PrezzoEtichetteGanci = this.InterrogaListinoAccessori("ETICHETTEGANCI", true);
 
-                // Calcolo il prezzo delle etichette dei ganci
-                this._cassaInFerro.PrezzoEtichetteGanci = this.InterrogaListinoAccessori("ETICHETTEGANCI", true);
+                        // Calcolo il peso delle etichette dei ganci
+                        this._cassaInFerro.PesoEtichetteGanci = this.InterrogaListinoAccessori("ETICHETTEGANCI", false) * 4;
+                    }
 
-                // Calcolo il peso delle etichette dei ganci
-                this._cassaInFerro.PesoEtichetteGanci = this.InterrogaListinoAccessori("ETICHETTEGANCI", false) * 4;
 
-                if (this._imballi.Lunghezza[i] != 0)
-                {
-                    // Sommo tutti i costi - Manodopera + materia prima
-                    this._cassaInFerro.PrezzoCassaFinale[i] = Math.Round(prezzocassasenzacc +
-                        prezzoincrocio +                            // Manodopera x incrocio
-                        prezzotamponatura +                         // Manodopera x tamponatura
-                        this._cassaInFerro.PrezzoVerniciatura[0] +  // Manodopera x verniciatura
-                        this._cassaInFerro.PrezzoGanci +            // Prezzo x 4 ganci
-                        this._cassaInFerro.PrezzoEtichetteGanci +   // Prezzo x 4 etichette ganci
-                        prezzodiagonali +                           // Manodopera x diagonali
-                        this._cassaInFerro.PrezzoLongheroni[i] +
-                        this._cassaInFerro.PrezzoLongheroniRinforzo[i] +
-                        this._cassaInFerro.PrezzoTraversiniBase[i] +
-                        this._cassaInFerro.PrezzoRitti[i] +
-                        this._cassaInFerro.PrezzoReteTamponaturaBase[i] +
-                        this._cassaInFerro.PrezzoDiagonali[i] +
-                        this._cassaInFerro.PrezzoDiagonaliUltimaCampata[i] +
-                        this._cassaInFerro.PrezzoTraversiniSuperiori[i] +
-                        this._cassaInFerro.PrezzoReteTamponatura[i] +
-                        this._cassaInFerro.PrezzoPluriballAlluminio[i] +
-                        this._cassaInFerro.PrezzoIncroci[i] +
-                        this._cassaInFerro.PrezzoIncrocioUltimaCampata[i], 2);
+                    if (this._imballi.Lunghezza[i] != 0)
+                    {
+                        // Sommo tutti i costi - Manodopera + materia prima
+                        this._cassaInFerro.PrezzoCassaFinale[i] = Math.Round(prezzocassasenzacc +
+                            prezzoincrocio +                            // Manodopera x incrocio
+                            prezzotamponatura +                         // Manodopera x tamponatura
+                            this._cassaInFerro.PrezzoVerniciatura[0] +  // Manodopera x verniciatura
+                            this._cassaInFerro.PrezzoGanci +            // Prezzo x 4 ganci
+                            this._cassaInFerro.PrezzoEtichetteGanci +   // Prezzo x 4 etichette ganci
+                            prezzodiagonali +                           // Manodopera x diagonali
+                            this._cassaInFerro.PrezzoLongheroni[i] +
+                            this._cassaInFerro.PrezzoLongheroniRinforzo[i] +
+                            this._cassaInFerro.PrezzoTraversiniBase[i] +
+                            this._cassaInFerro.PrezzoRitti[i] +
+                            this._cassaInFerro.PrezzoReteTamponaturaBase[i] +
+                            this._cassaInFerro.PrezzoDiagonali[i] +
+                            this._cassaInFerro.PrezzoDiagonaliUltimaCampata[i] +
+                            this._cassaInFerro.PrezzoTraversiniSuperiori[i] +
+                            this._cassaInFerro.PrezzoReteTamponatura[i] +
+                            this._cassaInFerro.PrezzoPluriballAlluminio[i] +
+                            this._cassaInFerro.PrezzoIncroci[i] +
+                            this._cassaInFerro.PrezzoIncrocioUltimaCampata[i], 2);
 
-                    // Sommo tutti i pesi
-                    this._cassaInFerro.PesoFinale[i] = Math.Round((this._cassaInFerro.PesoLongheroni[i] +
-                        this._cassaInFerro.PesoLongheroniRinforzo[i] +
-                        this._cassaInFerro.PesoDiagonali[i] +
-                        this._cassaInFerro.PesoReteTamponatura[i] +
-                        this._cassaInFerro.PesoReteTamponaturaBase[i] +
-                        this._cassaInFerro.PesoRitti[i] +
-                        this._cassaInFerro.PesoTraversiniBase[i] +
-                        this._cassaInFerro.PesoTraversiniSuperiori[i] +
-                        this._cassaInFerro.PesoGanci +
-                        this._cassaInFerro.PesoEtichetteGanci +
-                        this._cassaInFerro.PesoPluriballAlluminio[i] +
-                        this._cassaInFerro.PesoIncroci[i] +
-                        this._cassaInFerro.PesoIncrocioUltimaCampata[i] +
-                        this._cassaInFerro.PesoDiagonaliUltimaCampata[i]) * 0.001, 2);
-                }                
+                        // Sommo tutti i pesi
+                        this._cassaInFerro.PesoFinale[i] = Math.Round((this._cassaInFerro.PesoLongheroni[i] +
+                            this._cassaInFerro.PesoLongheroniRinforzo[i] +
+                            this._cassaInFerro.PesoDiagonali[i] +
+                            this._cassaInFerro.PesoReteTamponatura[i] +
+                            this._cassaInFerro.PesoReteTamponaturaBase[i] +
+                            this._cassaInFerro.PesoRitti[i] +
+                            this._cassaInFerro.PesoTraversiniBase[i] +
+                            this._cassaInFerro.PesoTraversiniSuperiori[i] +
+                            this._cassaInFerro.PesoGanci +
+                            this._cassaInFerro.PesoEtichetteGanci +
+                            this._cassaInFerro.PesoPluriballAlluminio[i] +
+                            this._cassaInFerro.PesoIncroci[i] +
+                            this._cassaInFerro.PesoIncrocioUltimaCampata[i] +
+                            this._cassaInFerro.PesoDiagonaliUltimaCampata[i]) * 0.001, 2);
+                    }
+                }                  
             }
             // Trovo la configurazione con peso minore
            this.GetConfigurazioneConveniente();

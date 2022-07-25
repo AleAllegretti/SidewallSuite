@@ -1,4 +1,5 @@
 ﻿using BeltsPack.Views.Dialogs;
+using BeltsPack.Views.Settings;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -63,6 +64,11 @@ namespace BeltsPack.Views
         private void Parametri_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new SettingsParameters());
+        }
+
+        private void Tipo_Casse_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new SettingsTipologiaCasse());
         }
     }
 }

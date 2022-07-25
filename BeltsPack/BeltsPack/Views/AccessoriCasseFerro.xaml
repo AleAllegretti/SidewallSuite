@@ -36,17 +36,17 @@
 
         </Grid.Resources>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
             <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="0.5*" />
-            <ColumnDefinition Width="0.5*" />
-            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.3*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="33"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1.6*"/>
             <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="1.9*"/>
+            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.6*"/>
         </Grid.RowDefinitions>
 
@@ -58,7 +58,7 @@
         </StackPanel>
 
         <!--Cassa solo ritti-->
-        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="2">
+        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="2" Visibility="Collapsed">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -84,7 +84,7 @@
         </md:Card>
         
         <!--Diagonali ad incrocio-->
-        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="0">
+        <md:Card Margin="30,40,30,0" Grid.Row="2" Grid.Column="0" Visibility="Collapsed">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>
@@ -134,7 +134,7 @@
         </md:Card>
 
         <!--Selezione logo-->
-        <md:Card Margin="30,40,60,0" Grid.Row="2" Grid.Column="3">
+        <md:Card Margin="30,40,60,0" Grid.Row="2" Grid.Column="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="34"/>

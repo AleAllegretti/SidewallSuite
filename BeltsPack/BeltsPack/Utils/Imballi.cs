@@ -133,6 +133,10 @@ namespace BeltsPack.Models
             this._cassainferro.FattibilitaCamion = new bool[10];
             this._cassainferro.FattibilitaNave = new bool[10];
             this._cassainferro.TrasportoDefault = new string[10];
+            this._cassainferro.TipologiaCassa = new string[10];
+            this._cassainferro.PresenzaGanci = new string[10];
+            this._cassainferro.IncrociSpalle = new string[10];
+            this._cassainferro.PresenzaSoloRitti = new string[10];
 
             this.Lunghezza = new double[10];
             this.Larghezza = new double[10];
@@ -548,6 +552,9 @@ namespace BeltsPack.Models
         }
         private void CalcolaPesoCassa()
         {
+            // Variabili locali
+            double pesoLongh = 0;
+            double prezzoLongh = 0;
 
             // Calcolo lunghezza dell'ultima campata ipotizzando le altre lunghe 2 metri
             this.LunghezzaUltimaCampata();
@@ -561,11 +568,26 @@ namespace BeltsPack.Models
             SqlCommand creaComando = dbSQL.CostoCassaFerroCommand();
             reader = creaComando.ExecuteReader();
 
-            // Costo e peso dei longheroni e traversini alla base
+            // Capisco il tipo di cassa che sto considerando
+            string codiceTubolare = "TUBOLARE80504";
+            if(this._cassainferro.TipologiaCassa[ContatoreConfigurazioni] != null)
+            {
+                if (this._cassainferro.TipologiaCassa[ContatoreConfigurazioni].Substring(5) != "8"
+                || this._cassainferro.TipologiaCassa[ContatoreConfigurazioni].Substring(5) != "11")
+                {
+                    codiceTubolare = "TUBOLARE80504";
+                }
+                else
+                {
+                    codiceTubolare = "TUBOLARE501205";
+                }
+            }
+            
+            // LONGHERONI E TRAVERSINI
             while (reader.Read())
             {
                 var temp = reader.GetValue(reader.GetOrdinal("Codice"));
-                if (temp.ToString() == "TUBOLARE80504")
+                if (temp.ToString() == codiceTubolare)
                 {
                     // Altezza longherone
                     this._cassainferro.AltezzaLongherone = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Altezza")));
@@ -576,28 +598,55 @@ namespace BeltsPack.Models
                     {
                         numeroLongheroni = 6;
                     }
-                    
-                    this._cassainferro.PesoLongheroni[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMetro"))) * numeroLongheroni * this.Lunghezza[ContatoreConfigurazioni] * 0.001;
-                    this._cassainferro.PrezzoLongheroni[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * numeroLongheroni * this.Lunghezza[ContatoreConfigurazioni] * 0.001;
-                    
-                    if (this.Lunghezza[ContatoreConfigurazioni] >= 8000)
-                    // Se la cassa è > 8 m considero 8 metri di rinforzo
-                    {
-                        this._cassainferro.PesoLongheroniRinforzo[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMetro"))) *  8000 * 0.001;
-                        this._cassainferro.PrezzoLongheroniRinforzo[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * 8000 * 0.001;
-                    }
 
+                    // Capisco il peso ed il prezzo dei longheroni
+                    pesoLongh = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMetro")));
+                    prezzoLongh = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo")));
+
+                    this._cassainferro.PesoLongheroni[ContatoreConfigurazioni] = pesoLongh * numeroLongheroni * this.Lunghezza[ContatoreConfigurazioni] * 0.001;
+                    this._cassainferro.PrezzoLongheroni[ContatoreConfigurazioni] = prezzoLongh * numeroLongheroni * this.Lunghezza[ContatoreConfigurazioni] * 0.001;
+                
                     // Peso e prezzo dei traversini alla base
                     this._cassainferro.NumeroTraversiniBase[ContatoreConfigurazioni] =Convert.ToInt32( Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 1000, 0) + 1);
-                    this._cassainferro.PesoTraversiniBase[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMetro"))) * (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 1000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
-                    this._cassainferro.PrezzoTraversiniBase[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 1000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
+                    this._cassainferro.PesoTraversiniBase[ContatoreConfigurazioni] = pesoLongh * (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 1000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
+                    this._cassainferro.PrezzoTraversiniBase[ContatoreConfigurazioni] = prezzoLongh * (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 1000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
 
                     break;
                 }
             }
 
+            // LONGHERONI DI RINFORZO
+            reader.Close();
+            creaComando = dbSQL.CreateSettingCasseCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                if(reader.GetValue(reader.GetOrdinal("Nome_Cassa")).ToString() == this._cassainferro.TipologiaCassa[ContatoreConfigurazioni])
+                {
+                    this._cassainferro.PesoLongheroniRinforzo[ContatoreConfigurazioni] = pesoLongh * Convert.ToDouble(reader.GetValue(reader.GetOrdinal("L_Rinforzo_Longherone"))) * 4;
+                    this._cassainferro.PrezzoLongheroniRinforzo[ContatoreConfigurazioni] = prezzoLongh * Convert.ToDouble(reader.GetValue(reader.GetOrdinal("L_Rinforzo_Longherone"))) * 4;
+
+                    // Capisco la presenza dei ganci
+                    this._cassainferro.PresenzaGanci[ContatoreConfigurazioni] = reader.GetValue(reader.GetOrdinal("Presenza_Ganci")).ToString();
+
+                    // Capisco la presenza degli incroci sulle spalle
+                    this._cassainferro.IncrociSpalle[ContatoreConfigurazioni] = reader.GetValue(reader.GetOrdinal("Incroci_Spalle")).ToString();
+
+                    // Capisco se la cssa può essere fatta con solo i ritti
+                    this._cassainferro.PresenzaSoloRitti[ContatoreConfigurazioni] = reader.GetValue(reader.GetOrdinal("Solo_Ritti")).ToString();
+                    if (this._cassainferro.PresenzaSoloRitti[ContatoreConfigurazioni] == "Si")
+                    {
+                        this._cassainferro.PesoLongheroni[ContatoreConfigurazioni] = this._cassainferro.PesoLongheroni[ContatoreConfigurazioni] / 2;
+                        this._cassainferro.PrezzoLongheroni[ContatoreConfigurazioni] = this._cassainferro.PrezzoLongheroni[ContatoreConfigurazioni] / 2;
+                    }
+
+                    break;
+                }             
+            }
+                
             // Costo e peso dei ritti e dei traversini superiori
             reader.Close();
+            creaComando = dbSQL.CostoCassaFerroCommand();
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -615,11 +664,13 @@ namespace BeltsPack.Models
                         (this.Altezza[ContatoreConfigurazioni] - this._cassainferro.AltezzaLongherone * 3) * this._cassainferro.NumeroRitti[ContatoreConfigurazioni] * 0.001;
 
                     // Peso e prezzo dei traversini superiori
-                    this._cassainferro.PesoTraversiniSuperiori[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMetro"))) * 
+                    if (this._cassainferro.PresenzaSoloRitti[ContatoreConfigurazioni] == "No")
+                    {
+                        this._cassainferro.PesoTraversiniSuperiori[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("PesoMetro"))) *
                         (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 2000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
-                    this._cassainferro.PrezzoTraversiniSuperiori[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * 
-                        (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 2000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
-
+                        this._cassainferro.PrezzoTraversiniSuperiori[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) *
+                            (Math.Round(this.Lunghezza[ContatoreConfigurazioni] / 2000, 0) + 1) * this.Larghezza[ContatoreConfigurazioni] * 0.001;
+                    }
                     break;
                 }
             }
@@ -665,7 +716,7 @@ namespace BeltsPack.Models
 
             // Diagonali e incroci se la cassa è maggiore di o uguale di 8 metri
             creaComando = dbSQL.CreateSettingCostiFerroCommand();
-            if (this.Lunghezza[ContatoreConfigurazioni] >= 8000)
+            if (this._cassainferro.IncrociSpalle[ContatoreConfigurazioni] == "Si")
             {
                 reader.Close();
                 reader = creaComando.ExecuteReader();
@@ -727,9 +778,9 @@ namespace BeltsPack.Models
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length - 1; counter++)
             {
                 // Inizializza variabili
-                this.InizializzaVariabili();
+                this.InizializzaVariabili(counter);
 
-                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
+                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[counter] == true)
                 {
                     // Calcola la lunghezza di ciascun strato
                     Strati[i, j] = contatorestrati;
@@ -802,22 +853,23 @@ namespace BeltsPack.Models
                 // Assegna le dimensioni al vettore solo se la cassa è fattibile
                 if (this.cassaFattibile == 1)
                 {
+                    ContatoreConfigurazioni = counter;
                     this.AssegnaDimensioni();
                     this.NumeroConfigurazione[ContatoreConfigurazioni] = 1;
                     this._cassainferro.Configurazione = 1;
-                }
 
-                // Calcola la criticità dell'imballo
-                this.CalcoloCriticitaImballo();
+                    // Calcola la criticità dell'imballo
+                    this.CalcoloCriticitaImballo();
 
-                // Calcola peso e prezzo della configurazione
-                this.CalcolaPesoCassa();
+                    // Calcola peso e prezzo della configurazione
+                    this.CalcolaPesoCassa();
+                } 
             }  
         }
         private void CalcolaImballoConfigurazione2()
         {
             // Inizializza variabili
-            this.InizializzaVariabili();
+            //this.InizializzaVariabili(counter);
 
             // Resetta i limiti dell'imballo
             this.StabilisceLimitiImballo();
@@ -903,7 +955,7 @@ namespace BeltsPack.Models
         private void CalcolaImballoConfigurazione3()
         {
             // Inizializza variabili
-            this.InizializzaVariabili();
+            //this.InizializzaVariabili(counter);
 
             // Resetta i limiti dell'imballo
             this.StabilisceLimitiImballo();
@@ -993,7 +1045,7 @@ namespace BeltsPack.Models
         private void CalcolaImballoConfigurazione4()
         {
             // Inizializza variabili
-            this.InizializzaVariabili();
+            //this.InizializzaVariabili(counter);
 
             // Resetta i limiti dell'imballo
             this.StabilisceLimitiImballo();
@@ -1094,7 +1146,7 @@ namespace BeltsPack.Models
         private void CalcolaImballoConfigurazione5()
         {
             // Inizializza variabili
-            this.InizializzaVariabili();
+            //this.InizializzaVariabili(counter);
 
             // Resetta i limiti dell'imballo
             this.StabilisceLimitiImballo();
@@ -1209,9 +1261,9 @@ namespace BeltsPack.Models
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length-1; counter++)
             {
                 // Inizializza variabili
-                this.InizializzaVariabili();
+                this.InizializzaVariabili(counter);
 
-                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
+                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[counter] == true)
                 {
                     // Calcola la lunghezza di ciascun strato
                     Strati[i, j] = contatorestrati;
@@ -1322,16 +1374,23 @@ namespace BeltsPack.Models
                 // Assegna le dimensioni al vettore
                 if (this.cassaFattibile == 1)
                 {
+                    ContatoreConfigurazioni = counter;
                     this.AssegnaDimensioni();
                     this.NumeroConfigurazione[ContatoreConfigurazioni] = 6;
                     this._cassainferro.Configurazione = 6;
-                }
 
-                // Calcola la criticità dell'imballo
-                this.CalcoloCriticitaImballo();
+                    // Calcolo numero subbi e corrugati
+                    this.CalcoloNumeroSubbiCorrugati();
 
-                // Calcola peso e prezzo della configurazione
-                this.CalcolaPesoCassa();
+                    // Calcola la criticità dell'imballo
+                    this.CalcoloCriticitaImballo();
+
+                    // Calcola peso e prezzo della configurazione
+                    this.CalcolaPesoCassa();
+
+                    // Riazzero la fattibilità della cassa
+                    this.cassaFattibile = 0;
+                }             
             }
         }
         private void CalcolaImballoConfigurazione7()
@@ -1343,9 +1402,9 @@ namespace BeltsPack.Models
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length -1; counter++)
             {
                 // Inizializza variabili
-                this.InizializzaVariabili();
+                this.InizializzaVariabili(counter);
 
-                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] == true)
+                while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[counter] == true)
                 {
                     // Calcola la lunghezza di ciascun strato
                     Strati[i, j] = contatorestrati;
@@ -1482,19 +1541,20 @@ namespace BeltsPack.Models
                 // Assegna le dimensioni al vettore
                 if (this.cassaFattibile == 1)
                 {
+                    ContatoreConfigurazioni = counter;
                     this.AssegnaDimensioni();
                     this.NumeroConfigurazione[ContatoreConfigurazioni] = 7;
                     this._cassainferro.Configurazione = 7;
-                }
 
-                // Calcolo numero subbi e corrugati
-                this.CalcoloNumeroSubbiCorrugati();
+                    // Calcolo numero subbi e corrugati
+                    this.CalcoloNumeroSubbiCorrugati();
 
-                // Calcola la criticità dell'imballo
-                this.CalcoloCriticitaImballo();
+                    // Calcola la criticità dell'imballo
+                    this.CalcoloCriticitaImballo();
 
-                // Calcola peso e prezzo della configurazione
-                this.CalcolaPesoCassa();
+                    // Calcola peso e prezzo della configurazione
+                    this.CalcolaPesoCassa();
+                }               
             }
         }
         private void ControllaLimitiImballo(int contTrasporto)
@@ -1551,7 +1611,6 @@ namespace BeltsPack.Models
 
                 // Inizializzo contatori
                 this.InizializzaContatori();
-
             }
 
             // Provo a disporre, se possibile il nastro in doppia fila
@@ -1564,7 +1623,7 @@ namespace BeltsPack.Models
                 this.Numerofile = 2;
 
                 // Inizializzo contatori
-                this.InizializzaVariabili();
+                this.InizializzaVariabili(this.itrasporto);
 
             }
             // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
@@ -1611,9 +1670,9 @@ namespace BeltsPack.Models
             }
             
         }
-        private void InizializzaVariabili()
+        private void InizializzaVariabili(int counter)
         {
-            this._cassainferro.FattibilitaTrasporto[ContatoreConfigurazioni] = true;
+            this._cassainferro.FattibilitaTrasporto[counter] = true;
             this._nastro.LunghezzaImballato = 0;
             Strati = new double[30, 3];
             i = 0;
@@ -1710,7 +1769,32 @@ namespace BeltsPack.Models
                 {
                     this.Larghezza[ContatoreConfigurazioni] = this._nastro.Larghezza * 2 + this.TolleranzaLarghezza + this.TolleranzaCassaDoppia + this._prodotto.LarghezzaAggSoloBordi * 2;
                 }
-                
+
+                // Stabilisco la tipologia della cassa
+                this.GetCassaType();
+            }
+        }
+
+        public void GetCassaType()
+        {
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+            int i = 0;
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingCasseCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                if (this.Lunghezza[ContatoreConfigurazioni] <= Convert.ToDouble(reader.GetValue(reader.GetOrdinal("L_Max")))
+                    && this.Lunghezza[ContatoreConfigurazioni] >= Convert.ToDouble(reader.GetValue(reader.GetOrdinal("L_Min")))
+                    && this._prodotto.PesoTotaleNastro <= Convert.ToDouble(reader.GetValue(reader.GetOrdinal("P_Max")))
+                    && this._prodotto.PesoTotaleNastro >= Convert.ToDouble(reader.GetValue(reader.GetOrdinal("P_Min"))))
+                {
+                    this._cassainferro.TipologiaCassa[ContatoreConfigurazioni] = reader.GetValue(reader.GetOrdinal("Nome_Cassa")).ToString();
+                }
             }
         }
         private async void ControllaFattibilitaTotale()
@@ -1782,7 +1866,7 @@ namespace BeltsPack.Models
             this._nastro.LunghezzaImballato = 0;
             if (this.itrasporto < this._cassainferro.FattibilitaTrasporto.Length - 1)
             {
-                this._cassainferro.FattibilitaTrasporto[this.itrasporto + 1] = true;
+               this._cassainferro.FattibilitaTrasporto[this.itrasporto + 1] = true;
             }
             
             i = 0;

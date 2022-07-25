@@ -20,8 +20,10 @@ namespace BeltsPack.Models
 		// Limite in altezza
 		public double[] LimiteAltezza { get; set; }
 
-		// Tipo Trasporto
-		public string[] TipoTrasporto { get; set; }
+        // Tipologia cassa
+        public string[] TipologiaCassa { get; set; }
+        // Tipo Trasporto
+        public string[] TipoTrasporto { get; set; }
 		// Determino il trasporto di default
 		public string[] TrasportoDefault { get; set; }
 		// Fattibilità nave
@@ -30,7 +32,12 @@ namespace BeltsPack.Models
 		public bool[] FattibilitaCamion { get; set; }
 		// Fattibilità imballo
 		public bool[] FattibilitaTrasporto { get; set; }
-
+        // Presenza ganci
+        public string[] PresenzaGanci { get; set; }
+        // Presenza incroci spalle
+        public string[] IncrociSpalle { get; set; }
+		// Solo ritti
+		public string[] PresenzaSoloRitti { get; set; }
 		// Lunghezza
 		private double lunghezza;
 
