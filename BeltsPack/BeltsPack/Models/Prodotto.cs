@@ -83,6 +83,8 @@ namespace BeltsPack.Models
 		public string UMCommissioni { get; set; }
 		// Nome agente
 		public string NomeAgente { get; set; }
+		// Codice agente
+		public string CodiceAgente { get; set; }
 		// Commissioni agente
 		public string CommissioniAgente { get; set; }
 		// Tazze telate
@@ -253,10 +255,22 @@ namespace BeltsPack.Models
 			reader = creaComando.ExecuteReader();
 			while (reader.Read())
 			{
-				this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
+				this.CodiceAgente = reader.GetValue(reader.GetOrdinal("Cd_Agente_1")).ToString();
 				this.TipoConsegna = reader.GetValue(reader.GetOrdinal("Cd_DOPorto")).ToString();
 				this.Destinazione = reader.GetValue(reader.GetOrdinal("Localita")).ToString();
 				this.EmailCliente = reader.GetValue(reader.GetOrdinal("Email")).ToString();
+				break;
+			}
+
+			reader.Close();
+
+			// Prendo i dettagli dell'agente
+			creaComando = dbSQL.CreateAgentiCommand(this.CodiceAgente);
+			reader = creaComando.ExecuteReader();
+			while (reader.Read())
+			{
+				this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
+				this.NomeAgente = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
 				break;
 			}
 		}

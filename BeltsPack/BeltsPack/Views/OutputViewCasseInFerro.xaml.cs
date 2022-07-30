@@ -322,14 +322,16 @@ namespace BeltsPack.Views
                     this._nastro.SetCaratterisitche();
 
                     // Codice Nastro
-                    distinta.SearchCodnastro(this._nastro.Tipo, this._nastro.Classe, this._nastro.Larghezza, this._nastro.SiglaTrattamento);
+                    distinta.SearchCodnastro(this._nastro.Tipo, this._nastro.Classe, this._nastro.Larghezza,
+                   this._nastro.SpessoreSup, "NAS", this._nastro.SiglaTipo, this._nastro.SiglaTrattamento, this._nastro.SpessoreInf,
+                   this._nastro.NumTele, this._nastro.NumTessuti);
                     if (_prodotto.Tipologia == "Bordi e tazze" || _prodotto.Tipologia == "Solo bordi")
                     {
                         // Lunghezza bordo
                         this._bordo.SetLunghezzaTotaleBordo(this._nastro.Lunghezza);
 
                         // Codice Bordo
-                        distinta.searchCodBordo(this._bordo.Altezza, this._bordo.Larghezza, this._bordo.SiglaTrattamento);
+                        distinta.searchCodBordo(this._bordo.Altezza, this._bordo.Larghezza, "BOR", this._bordo.SiglaTele, this._bordo.SiglaTrattamento);
 
                         // Raspatura bordo
                         distinta.searchCodRaspaturaBordo("RAB", this._bordo.Altezza, this._bordo.SiglaTrattamento);
@@ -353,9 +355,9 @@ namespace BeltsPack.Views
                         distinta.searchCodTazza(this._tazza.Altezza, this._nastro.LarghezzaUtile,
                             this._tazza.SiglaTrattamento, this._tazza.Telata, this._tazza.Forma);
                         // Raspatura tazze
-                        distinta.searchCodRaspaturaTazze("RAT", this._tazza.Altezza, this._bordo.Trattamento, this._tazza.Forma);
+                        distinta.searchCodRaspaturaTazze("RAL", this._tazza.Altezza, this._bordo.Trattamento, this._tazza.Forma);
                         // Applicazione tazze
-                        distinta.searchCodApplicazioneTazze("LAV", "APT", "APT", this._tazza.Altezza, this._tazza.Forma);
+                        distinta.searchCodApplicazioneTazze("APP", "LIS", this._tazza.Altezza, this._tazza.Forma, this._tazza.Lunghezza);
                     }
                     if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
                     {
@@ -373,7 +375,7 @@ namespace BeltsPack.Views
                         if (this._prodotto.PresenzaBlinkers == "Si")
                         {
                             // Blk
-                            distinta.SearchCodBlk("LIS", "LIS", this._bordo.Altezza, this._bordo.SiglaTrattamento);
+                            distinta.SearchCodBlk("BLK", this._bordo.Altezza, this._bordo.SiglaTrattamento);
                             // Applicazione blinkers
                             distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
                         }

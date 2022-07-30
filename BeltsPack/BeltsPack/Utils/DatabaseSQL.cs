@@ -31,7 +31,8 @@ namespace BeltsPack.Utils
         public readonly string TABELLA_CLIENTI = "CFCliEx";
         public readonly string TABELLA_CATEGORIE = "Categories";
         public readonly string TABELLA_TEST = "DatabaseTest";
-        public readonly string TABELLA_CASSE = "Tipologia_Casse";
+        public readonly string TABELLA_CASSE = "TipologiaCasse";
+        public readonly string TABELLA_AGENTI = "Agente";
 
         private Nastro _nastro;
         private Bordo _bordo;
@@ -86,21 +87,34 @@ namespace BeltsPack.Utils
             return this.CreateCommand("SELECT Larghezza,Lunghezza,Altezza,Peso,Costo FROM " + TABELLA_IMBALLI_LEGNO);
         }
 
-        public SqlCommand ArticleSearchCommand(string tipo, string trattamento, string famiglia, string gruppo, string sottogruppo, int classe = 0, double larghezza = 0)
+        public SqlCommand ArticleSearchCommand(string tipo, int spessoreSup, string famiglia, 
+            string gruppo, string sottogruppo, int classe, double larghezza, int spessoreInf, int numTele, int numTessuti)
         {
             // Trasformo la larghezza in string perchè SQL non accetta la virgola come separatore
             string larghezzaSt;
             larghezzaSt = larghezza.ToString(CultureInfo.InvariantCulture);
 
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura,LarghezzaMKS FROM " +
+            // Modifico la lunghezza della classe perchè il campo su Arca può contenere al massimo 2 cifre
+            string classeSt = "";
+
+            if(classe.ToString().Length == 3)
+            {
+                classeSt = classe.ToString().Substring(classe.ToString().Length - 3, 2);
+            }
+            else
+            {
+                classeSt = classe.ToString().Substring(classe.ToString().Length - 3, 3);
+            }
+            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura,LarghezzaMKS," +
+                "Cd_ARClasse1,Cd_ARClasse3,Cd_ARClasse3,Descrizione FROM " +
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo1 = " + "'" + famiglia +
                 "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
                 "' AND  LarghezzaMKS >= " + larghezzaSt +
-                " AND  Descrizione LIKE " + "'%" + trattamento +
-                "%' AND  Cd_AR LIKE " + "'%" + classe +
-                "%' AND  Cd_AR LIKE " + "'%" + tipo + "%'");
+                " AND  Cd_ARClasse1 = " + "'" + classe.ToString().Substring(classe.ToString().Length-3, 2) +
+                "' AND  Cd_ARClasse2 = " + "'" + numTessuti + "+" + numTele +
+                "' AND  Cd_ARClasse3 = " + "'" + spessoreSup + "+" + spessoreInf + "'");
         }
 
         public SqlCommand RaspaturaBordoSearchCommand(string gruppo, int altezza, string trattamento)
@@ -108,8 +122,8 @@ namespace BeltsPack.Utils
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGruppo3 FROM " +
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo2 = " + "'" + gruppo +
-                "' AND  Descrizione LIKE " + "'%" + altezza +
-                "' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%'");
+                "' AND  Altezza LIKE " + "'%" + altezza +
+                "%' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%'");
         }
         public SqlCommand RaspaturaTazzeSearchCommand(string gruppo, int altezza, string trattamento, string forma)
         {
@@ -156,23 +170,23 @@ namespace BeltsPack.Utils
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_AR LIKE " + "'%" + "RAS" + forma + altezza +
-                "' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%'");
+                "%' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%'");
         }
         public SqlCommand AttrezzaggioSearchCommand(int altezza, string famiglia, string sottogruppo)
         {
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
                 TABELLA_ARTICOLI +
-                " Where Cd_ARGruppo3 = " + "'" + sottogruppo +
-                "' AND  Descrizione LIKE " + "'%" + altezza +
-                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
+                " Where Cd_ARGruppo2 = " + "'" + sottogruppo +
+                "' AND  Altezza LIKE " + "'%" + altezza +
+                "%' AND  Cd_ARGruppo3 LIKE " + "'" + famiglia + "'");
         }
         public SqlCommand PreparazioneSearchCommand(int altezza, string famiglia, string sottogruppo, string descrizione = "")
         {
             if (descrizione !="")
             {
-                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura FROM " +
                TABELLA_ARTICOLI +
-               " Where Cd_ARGruppo3 = " + "'" + sottogruppo +
+               " Where Cd_ARGruppo3 = " + "'" + altezza +
                "' AND  Descrizione LIKE " + "'%" + "Preparazione nastro Cleated Belt"  +
                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
             }
@@ -180,20 +194,20 @@ namespace BeltsPack.Utils
             {
                 return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
                 TABELLA_ARTICOLI +
-                " Where Cd_ARGruppo3 = " + "'" + sottogruppo +
-                "' AND  Descrizione LIKE " + "'%" + "Preparazione nastro B " + altezza +
+                " Where Cd_ARGruppo3 LIKE " + "'%" + altezza +
                 "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
             }
             
         }
 
-        public SqlCommand FixSearchCommand(string altezza, string famiglia, string sottogruppo)
+        public SqlCommand FixSearchCommand(int altezza, string famiglia, string sottogruppo)
         {
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
                 TABELLA_ARTICOLI +
-                " Where Cd_ARGruppo3 = " + "'" + sottogruppo +
-                "' AND  Descrizione LIKE " + "'%" + altezza +
-                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
+                " Where Cd_ARGruppo2 = " + "'" + sottogruppo +
+                "' AND  Cd_ARGruppo3 >= " + "'" + altezza +
+                "' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
+                "ORDER BY Cd_ARGruppo3 ASC");
         }
         public SqlCommand ProdottoSearchCommand(string descrizione)
         {
@@ -207,23 +221,23 @@ namespace BeltsPack.Utils
                 TABELLA_ARTICOLI +
                 " Where  Descrizione LIKE '%" + descrizione + "%'");
         }
-        public SqlCommand BlkSearchCommand(string altezza, string famiglia, string sottogruppo, string trattamento)
+        public SqlCommand BlkSearchCommand(int altezza, string sottogruppo, string trattamento)
         {
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
                 TABELLA_ARTICOLI +
-                " Where Cd_ARGruppo3 = " + "'" + sottogruppo +
-                "' AND  Descrizione LIKE " + "'%" + altezza +
-                "' AND Cd_Ar LIKE " + "'%" + trattamento +
-                "%' AND Cd_Ar LIKE " + "'%" + "BLK" +
-                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
+                " Where Cd_ARGruppo1 = " + "'" + sottogruppo +
+                "' AND  Cd_ARGruppo3 >= " + "'" + altezza +
+                "' AND Cd_ARGruppo2 LIKE " + "'%" + trattamento +
+                "%' AND Cd_Ar LIKE " + "'%" + "BLK" + "%'" +
+                 "ORDER BY Cd_ARGruppo3 ASC");
         }
 
-        public SqlCommand ApplicazioneTazzaSearchCommand(int altezza, string famiglia, string sottogruppo, string forma)
+        public SqlCommand ApplicazioneTazzaSearchCommand(int altezza, string famiglia, string sottogruppo, string forma, int larghezza)
         {
             // Eccezione per tazze TC 230 - 240 e 250
             if (altezza == 230 || altezza == 240 || altezza == 250)
             {
-                altezza = 220;
+                altezza = 280;
             }
 
             // Eccezione per tazze TC 90
@@ -232,11 +246,13 @@ namespace BeltsPack.Utils
                 altezza = 110;
             }
 
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
+            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGRuppo3,Lunghezza FROM " +
                 TABELLA_ARTICOLI +
-                " Where Cd_ARGruppo3 LIKE " + "'" + forma + "'" +
+                " Where Descrizione LIKE " + "'%" + forma + "%'" +
+                " AND  Lunghezza > " + larghezza  +
                 " AND  Descrizione LIKE " + "'%" + altezza +
-                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
+                "%' AND  Cd_ARGRuppo3 LIKE " + "'%" + sottogruppo +
+                "%' AND  Cd_ARGruppo2 LIKE " + "'" + famiglia + "' ORDER BY Lunghezza ASC");
         }
         public SqlCommand GiunzioneSearchCommand(string codice)
         {
@@ -262,7 +278,7 @@ namespace BeltsPack.Utils
                 TABELLA_ARTICOLI +
                 " Where Cd_Ar LIKE " + "'%" + codice + "%'");
         }
-        public SqlCommand BordoSearchCommand(string tipo, double altezza, double larghezza, string trattamento, 
+        public SqlCommand BordoSearchCommand(double altezza, double larghezza,
             string famiglia, string gruppo, string sottogruppo)
         {
             string larghezzaString;
@@ -273,10 +289,8 @@ namespace BeltsPack.Utils
                 " Where Cd_ARGruppo1 = " + "'" + famiglia +
                 "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
-                "' AND  Cd_AR LIKE " + "'%" + trattamento +
-                "%' AND  Altezza LIKE " + "'%" + altezza +
-                "%' AND  LarghezzaMks LIKE " + "'%" + larghezzaString +
-                "%' AND  Cd_AR LIKE " + "'%" + tipo + "%'");
+                "' AND  Altezza LIKE " + "'%" + altezza +
+                "%' AND  LarghezzaMks LIKE " + "'%" + larghezzaString + "%'");
         }
         public SqlCommand TazzeSearchCommand(string tipo, double altezza, double larghezza, string trattamento,
             string famiglia, string gruppo, string sottogruppo, string tele, string forma)
@@ -433,22 +447,27 @@ namespace BeltsPack.Utils
         {
             return this.CreateCommand("SELECT Id_CF,Descrizione,Provvigione FROM " + TABELLA_CLIENTI + " ORDER BY Descrizione ASC");
         }
+        public SqlCommand CreateAgentiCommand(string codiceAgente)
+        {
+            return this.CreateCommand("SELECT Cd_Agente,Descrizione,Provvigione, Email FROM " + TABELLA_AGENTI + " where Cd_Agente like '%" +
+                codiceAgente + "%'");
+        }
         public SqlCommand ClienteSearchCommand(string nomeCliente)
         {
-            return this.CreateCommand("SELECT Descrizione,Provvigione,Cd_DOPorto,Localita,Email,Cd_Nazione FROM " +
+            return this.CreateCommand("SELECT Descrizione,Provvigione,Cd_DOPorto,Localita,Email,Cd_Nazione,Cd_Agente_1 FROM " +
                 TABELLA_CLIENTI +
                 " Where Descrizione LIKE " + "'%" + nomeCliente + "%'");
         }
 
         public SqlCommand CreateSettingNastriCommand()
         {
-            return this.CreateCommand("SELECT ID,NomeNastro,Classe,PesoMQ,SpessoreSup,SpessoreInf,NumeroTele,NumeroTessuti,MinimoDiametroPulley,DataUltimoAggiornamento FROM " + TABELLA_NASTRI);
+            return this.CreateCommand("SELECT ID,NomeNastro,SiglaNastro,Classe,PesoMQ,SpessoreSup,SpessoreInf,NumeroTele,NumeroTessuti,MinimoDiametroPulley,DataUltimoAggiornamento FROM " + TABELLA_NASTRI);
         }
 
         public SqlCommand CreateSettingCasseCommand()
         {
-            return this.CreateCommand("SELECT Nome_Cassa, L_Min, L_Max, P_Min, P_Max, W_Longherone, H_Longherone, S_Longherone, " +
-                "Presenza_Ganci, Rinforzo_Longherone, L_Rinforzo_Longherone, Solo_Ritti, Incroci_Spalle FROM " + TABELLA_CASSE);
+            return this.CreateCommand("SELECT ID, Nome_Cassa, L_Min, L_Max, P_Min, P_Max, W_Longherone, H_Longherone, S_Longherone, " +
+                "Presenza_Ganci, Rinforzo_Longherone, L_Rinforzo_Longherone, Solo_Ritti, Incroci_Spalle, DataUltimoAggiornamento FROM " + TABELLA_CASSE);
         }
         public SqlCommand CreateSettingDistinctNastriCommand()
         {

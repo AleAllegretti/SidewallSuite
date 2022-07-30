@@ -71,10 +71,13 @@ namespace BeltsPack.Utils
         public void SearchCodnastro(string tipo,
                                     int classe,
                                     double larghezza,
-                                    string trattamento,
-                                    string famiglia = "NAS",
-                                    string gruppo = "NAS",
-                                    string sottogruppo = "NAS")
+                                    int spessoreSup,
+                                    string famiglia,
+                                    string gruppo,
+                                    string sottogruppo,
+                                    int spessoreInf,
+                                    int numTele,
+                                    int numTessuti)
         {
             // Inizilizzo la larghezza massima
             double largh_min = 3;
@@ -86,7 +89,8 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.ArticleSearchCommand(tipo, trattamento, famiglia, gruppo, sottogruppo, classe, larghezza);
+            SqlCommand creaComando = dbSQL.ArticleSearchCommand(tipo, spessoreSup, famiglia, gruppo, 
+                sottogruppo, classe, larghezza, spessoreInf, numTele, numTessuti);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -129,11 +133,9 @@ namespace BeltsPack.Utils
         }
         public void searchCodBordo(int altezza,
                                     double larghezza,
-                                    string trattamento,
-                                    string tipo = "BORDO",
-                                    string famiglia = "BOR",
-                                    string gruppo = "BOR",
-                                    string sottogruppo = "BOR")
+                                    string famiglia,
+                                    string gruppo,
+                                    string sottogruppo)
         {
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
@@ -141,7 +143,7 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.BordoSearchCommand(tipo, altezza, larghezza * 0.001, trattamento, famiglia, gruppo, sottogruppo);
+            SqlCommand creaComando = dbSQL.BordoSearchCommand(altezza, larghezza * 0.001, famiglia, gruppo, sottogruppo);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -207,7 +209,7 @@ namespace BeltsPack.Utils
             // Controllo il trattamento
             if (trattamento != "HR")
             {
-                trattamento = "STD";
+                trattamento = "AW";
             }
 
             // Crea il comando SQL
@@ -239,7 +241,7 @@ namespace BeltsPack.Utils
         // Controllo il trattamento
         if (trattamento != "HR")
         {
-            trattamento = "STD";
+            trattamento = "AW";
         }
 
         // Crea il comando SQL
@@ -302,96 +304,41 @@ namespace BeltsPack.Utils
         }
 
         public void searchCodApplicazioneTazze(string famiglia,
-                                   string gruppo,
                                    string sottogruppo,
                                    int altezza,
-                                   string forma)
+                                   string forma,
+                                   int lunghezzaLis)
         {
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
-            // Considero la descrizione in locale
-            string lunghezzaTazza;
-            int lunghezzaTazzaNum;
-            int lunghezzaMin = 3000;
-
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.ApplicazioneTazzaSearchCommand(altezza, famiglia, sottogruppo, forma);
+            SqlCommand creaComando = dbSQL.ApplicazioneTazzaSearchCommand(altezza, famiglia, sottogruppo, forma, lunghezzaLis);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
-                // Prendo la descrizione
+                // Prendo le caratteristiche del nastro
+                this._tazza.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._tazza.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
                 this._tazza.DescrizioneApplicazione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-
-                // Considero solo l'ultima parte della descrizione per vedere la lunghezza
-                lunghezzaTazza = this._tazza.DescrizioneApplicazione.Substring(25);
-
-                // Elimino gli spazi vuoti
-                lunghezzaTazza = lunghezzaTazza.Replace(" ", "");
-                lunghezzaTazza = lunghezzaTazza.Replace("x", "");
-                lunghezzaTazza = lunghezzaTazza.Replace("X", "");
-
-                // Converto la string in numero per vederne la lunghezza corretta
-                try
-                {
-                    lunghezzaTazzaNum = Convert.ToInt32(lunghezzaTazza);
-
-                    // Vedo se la lunghezza della mia tazza è minore di quella che sto leggendo a dB
-                    if (lunghezzaTazzaNum >= this._tazza.Lunghezza && lunghezzaTazzaNum < lunghezzaMin)
-                    {
-                        // Mi tengo buono questo valore
-                        lunghezzaMin = lunghezzaTazzaNum;
-
-                        // Prendo le caratteristiche del nastro
-                        this._tazza.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
-                        this._tazza.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
-
-                        break;
-                    }
-                }
-                catch 
-                {
-
-                }              
+                break;         
             }
             // Controllo che il codice sia presente
             this.PresenzaCodice(this._tazza.CodiceApplicazione, 6);
         }
-
         public void SearchCodFix(string sottogruppo,
                                     string famiglia,
                                     int altezza)
         {
-            // Capisco che tipologia di fix devo utilizzare in base all'altezza del bordo
-            string descrizioneFix;
-            descrizioneFix = "";
-
-            if (altezza <= 160)
-            {
-                descrizioneFix = "160";
-            }
-            else if (altezza > 160 && altezza <= 240)
-            {
-                descrizioneFix = "240";
-            }
-            else if (altezza == 300)
-            {
-                descrizioneFix = "300";
-            }
-            else if (altezza > 300 && altezza <= 630)
-            {
-                descrizioneFix = "630";
-            }
-
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.FixSearchCommand(descrizioneFix, famiglia, sottogruppo);
+            SqlCommand creaComando = dbSQL.FixSearchCommand(altezza, famiglia, sottogruppo);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -405,34 +352,16 @@ namespace BeltsPack.Utils
             this.PresenzaCodice(this._bordo.CodiceFix, 8);
         }
         public void SearchCodBlk(string sottogruppo,
-                                    string famiglia,
                                     int altezza,
                                     string trattamento)
         {
-            // Capisco che tipologia di fix devo utilizzare in base all'altezza del bordo
-            string descrizioneBlk;
-            descrizioneBlk = "";
-
-            if (altezza <= 140)
-            {
-                descrizioneBlk = "140";
-            }
-            else if (altezza > 140 && altezza <= 220)
-            {
-                descrizioneBlk = "220";
-            }
-            else if (altezza == 280)
-            {
-                descrizioneBlk = "280";
-            }
-
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.BlkSearchCommand(descrizioneBlk, famiglia, sottogruppo, trattamento);
+            SqlCommand creaComando = dbSQL.BlkSearchCommand(altezza, sottogruppo, trattamento);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {

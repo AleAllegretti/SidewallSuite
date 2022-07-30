@@ -863,6 +863,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\SQL\Add_Sigla_Column_On_Tabella_Nastri.sql" />
     <Content Include="Assets\SQL\CreateCategoriesTable.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

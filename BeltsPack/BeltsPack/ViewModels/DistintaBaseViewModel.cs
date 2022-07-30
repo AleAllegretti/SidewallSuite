@@ -115,7 +115,7 @@ namespace BeltsPack.ViewModels
             {
                 _distintaBase.Add(new DistintaBase("Traversini sup.", 
                     this._imballi.Larghezza[NumeroConfigurazione] * 0.001, 
-                    this._cassaInFerro.NumeroRitti[NumeroConfigurazione],
+                    this._cassaInFerro.NumeroRitti[NumeroConfigurazione] / 2,
                     this._cassaInFerro.PrezzoTraversiniSuperiori[NumeroConfigurazione],
                     this._cassaInFerro.PesoTraversiniSuperiori[NumeroConfigurazione] * 0.001));
             }

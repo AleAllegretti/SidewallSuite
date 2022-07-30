@@ -62,7 +62,7 @@ namespace BeltsPack.Views.Settings
             else
             {
                 var dataRow = (selectedItem as DataRowView).Row;
-                ID = dataRow["ID"].ToString();
+                ID = dataRow["Nome_Cassa"].ToString();
 
                 // Abilita il tasto di salvataggio
                 ModificaDimensioni.IsEnabled = true;

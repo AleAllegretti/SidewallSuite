@@ -75,6 +75,8 @@ namespace BeltsPack.Models
         public double Peso { get; set; }
         // Tipo di nastro
         public string Tipo { get; set; }
+        // Sigla tipo di nastro
+        public string SiglaTipo { get; set; }
         // Classe del nastro
         public int Classe { get; set; }
         // Spessore nastro
@@ -131,14 +133,14 @@ namespace BeltsPack.Models
                         this.SpessoreInf = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("SpessoreInf")));
                         this.NumTele = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTele")));
                         this.NumTessuti = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTessuti")));
-
+                        this.SiglaTipo = reader.GetValue(reader.GetOrdinal("SiglaNastro")).ToString();
                         break;
                     }
                 }
             }
             catch
             {
-                System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le CARATTERISTICHE (peso, costo ecc...) nel menù impostazioni.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le CARATTERISTICHE (peso, costo ecc...) nel menù impostazioni.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
         }
