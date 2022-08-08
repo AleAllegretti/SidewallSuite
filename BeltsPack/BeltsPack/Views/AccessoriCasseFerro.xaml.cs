@@ -72,15 +72,25 @@ namespace BeltsPack.Views
             double prezzovernicitura = 0;
             double prezzoetichetteganci = 0;
             double prezzodiagonali = 0;
+            int i = 0;
 
             // Calcolo il prezzo delle etichette da mettere su ogni gancio
             prezzoetichetteganci = this.InterrogaListinoAccessori("ETICHETTEGANCI", true);
             
-            // Diagonali singole se la cassa è maggiore o uguale di 8 metri
-            prezzodiagonali = this.InterrogaListinoPaladini("DIAGONALI", true);
-
-            // Calcolo il prezzo della manodopera dal listino di paladini
-            prezzoincrocio = this.InterrogaListinoPaladini("INCROCIO", true);
+            while (i <= this._cassaInFerro.IncrociSpalle[i].Length)
+            {
+                if (this._cassaInFerro.IncrociSpalle[i] == "Si")
+                {
+                    this._cassaInFerro.PrezzoManodoperaDiagonali[i] = this.InterrogaListinoPaladini("DIAGONALI", true);
+                    this._cassaInFerro.PrezzoManodoperaIncroci[i] = this.InterrogaListinoPaladini("INCROCIO", true);
+                }
+                else
+                {
+                    this._cassaInFerro.PrezzoManodoperaDiagonali[i] = 0;
+                    this._cassaInFerro.PrezzoManodoperaIncroci[i] = 0;
+                }
+                i += 1;
+            }
 
             // Tamponatura con rete fianchi - la metto solo se il cliente è la SIG
             if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
@@ -91,7 +101,7 @@ namespace BeltsPack.Views
             else
             {
                 prezzotamponatura = 0;
-                int i = 0;
+                i = 0;
                 while(this._cassaInFerro.PrezzoReteTamponatura[i] != 0)
                 {
                     this._cassaInFerro.PrezzoReteTamponatura[i] = 0;
@@ -104,7 +114,7 @@ namespace BeltsPack.Views
             // Verniciatura
             if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma") & this._imballi.Lunghezza[0] <= 9000)
             {
-                int i = 0;
+                i= 0;
                 while (this._imballi.Lunghezza[i] != 0)
                 {
                     this._cassaInFerro.PrezzoVerniciatura[i] = this.InterrogaListinoPaladini("VERNICIATURAFINO9", true);
@@ -114,7 +124,7 @@ namespace BeltsPack.Views
             }
             else if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma") & this._imballi.Lunghezza[0] > 9000)
             {
-                int i = 0;
+                i = 0;
                 while (this._imballi.Lunghezza[i] != 0)
                 {
                     this._cassaInFerro.PrezzoVerniciatura[i] = this.InterrogaListinoPaladini("VERNICIATURAOLTRE9", true);
@@ -228,7 +238,7 @@ namespace BeltsPack.Views
                     }
 
                     // Calcolo il prezzo base della cassa
-                    prezzocassasenzacc = this.InterrogaListinoPaladini(CodiceGabbia, true);
+                    this._cassaInFerro.PrezzoCassaSenzaAcc[i] = this.InterrogaListinoPaladini(CodiceGabbia, true);
 
                     if (this._cassaInFerro.PresenzaGanci[i] == "Si")
                     {
@@ -246,13 +256,13 @@ namespace BeltsPack.Views
                     if (this._imballi.Lunghezza[i] != 0)
                     {
                         // Sommo tutti i costi - Manodopera + materia prima
-                        this._cassaInFerro.PrezzoCassaFinale[i] = Math.Round(prezzocassasenzacc +
-                            prezzoincrocio +                            // Manodopera x incrocio
-                            prezzotamponatura +                         // Manodopera x tamponatura
-                            this._cassaInFerro.PrezzoVerniciatura[0] +  // Manodopera x verniciatura
-                            this._cassaInFerro.PrezzoGanci +            // Prezzo x 4 ganci
-                            this._cassaInFerro.PrezzoEtichetteGanci +   // Prezzo x 4 etichette ganci
-                            prezzodiagonali +                           // Manodopera x diagonali
+                        this._cassaInFerro.PrezzoCassaFinale[i] = Math.Round(this._cassaInFerro.PrezzoCassaSenzaAcc[i] +
+                            this._cassaInFerro.PrezzoManodoperaIncroci[i] +     // Manodopera x incrocio
+                            prezzotamponatura +                                 // Manodopera x tamponatura
+                            this._cassaInFerro.PrezzoVerniciatura[0] +          // Manodopera x verniciatura
+                            this._cassaInFerro.PrezzoGanci +                    // Prezzo x 4 ganci
+                            this._cassaInFerro.PrezzoEtichetteGanci +           // Prezzo x 4 etichette ganci
+                            this._cassaInFerro.PrezzoManodoperaDiagonali[i] +      // Manodopera x diagonali
                             this._cassaInFerro.PrezzoLongheroni[i] +
                             this._cassaInFerro.PrezzoLongheroniRinforzo[i] +
                             this._cassaInFerro.PrezzoTraversiniBase[i] +

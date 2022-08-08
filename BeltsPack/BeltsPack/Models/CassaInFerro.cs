@@ -76,7 +76,10 @@ namespace BeltsPack.Models
 
 		// Diagonali ad incrocio
 		public bool DiagonaliIncrocio { get; set; }
-
+		// Prezzo manodopera diagonali
+		public double[] PrezzoManodoperaDiagonali { get; set; }
+		// Prezzo manodopera incrocio
+		public double[] PrezzoManodoperaIncroci { get; set; }
 		// Tamponatura con rete
 		public bool TamponaturaConRete { get; set; }
 

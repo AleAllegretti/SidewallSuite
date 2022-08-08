@@ -179,6 +179,13 @@ namespace BeltsPack.ViewModels
                 this._cassaInFerro.PrezzoGanci,
                 this._cassaInFerro.PesoGanci));
 
+            // Prezzo cassa
+            _distintaBase.Add(new DistintaBase("Prezzo cassa",
+                0,
+                4,
+                this._cassaInFerro.PrezzoCassaSenzaAcc[NumeroConfigurazione],
+                0));
+
             // Peso e prezzo etichette
             _distintaBase.Add(new DistintaBase("Etichette ganci",
                 0,
