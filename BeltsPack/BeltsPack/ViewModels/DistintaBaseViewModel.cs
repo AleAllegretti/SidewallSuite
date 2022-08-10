@@ -95,6 +95,13 @@ namespace BeltsPack.ViewModels
             // Se la lunghezza della cassa è maggiore o uguale di 8 metri
             if(this._imballi.Lunghezza[NumeroConfigurazione] >= 8000)
             {
+                // Manodopera incroci
+                _distintaBase.Add(new DistintaBase("Manodopera diagonali",
+                    0,
+                    1,
+                    this._cassaInFerro.PrezzoManodoperaDiagonali[NumeroConfigurazione],
+                    0));
+
                 // Diagonali campate da 2000
                 _distintaBase.Add(new DistintaBase("Diagonali campate 2000 [mm]", 
                     this._cassaInFerro.LunghezzaDiagonali[NumeroConfigurazione] * 0.001,
@@ -130,6 +137,13 @@ namespace BeltsPack.ViewModels
             // Se ci sono gli incroci
             if(this._cassaInFerro.DiagonaliIncrocio)
             {
+                // Manodopera incroci
+                _distintaBase.Add(new DistintaBase("Manodopera incroci",
+                    0,
+                    1,
+                    this._cassaInFerro.PrezzoManodoperaIncroci[NumeroConfigurazione],
+                    0));
+
                 // incroci campate da 2000
                 _distintaBase.Add(new DistintaBase("Incroci campate 2000 [mm]",
                     this._cassaInFerro.LunghezzaDiagonali[NumeroConfigurazione] * 0.001,
@@ -167,7 +181,7 @@ namespace BeltsPack.ViewModels
             {
                 _distintaBase.Add(new DistintaBase("Verniciatura",
                     0, 
-                    0, 
+                    1, 
                     this._cassaInFerro.PrezzoVerniciatura[NumeroConfigurazione], 
                     0));
             }
@@ -182,7 +196,7 @@ namespace BeltsPack.ViewModels
             // Prezzo cassa
             _distintaBase.Add(new DistintaBase("Prezzo cassa",
                 0,
-                4,
+                1,
                 this._cassaInFerro.PrezzoCassaSenzaAcc[NumeroConfigurazione],
                 0));
 

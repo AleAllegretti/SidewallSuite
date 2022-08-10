@@ -177,10 +177,10 @@ namespace BeltsPack.Views
                     distinta.searchCodRaspaturaBordo("RAB", this._bordo.Altezza, this._bordo.SiglaTrattamento);
 
                     // Attrezzaggio bordo
-                    distinta.SearchCodAttAppBor("ATR", "LAV", _bordo.Altezza);
+                    distinta.SearchCodAttAppBor("ATT", "LAV", _bordo.Altezza, _prodotto.Tipologia);
 
                     // Applicazione bordo
-                    distinta.SearchCodAttAppBor("APB", "LAV", _bordo.Altezza);
+                    distinta.SearchCodAppBor("APB", "BOR", _bordo.Altezza, _prodotto.Tipologia);
 
                 }
                 if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze")
@@ -192,8 +192,8 @@ namespace BeltsPack.Views
                     // Caratteristiche
                     this._tazza.CarattersticheTazza();
                     // Tazze
-                    distinta.searchCodTazza(this._tazza.Altezza, this._nastro.LarghezzaUtile, 
-                        this._tazza.SiglaTrattamento, this._tazza.Telata, this._tazza.Forma);
+                    distinta.searchCodTazza(this._tazza.Altezza, this._nastro.LarghezzaUtile,
+                            this._tazza.SiglaTrattamento, this._tazza.SiglaTele, this._tazza.Forma, "LIS");
                     // Raspatura tazze
                     distinta.searchCodRaspaturaTazze("RAL", this._tazza.Altezza, this._bordo.Trattamento, this._tazza.Forma);
                     // Applicazione tazze
@@ -232,7 +232,7 @@ namespace BeltsPack.Views
                     }
 
                     // Codice giunzione
-                    distinta.SearchCodGiunzione("GIU-OFF");
+                    distinta.SearchCodGiunzione("LAV", "GIU", this._prodotto.AltezzaApplicazioni, this._nastro.Larghezza);
                 }
 
                 // Commissioni

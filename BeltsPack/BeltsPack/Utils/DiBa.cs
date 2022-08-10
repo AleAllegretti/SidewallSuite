@@ -163,26 +163,16 @@ namespace BeltsPack.Utils
                                     string trattamento,
                                     string tele,
                                     string forma,
-                                    string tipo = "Listello",
-                                    string famiglia = "LIS",
-                                    string gruppo = "LIS",
-                                    string sottogruppo = "LIS")
+                                    string famiglia)
         {
-            // Determino la sigla delle tele
-            string siglaTele = "";
-            if (tele == "Si")
-            {
-                siglaTele = "HBF";
-            }
-
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
             dbSQL.OpenConnection();
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.TazzeSearchCommand(tipo, altezza, larghezza * 0.001, trattamento, 
-                famiglia, gruppo, sottogruppo, siglaTele, forma);
+            SqlCommand creaComando = dbSQL.TazzeSearchCommand(altezza, larghezza * 0.001, trattamento, 
+                famiglia, tele, forma);
 
             reader = creaComando.ExecuteReader();
             while (reader.Read())
@@ -261,8 +251,20 @@ namespace BeltsPack.Utils
         }
         public void SearchCodAttAppBor(string sottogruppo,
                                     string famiglia,
-                                    int altezza)
+                                    int altezza,
+                                    string tipologia)
         {
+            // Eccezione ne caso in cui il nastro sia solo bordi o solo tazze
+            string altezzastr = "";
+
+            if (tipologia == "Solo bordi")
+            {
+                altezzastr = "BOR";
+            }
+            else if(tipologia == "Solo tazze")
+            {
+                altezzastr = "CLE";
+            }
 
             // Crea il wrapper del database
             DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
@@ -270,16 +272,17 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.AttrezzaggioSearchCommand(altezza, famiglia, sottogruppo);
+            SqlCommand creaComando = dbSQL.AttrezzaggioSearchCommand(altezza, famiglia, sottogruppo, altezzastr);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
-                if (sottogruppo == "ATR")
+                if (sottogruppo == "ATT")
                 {
                     this._bordo.CodiceAttrezzaggio = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                     this._bordo.DescrizioneAttrezzaggio = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
                     this._bordo.UMAttrezzaggio = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
+                    break;
                     
                 }
                 else
@@ -288,10 +291,10 @@ namespace BeltsPack.Utils
                     this._bordo.DescrizioneApplicazione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
                     this._bordo.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
-                    
+                    break;
                 }
             }
-            if (sottogruppo == "ATR")
+            if (sottogruppo == "ATT")
             {
                 // Controllo che il codice del nastro sia presente
                 this.PresenzaCodice(this._bordo.CodiceAttrezzaggio, 4);
@@ -301,6 +304,33 @@ namespace BeltsPack.Utils
                 // Controllo che il codice del nastro sia presente
                 this.PresenzaCodice(this._bordo.CodiceApplicazione, 5);
             }    
+        }
+        public void SearchCodAppBor(string sottogruppo,
+                                   string famiglia,
+                                   int altezza,
+                                   string tipologia)
+        {
+
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.ApplicazioneBordoSearchCommand(altezza, famiglia, sottogruppo);
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+
+                this._bordo.CodiceApplicazione = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._bordo.DescrizioneApplicazione = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
+                this._bordo.UMApplicazione = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
+
+                break;
+            }
+
+            // Controllo che il codice del nastro sia presente
+            this.PresenzaCodice(this._bordo.CodiceApplicazione, 5);
         }
 
         public void searchCodApplicazioneTazze(string famiglia,
@@ -380,10 +410,14 @@ namespace BeltsPack.Utils
                                    string tipologia)
         {
             // Se il nastro è solo tazze
-            string descrizione = "";
-            if (tipologia == "Solo tazze")
+            string altezzastr = "";
+            if (tipologia == "Solo bordi")
             {
-                descrizione = "cleated";
+                altezzastr = "BOR";
+            }
+            else if (tipologia == "Solo tazze")
+            {
+                altezzastr = "CLE";
             }
 
             // Crea il wrapper del database
@@ -392,7 +426,7 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.PreparazioneSearchCommand(altezza, famiglia, sottogruppo, descrizione);
+            SqlCommand creaComando = dbSQL.PreparazioneSearchCommand(altezza, famiglia, sottogruppo, altezzastr);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -405,7 +439,10 @@ namespace BeltsPack.Utils
             // Controllo che il codice del nastro sia presente
             this.PresenzaCodice(this._nastro.CodicePreparazione, 7);
         }
-        public void SearchCodGiunzione(string codice)
+        public void SearchCodGiunzione(string famiglia,
+                                        string gruppo,
+                                        int altezzabordo,
+                                        int larghezzanas)
         {
 
             // Crea il wrapper del database
@@ -414,7 +451,7 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.GiunzioneSearchCommand(codice);
+            SqlCommand creaComando = dbSQL.GiunzioneSearchCommand(famiglia, gruppo, altezzabordo, larghezzanas);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -595,7 +632,7 @@ namespace BeltsPack.Utils
 
             // Crea il comando SQL
             SqlDataReader reader;
-            SqlCommand creaComando = dbSQL.GiunzioneSearchCommand(codice);
+            SqlCommand creaComando = dbSQL.GiunzioneBordiSearchCommand(codice);
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
@@ -1267,11 +1304,11 @@ namespace BeltsPack.Utils
                     sw.WriteLine("Destination: " + this._prodotto.Destinazione);
                     if (this._prodotto.TipoConsegna == "")
                     {
-                        sw.WriteLine("Incoterms: not specified" );
+                        sw.WriteLine("Incoterms 2020: not specified" );
                     }
                     else
                     {
-                        sw.WriteLine("Incoterms: " + this._prodotto.TipoConsegna);
+                        sw.WriteLine("Incoterms 2020: " + this._prodotto.TipoConsegna);
                     }
                     
                 }

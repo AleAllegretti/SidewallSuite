@@ -44,7 +44,7 @@ namespace TestCasseinFerro
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 800;
+            _nastro.Larghezza = 650;
             _nastro.Classe = 500;
             _nastro.Tipo = "TEXRIGID";
             _nastro.SpessoreInf = 0;
@@ -58,22 +58,23 @@ namespace TestCasseinFerro
            
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 75;
-            _bordo.Altezza = 200;
-            _bordo.SiglaTrattamento = "HR";
+            _bordo.Larghezza = 50;
+            _bordo.Altezza = 120;
+            _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 140;
-            _tazza.Forma = "TC";
+            _tazza.Altezza = 110;
+            _tazza.Forma = "T";
             _tazza.SiglaTrattamento = "AW";
-            _tazza.SiglaTele = "HBF";
+            _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();
 
             // CARATTERISTICHE PRODOTTO
             _prodotto.Tipologia = "Bordi e tazze";
             _prodotto.Cliente = "Bevcon Wayors Pvt. Ltd.";
             _prodotto.SetDettagliCliente();
+            _prodotto.AltezzaApplicazioni = Math.Max(_tazza.Altezza, _bordo.Altezza);
 
             // Per il display dei risultati
             List<string> TestResults = new List<string>();
@@ -94,16 +95,16 @@ namespace TestCasseinFerro
 
             // Codice tazze
             distinta.searchCodTazza(_tazza.Altezza, _nastro.LarghezzaUtile,
-                        _tazza.SiglaTrattamento, _tazza.Telata, _tazza.Forma);
+                        _tazza.SiglaTrattamento, _tazza.SiglaTele, _tazza.Forma, "LIS");
 
             // Codice raspatura tazze
             distinta.searchCodRaspaturaTazze("RAL", _tazza.Altezza, _tazza.SiglaTrattamento, _tazza.Forma);
 
             // Codice attrezzaggio linea
-            distinta.SearchCodAttAppBor("ATR", "LAV", _bordo.Altezza);
+            distinta.SearchCodAttAppBor("ATT", "LAV", _bordo.Altezza, _prodotto.Tipologia);
 
             // Codice applicazione bordo
-            distinta.SearchCodAttAppBor("APP", "BOR", _bordo.Altezza);
+            distinta.SearchCodAppBor("APP", "BOR", _bordo.Altezza, _prodotto.Tipologia);
 
             // Codice applicazione listelli
             distinta.searchCodApplicazioneTazze("APP", "LIS", _tazza.Altezza, _tazza.Forma, _nastro.LarghezzaUtile);
@@ -121,7 +122,7 @@ namespace TestCasseinFerro
             distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
 
             // Codice giunzione
-            distinta.SearchCodGiunzione("GIU-OFF");
+            distinta.SearchCodGiunzione("LAV", "GIU", _prodotto.AltezzaApplicazioni, _nastro.Larghezza);
 
             // Articolo sidewall
             distinta.SearchCodProdotto(_bordo.Altezza, _prodotto.Tipologia);

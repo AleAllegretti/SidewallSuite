@@ -77,7 +77,7 @@ namespace BeltsPack.Views
             // Calcolo il prezzo delle etichette da mettere su ogni gancio
             prezzoetichetteganci = this.InterrogaListinoAccessori("ETICHETTEGANCI", true);
             
-            while (i <= this._cassaInFerro.IncrociSpalle[i].Length)
+            while (i < this._cassaInFerro.IncrociSpalle.Length)
             {
                 if (this._cassaInFerro.IncrociSpalle[i] == "Si")
                 {
@@ -102,7 +102,7 @@ namespace BeltsPack.Views
             {
                 prezzotamponatura = 0;
                 i = 0;
-                while(this._cassaInFerro.PrezzoReteTamponatura[i] != 0)
+                while(i < this._cassaInFerro.PrezzoReteTamponatura.Length)
                 {
                     this._cassaInFerro.PrezzoReteTamponatura[i] = 0;
                     this._cassaInFerro.PesoReteTamponatura[i] = 0;
@@ -262,7 +262,7 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PrezzoVerniciatura[0] +          // Manodopera x verniciatura
                             this._cassaInFerro.PrezzoGanci +                    // Prezzo x 4 ganci
                             this._cassaInFerro.PrezzoEtichetteGanci +           // Prezzo x 4 etichette ganci
-                            this._cassaInFerro.PrezzoManodoperaDiagonali[i] +      // Manodopera x diagonali
+                            this._cassaInFerro.PrezzoManodoperaDiagonali[i] +   // Manodopera x diagonali
                             this._cassaInFerro.PrezzoLongheroni[i] +
                             this._cassaInFerro.PrezzoLongheroniRinforzo[i] +
                             this._cassaInFerro.PrezzoTraversiniBase[i] +
