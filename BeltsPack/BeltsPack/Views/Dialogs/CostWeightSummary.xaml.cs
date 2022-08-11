@@ -17,10 +17,12 @@ namespace BeltsPack.Views.Dialogs
     /// </summary>
     public partial class CostWeightSummary : UserControl
     {
+        private Prodotto _prodotto;
 
         public CostWeightSummary(Imballi imballi, CassaInFerro cassaInFerro, int numeroConfigurazione, Nastro nastro,
             Bordo bordo, Tazza tazza, Prodotto prodotto)
         {
+            this._prodotto = prodotto;
 
             InitializeComponent();
 
@@ -55,7 +57,7 @@ namespace BeltsPack.Views.Dialogs
             workBook.Worksheets[0].Range["A1:E1"].CellStyle.Font.Size = 10;
 
             // Salvataggio file
-            string FileName = "EstrazioneCostoPesi_CassaInFerro_" + DateTime.Now.ToString("dd_MM_yyyy") + ".xlsx";
+            string FileName = "EstrazioneCostoPesi_CassaInFerro_Comm_" + this._prodotto.Codice + ".xlsx";
  
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string filepath = path + "\\" + FileName;

@@ -340,7 +340,7 @@ namespace BeltsPack.Views
                         distinta.SearchCodAttAppBor("ATT", "LAV", _bordo.Altezza, _prodotto.Tipologia);
 
                         // Applicazione bordo
-                        distinta.SearchCodAppBor("APB", "BOR", _bordo.Altezza, _prodotto.Tipologia);
+                        distinta.SearchCodAppBor("APP", "BOR", _bordo.Altezza, _prodotto.Tipologia);
 
                     }
                     if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze")

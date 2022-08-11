@@ -134,6 +134,7 @@ namespace BeltsPack.Models
             this._cassainferro.LimiteAltezza = new double[10];
             this._cassainferro.LimiteLarghezza = new double[10];
             this._cassainferro.LimiteLunghezza = new double[10];
+            this._cassainferro.PrezzoGestioneCassa = new double[10];
             this._cassainferro.TipoTrasporto = new string[10];
             this._cassainferro.FattibilitaTrasporto = new bool[10];
             this._cassainferro.FattibilitaCamion = new bool[10];
@@ -716,6 +717,32 @@ namespace BeltsPack.Models
                     this._cassainferro.PrezzoPluriballAlluminio[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * (this.Lunghezza[ContatoreConfigurazioni] * 0.001 * this.Altezza[ContatoreConfigurazioni] * 0.001 * 2 +
                         this.Lunghezza[ContatoreConfigurazioni] * 0.001 * this.Larghezza[ContatoreConfigurazioni] * 0.001 * 2);
 
+                    break;
+                }
+            }
+
+            // Peso e prezzo pluriball in alluminio
+            int Id = 0;
+            if (this.Lunghezza[ContatoreConfigurazioni] <= 4000)
+            {
+                Id = 2;
+            }
+            else
+            {
+                Id = 3;
+            }
+
+            reader.Close();
+            creaComando = dbSQL.CreateSettingCostiGestioneCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("ID"));
+                if (temp.ToString() == Id.ToString())
+                {
+                    // Peso e prezzo della rete di tamponatura sui fianchi
+                    this._cassainferro.PrezzoGestioneCassa[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo")));
+                    
                     break;
                 }
             }

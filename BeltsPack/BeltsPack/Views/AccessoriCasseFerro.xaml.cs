@@ -257,6 +257,7 @@ namespace BeltsPack.Views
                     {
                         // Sommo tutti i costi - Manodopera + materia prima
                         this._cassaInFerro.PrezzoCassaFinale[i] = Math.Round(this._cassaInFerro.PrezzoCassaSenzaAcc[i] +
+                            this._cassaInFerro.PrezzoGestioneCassa[i] +
                             this._cassaInFerro.PrezzoManodoperaIncroci[i] +     // Manodopera x incrocio
                             prezzotamponatura +                                 // Manodopera x tamponatura
                             this._cassaInFerro.PrezzoVerniciatura[0] +          // Manodopera x verniciatura

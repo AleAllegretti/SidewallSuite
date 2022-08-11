@@ -68,6 +68,13 @@ namespace BeltsPack.ViewModels
                this._tazza.PesoTotale));
             }
 
+            // Prezzo gestione cassa
+            _distintaBase.Add(new DistintaBase("Gestione cassa",
+                0,
+                1,
+                this._cassaInFerro.PrezzoGestioneCassa[NumeroConfigurazione],
+                0));
+
             // Longheroni superiori e inferiori
             _distintaBase.Add(new DistintaBase("Longherone sup. / inf.", 
                 _imballi.Lunghezza[NumeroConfigurazione] * 0.001,
@@ -216,7 +223,7 @@ namespace BeltsPack.ViewModels
 
             // Peso e prezzo dei corrugati
             _distintaBase.Add(new DistintaBase("Corrugati",
-                this._imballi.Larghezza[NumeroConfigurazione],
+                this._imballi.Larghezza[NumeroConfigurazione] *0.001,
                 Convert.ToInt32(this._imballi.NumeroCurveCorrugati[NumeroConfigurazione]),
                 this._cassaInFerro.PrezzoCorrugati[NumeroConfigurazione],
                 this._cassaInFerro.PesoCorrugati[NumeroConfigurazione]));
