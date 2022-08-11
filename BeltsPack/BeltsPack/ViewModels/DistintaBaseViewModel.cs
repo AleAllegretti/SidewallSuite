@@ -210,16 +210,16 @@ namespace BeltsPack.ViewModels
             // Peso e prezzo dei subbi
             _distintaBase.Add(new DistintaBase("Subbi",
                 0,
-                0,
-                0,
+                Convert.ToInt32(this._imballi.NumeroCurvePolistirolo[NumeroConfigurazione]),
+                this._cassaInFerro.PrezzoSubbiPolistirolo[NumeroConfigurazione],
                 0));
 
             // Peso e prezzo dei corrugati
             _distintaBase.Add(new DistintaBase("Corrugati",
-                0,
-                0,
-                0,
-                0));
+                this._imballi.Larghezza[NumeroConfigurazione],
+                Convert.ToInt32(this._imballi.NumeroCurveCorrugati[NumeroConfigurazione]),
+                this._cassaInFerro.PrezzoCorrugati[NumeroConfigurazione],
+                this._cassaInFerro.PesoCorrugati[NumeroConfigurazione]));
 
             // Peso e prezzo pluriball in alluminio
             _distintaBase.Add(new DistintaBase("Pluriball in alluminio",
@@ -234,7 +234,6 @@ namespace BeltsPack.ViewModels
                 0,
                 this._cassaInFerro.PrezzoCassaFinale[NumeroConfigurazione],
                 this._cassaInFerro.PesoFinale[NumeroConfigurazione] + this._prodotto.PesoTotaleNastro));
-
         }
     }
 }

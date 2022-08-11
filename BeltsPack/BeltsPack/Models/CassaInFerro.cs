@@ -115,6 +115,16 @@ namespace BeltsPack.Models
 
 		// Prezzo longheroni
 		public double[] PrezzoLongheroni { get; set; }
+		// Peso subbi in polistirolo
+		public double[] PesoSubbiPolistirolo { get; set; }
+
+		// Prezzo subbi in polistirolo
+		public double[] PrezzoSubbiPolistirolo { get; set; }
+		// Peso corrugati
+		public double[] PesoCorrugati { get; set; }
+
+		// Prezzo corrugati
+		public double[] PrezzoCorrugati { get; set; }
 
 		// Peso ritti
 		public double[] PesoRitti { get; set; }

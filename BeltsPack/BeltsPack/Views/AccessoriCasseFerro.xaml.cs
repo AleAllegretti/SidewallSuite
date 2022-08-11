@@ -273,6 +273,8 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PrezzoTraversiniSuperiori[i] +
                             this._cassaInFerro.PrezzoReteTamponatura[i] +
                             this._cassaInFerro.PrezzoPluriballAlluminio[i] +
+                            this._cassaInFerro.PrezzoCorrugati[i] +
+                            this._cassaInFerro.PrezzoSubbiPolistirolo[i] +
                             this._cassaInFerro.PrezzoIncroci[i] +
                             this._cassaInFerro.PrezzoIncrocioUltimaCampata[i], 2);
 
@@ -288,6 +290,8 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PesoGanci +
                             this._cassaInFerro.PesoEtichetteGanci +
                             this._cassaInFerro.PesoPluriballAlluminio[i] +
+                            this._cassaInFerro.PesoCorrugati[i] +
+                            this._cassaInFerro.PesoSubbiPolistirolo[i] +
                             this._cassaInFerro.PesoIncroci[i] +
                             this._cassaInFerro.PesoIncrocioUltimaCampata[i] +
                             this._cassaInFerro.PesoDiagonaliUltimaCampata[i]) * 0.001, 2);

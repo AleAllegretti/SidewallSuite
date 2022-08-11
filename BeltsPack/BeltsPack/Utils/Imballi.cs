@@ -126,6 +126,10 @@ namespace BeltsPack.Models
             this._cassainferro.PesoLongheroniRinforzo = new double[10];
             this._cassainferro.PesoPluriballAlluminio = new double[10];
             this._cassainferro.PrezzoPluriballAlluminio = new double[10];
+            this._cassainferro.PesoCorrugati = new double[10];
+            this._cassainferro.PrezzoCorrugati = new double[10];
+            this._cassainferro.PesoSubbiPolistirolo = new double[10];
+            this._cassainferro.PrezzoSubbiPolistirolo = new double[10];
             this._cassainferro.NumeroTraversiniBase = new int[10];
             this._cassainferro.LimiteAltezza = new double[10];
             this._cassainferro.LimiteLarghezza = new double[10];
@@ -711,6 +715,42 @@ namespace BeltsPack.Models
                         this.Lunghezza[ContatoreConfigurazioni] * 0.001 * this.Larghezza[ContatoreConfigurazioni] * 0.001 * 2);
                     this._cassainferro.PrezzoPluriballAlluminio[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * (this.Lunghezza[ContatoreConfigurazioni] * 0.001 * this.Altezza[ContatoreConfigurazioni] * 0.001 * 2 +
                         this.Lunghezza[ContatoreConfigurazioni] * 0.001 * this.Larghezza[ContatoreConfigurazioni] * 0.001 * 2);
+
+                    break;
+                }
+            }
+
+            // Peso e prezzo dei subbi in polistirolo
+            reader.Close();
+            creaComando = dbSQL.CreateSettingAccessoriCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("Codice"));
+                if (temp.ToString() == this.CodicePolistirolo)
+                {
+                    // Peso e prezzo della rete di tamponatura sui fianchi
+                    this._cassainferro.PesoSubbiPolistirolo[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Peso"))) * this.NumeroCurvePolistirolo[ContatoreConfigurazioni];
+                    this._cassainferro.PrezzoSubbiPolistirolo[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * this.NumeroCurvePolistirolo[ContatoreConfigurazioni];
+
+                    break;
+                }
+            }
+
+            // Peso e prezzo corrugati
+            reader.Close();
+            creaComando = dbSQL.CreateSettingAccessoriCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("Codice"));
+                if (temp.ToString() == this.CodiceCorrugato)
+                {
+                    // Peso e prezzo della rete di tamponatura sui fianchi
+                    this._cassainferro.PesoCorrugati[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Peso"))) * 
+                        this.NumeroCurveCorrugati[ContatoreConfigurazioni] * this.Larghezza[ContatoreConfigurazioni] * 0.001;
+                    this._cassainferro.PrezzoCorrugati[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo"))) * +
+                        this.NumeroCurveCorrugati[ContatoreConfigurazioni] * this.Larghezza[ContatoreConfigurazioni] * 0.001;
 
                     break;
                 }
@@ -1381,9 +1421,6 @@ namespace BeltsPack.Models
                     this.NumeroConfigurazione[ContatoreConfigurazioni] = 6;
                     this._cassainferro.Configurazione = 6;
 
-                    // Calcolo numero subbi e corrugati
-                    this.CalcoloNumeroSubbiCorrugati();
-
                     // Calcola la criticità dell'imballo
                     this.CalcoloCriticitaImballo();
 
@@ -1530,6 +1567,18 @@ namespace BeltsPack.Models
                         Strati[i, j] = 0;
                     }
 
+                    if (contatorestrati % 2 == 0)
+                    {
+                        // Ci dice quanti strati di polistirolo ha l'imballo
+                        this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
+                    }
+                    else
+                    {
+                        // Ci dice quanti strati di polistirolo ha l'imballo
+                        this.NumeroCurveCorrugati[ContatoreConfigurazioni] = (contatorestrati - 1) / 2;
+                    }
+
+
                     // Controllo che siamo dentro i limiti - Ho stabilito 200 [mm] di tolleranza
                     this.ControllaLimitiImballo(counter);
 
@@ -1623,6 +1672,7 @@ namespace BeltsPack.Models
             {
                 // Stabilisco il numero di file
                 this.Numerofile = 2;
+                this.CalcoloNumeroSubbiCorrugati();
 
                 // Inizializzo contatori
                 this.InizializzaVariabili(this.itrasporto);
@@ -1640,6 +1690,7 @@ namespace BeltsPack.Models
                 this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
                 this.cassaFattibile = 1;
                 altezzaNastroImballatoFinale = altezzanastroimballato;
+                this.CalcoloNumeroSubbiCorrugati();
 
                 // Inizializzo contatori
                 this.InizializzaContatori();
@@ -1655,6 +1706,7 @@ namespace BeltsPack.Models
                 this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
                 this.cassaFattibile = 1;
                 altezzaNastroImballatoFinale = altezzanastroimballato;
+                this.CalcoloNumeroSubbiCorrugati();
 
                 // Inizializzo contatori
                 this.InizializzaContatori();
@@ -1831,9 +1883,9 @@ namespace BeltsPack.Models
         private void CalcoloNumeroSubbiCorrugati()
         {
             // Ci dice quanti strati di polistirolo ha l'imballo
-            this.NumeroCurveCorrugati[ContatoreConfigurazioni] = (contatorestrati - 1) / 2;
+            this.NumeroCurveCorrugati[ContatoreConfigurazioni + 1] = (contatorestrati - 1) / 2;
             // Ci dice quanti strati di polistirolo ha l'imballo
-            this.NumeroCurvePolistirolo[ContatoreConfigurazioni] = contatorestrati / 2;
+            this.NumeroCurvePolistirolo[ContatoreConfigurazioni + 1] = contatorestrati / 2;
         }
         private void PossibilitaCassaDoppia()
         {

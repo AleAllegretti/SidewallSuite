@@ -15,7 +15,7 @@ namespace TestCasseinFerro
     {
 
         [Test]
-        public void Test1()
+public void Test1()
         {
             // DATABASE
             var databasesql = new DatabaseSQL("Server=DELLALE\\SQLEXPRESS;Database=DBSidewall;Trusted_Connection=True;  Min Pool Size=10; Max Pool Size=1000");
