@@ -372,7 +372,7 @@ namespace BeltsPack.Utils
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
-                this._bordo.CodiceFix = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString().Trim();
+                this._bordo.CodiceFix = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
                 this._bordo.DescrizioneFix = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
                 this._bordo.UMFix = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
@@ -663,7 +663,7 @@ namespace BeltsPack.Utils
                    
                 new Nastro // Bordo
                 {
-                SpazioDiba = "",
+                    SpazioDiba = "",
                     Codice = bordo.Codice,
                     Descrizione = bordo.Descrizione,
                     QuantitaDiba = nastro.Lunghezza * 2 * 0.001,
@@ -859,7 +859,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione della cartella di salvataggio.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione della cartella di salvataggio.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
             // Path di salvataggio del CSV
@@ -872,6 +872,7 @@ namespace BeltsPack.Utils
                 {
                     var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
                     {
+                        HasHeaderRecord = true,
                         Delimiter = ";"
                     };
 
@@ -886,7 +887,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
             // Faccio comparire il menù per la scelta del logo
@@ -895,7 +896,7 @@ namespace BeltsPack.Utils
                 List<Fornitore> fornitori = new List<Fornitore>();
                 var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
                 // Creo la TDS
-                this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path + "_TDS", this._nastro, this._bordo, selectedLogo, this._tazza);
+                this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
 
                 // Creo le note del nastro
@@ -903,7 +904,7 @@ namespace BeltsPack.Utils
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             
 
@@ -930,7 +931,7 @@ namespace BeltsPack.Utils
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)
             {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("File CSV è stato creato sul Destop. Tutti i codici sono stati trovati.", ConfirmDialog.ButtonConf.OK_ONLY);
+                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("File CSV è stato creato sul Destop. Tutti i codici sono stati trovati.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
             else
             {
@@ -946,8 +947,8 @@ namespace BeltsPack.Utils
                     }
                 }
                 // Faccio l'elenco dei codici mancanti
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il CSV è stato creato sul Desktop, ma i seguenti codici non sono stati trovati:" + "\n" +
-                    codiciMancanti, ConfirmDialog.ButtonConf.OK_ONLY);
+                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il CSV è stato creato sul Desktop, ma i seguenti codici non sono stati trovati:" + "\n" +
+                    //codiciMancanti, ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
             // Apro la directory per visualizzare i file
@@ -1206,7 +1207,7 @@ namespace BeltsPack.Utils
                     sw.WriteLine("L: " + this._imballi.Lunghezza[numeroConf] + " [mm]" + "  -  W:" + 
                         this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
                         this._imballi.Altezza[numeroConf] + " [mm]");
-                    sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+                    sw.WriteLine("Gross Weight: " + grossWeight + " [kg] - Type: " + this._cassaInFerro.TipologiaCassa[numeroConf].Substring(5,1));
                     sw.WriteLine("Price: " + this._cassaInFerro.PrezzoCassaFinale[numeroConf] + " [€]");
                     sw.WriteLine("-");
                 }
@@ -1248,7 +1249,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         public void createTXTTazze(string path)

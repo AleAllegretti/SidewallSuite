@@ -188,7 +188,8 @@ namespace BeltsPack.Utils
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo2 = " + "'" + sottogruppo +
                 "' AND  Cd_ARGruppo3 >= " + "'" + altezza +
-                "' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
+                "' AND  Cd_ARMisura NOT LIKE '%mt%' " +
+                "AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
                 "ORDER BY Cd_ARGruppo3 ASC");
         }
         public SqlCommand ProdottoSearchCommand(string descrizione)
@@ -281,7 +282,7 @@ namespace BeltsPack.Utils
                 "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
                 "' AND  Altezza LIKE " + "'%" + altezza +
-                "%' AND  LarghezzaMks LIKE " + "'%" + larghezzaString + "%'");
+                "%' AND  LarghezzaMks = " + "'" + larghezzaString + "'");
         }
         public SqlCommand TazzeSearchCommand(double altezza, double larghezza, string trattamento,
             string famiglia, string tele, string forma)

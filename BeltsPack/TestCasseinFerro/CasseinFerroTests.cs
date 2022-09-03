@@ -46,33 +46,33 @@ public void Test1()
 
             // CARATTERISTICHE NASTRO
             _nastro.Larghezza = 800;
-            _nastro.Classe = 500;
+            _nastro.Classe = 630;
             _nastro.Tipo = "TEXRIGID";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
             _nastro.NumTele = 0;
             _nastro.NumTessuti = 0;
-            _nastro.SiglaTrattamento = "FRK";
+            _nastro.SiglaTrattamento = "AW";
             _nastro.Aperto = true;
             _nastro.LarghezzaUtile = 420;
             _nastro.SetCaratterisitche();
-            _nastro.Lunghezza = 78000;
+            _nastro.Lunghezza = 57000;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 75;
-            _bordo.Altezza = 240;
+            _bordo.Larghezza = 70;
+            _bordo.Altezza = 160;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 220;
+            _tazza.Altezza = 140;
             _tazza.Forma = "TC";
             _tazza.SiglaTrattamento = "AW";
             _tazza.SiglaTele = "HBF";
             _tazza.CarattersticheTazza();
             _tazza.NumeroFile = 1;
             _tazza.Lunghezza = _nastro.LarghezzaUtile;
-            _tazza.Passo = 800;
+            _tazza.Passo = 330;
 
             // CARATTERISTICHE PRODOTTO
             _prodotto.Tipologia = "Bordi e tazze";
@@ -146,9 +146,19 @@ public void Test1()
             // Movimentazione
             distinta.SearchCodMovimentazione("SPESE EXTRA");
 
+            // Genero la cartella per contenere la documentazione della distinta
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ "\\" + _prodotto.Cliente;
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
             // Genero il txt con le caratteristiche del nastro
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + _prodotto.Codice + "_" + _prodotto.Cliente;
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + _prodotto.Cliente;
             distinta.createTXTNastro(path, "English");
+
+            // Creo il CSV per la distinta
+            distinta.creaCSV();
 
             // Controllo che gli articoli siano stati pescati correttamente
             Console.WriteLine("CODICI");
