@@ -215,7 +215,7 @@ namespace BeltsPack.Views
                     if (this._prodotto.PresenzaBlinkers == "Si")
                     {
                         // Blk
-                        distinta.SearchCodBlk("BLK", this._bordo.Altezza, this._bordo.SiglaTrattamento);
+                        distinta.SearchCodBlk("BLK", this._tazza.Altezza, this._bordo.SiglaTrattamento);
                         // Applicazione blinkers
                         distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
                     }

@@ -375,7 +375,7 @@ namespace BeltsPack.Views
                         if (this._prodotto.PresenzaBlinkers == "Si")
                         {
                             // Blk
-                            distinta.SearchCodBlk("BLK", this._bordo.Altezza, this._bordo.SiglaTrattamento);
+                            distinta.SearchCodBlk("BLK", this._tazza.Altezza, this._bordo.SiglaTrattamento);
                             // Applicazione blinkers
                             distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
                         }
@@ -396,7 +396,7 @@ namespace BeltsPack.Views
                     }
 
                     // Commissioni
-                    if (this._prodotto.NomeAgente != "")
+                    if (this._prodotto.NomeAgente != null)
                     {
                         distinta.SearchCodCommissioni(this._prodotto.NomeAgente, "SPESE EXTRA");
                     }

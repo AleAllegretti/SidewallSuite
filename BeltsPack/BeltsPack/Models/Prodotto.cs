@@ -264,15 +264,19 @@ namespace BeltsPack.Models
 
 			reader.Close();
 
-			// Prendo i dettagli dell'agente
-			creaComando = dbSQL.CreateAgentiCommand(this.CodiceAgente);
-			reader = creaComando.ExecuteReader();
-			while (reader.Read())
+			if (this.CodiceAgente != "")
 			{
-				this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
-				this.NomeAgente = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
-				break;
-			}
+                // Prendo i dettagli dell'agente
+                creaComando = dbSQL.CreateAgentiCommand(this.CodiceAgente);
+                reader = creaComando.ExecuteReader();
+                while (reader.Read())
+                {
+                    this.CommissioniAgente = reader.GetValue(reader.GetOrdinal("Provvigione")).ToString();
+                    this.NomeAgente = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
+                    break;
+                }
+            }
+			
 		}
 		public class Fornitore
         {

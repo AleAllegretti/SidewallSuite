@@ -372,7 +372,7 @@ namespace BeltsPack.Utils
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
-                this._bordo.CodiceFix = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString();
+                this._bordo.CodiceFix = reader.GetValue(reader.GetOrdinal("Cd_AR")).ToString().Trim();
                 this._bordo.DescrizioneFix = reader.GetValue(reader.GetOrdinal("Descrizione")).ToString();
                 this._bordo.UMFix = reader.GetValue(reader.GetOrdinal("Cd_ARMisura")).ToString();
 
@@ -775,12 +775,12 @@ namespace BeltsPack.Utils
                   new Nastro // Giunzione
                 {
                     SpazioDiba = "",
-                    Codice = bordo.CodiceBlk,
-                    Descrizione = bordo.DescrizioneBlk,
-                    QuantitaDiba = tazza.Numero * 2,
+                    Codice = nastro.CodiceGiunzione,
+                    Descrizione = nastro.DescrizioneGiunzione,
+                    QuantitaDiba = 1,
                     SpazioDiba1 = "",
                     SpazioDiba2 = "",
-                    UM = bordo.UMBlk
+                    UM = nastro.UMGiunzione
                 },
                   new Nastro // Giunzione bordi
                 {
@@ -848,7 +848,7 @@ namespace BeltsPack.Utils
         public async void creaCSV()
         {
             // Path salvataggio csv
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + this._prodotto.Cliente + "_" + this._prodotto.Codice;
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\"  + this._prodotto.Codice + "_" + this._prodotto.Cliente;
             try
             {
                 // Se la directory non esiste la creo
@@ -895,7 +895,7 @@ namespace BeltsPack.Utils
                 List<Fornitore> fornitori = new List<Fornitore>();
                 var selectedLogo = await DialogsHelper.ShowLoghiSelectionDialog(fornitori);
                 // Creo la TDS
-                this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
+                this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path + "_TDS", this._nastro, this._bordo, selectedLogo, this._tazza);
 
 
                 // Creo le note del nastro
@@ -1180,7 +1180,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del nastro.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del nastro.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1207,6 +1207,7 @@ namespace BeltsPack.Utils
                         this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
                         this._imballi.Altezza[numeroConf] + " [mm]");
                     sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+                    sw.WriteLine("Price: " + this._cassaInFerro.PrezzoCassaFinale[numeroConf] + " [€]");
                     sw.WriteLine("-");
                 }
             }
@@ -1269,7 +1270,7 @@ namespace BeltsPack.Utils
                 using (StreamWriter sw = fi.CreateText())
                 {
                     sw.WriteLine("N° tazze: " + this._tazza.Numero);
-                    sw.WriteLine("Lunghezza: " + this._tazza.Lunghezza);
+                    sw.WriteLine("Lunghezza [mm]: " + this._tazza.Lunghezza);
                     sw.WriteLine("N° file: " + this._tazza.NumeroFile);
                     if (this._tazza.NumeroFile != 1)
                     {

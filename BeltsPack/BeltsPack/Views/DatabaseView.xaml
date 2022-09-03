@@ -24,7 +24,7 @@
             <Setter Property="Background" Value="LightGray" />
         </Style>
 
-        <local:NameToColor x:Key="NameToColor" />
+        <!--<local:NameToColor x:Key="NameToColor" />-->
         
     </Page.Resources>
 
@@ -57,11 +57,11 @@
                                                 Width="30"/>
                 </sf:SfDataGrid.Columns>
 
-                <sf:SfDataGrid.CellStyle>
+                <!--<sf:SfDataGrid.CellStyle>
                     <Style TargetType="sf:GridCell">
                         <Setter Property="Background" Value="{Binding Stato, Converter = {StaticResource NameToColor}}" />
                     </Style>
-                </sf:SfDataGrid.CellStyle>
+                </sf:SfDataGrid.CellStyle>-->
 
             </sf:SfDataGrid>
         </StackPanel>

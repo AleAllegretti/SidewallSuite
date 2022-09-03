@@ -8,6 +8,7 @@ using BeltsPack.Utils;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Shapes;
 
 namespace TestCasseinFerro
 {
@@ -44,37 +45,43 @@ public void Test1()
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 650;
+            _nastro.Larghezza = 800;
             _nastro.Classe = 500;
             _nastro.Tipo = "TEXRIGID";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
             _nastro.NumTele = 0;
             _nastro.NumTessuti = 0;
-            _nastro.SiglaTrattamento = "AY";
+            _nastro.SiglaTrattamento = "FRK";
             _nastro.Aperto = true;
-            _nastro.LarghezzaUtile = 700;
-            _nastro.SetCaratterisitche();         
-           
+            _nastro.LarghezzaUtile = 420;
+            _nastro.SetCaratterisitche();
+            _nastro.Lunghezza = 78000;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 50;
-            _bordo.Altezza = 120;
+            _bordo.Larghezza = 75;
+            _bordo.Altezza = 240;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 110;
-            _tazza.Forma = "T";
+            _tazza.Altezza = 220;
+            _tazza.Forma = "TC";
             _tazza.SiglaTrattamento = "AW";
-            _tazza.SiglaTele = "HBL";
+            _tazza.SiglaTele = "HBF";
             _tazza.CarattersticheTazza();
+            _tazza.NumeroFile = 1;
+            _tazza.Lunghezza = _nastro.LarghezzaUtile;
+            _tazza.Passo = 800;
 
             // CARATTERISTICHE PRODOTTO
             _prodotto.Tipologia = "Bordi e tazze";
-            _prodotto.Cliente = "Bevcon Wayors Pvt. Ltd.";
+            _prodotto.Cliente = "EZZ";
             _prodotto.SetDettagliCliente();
             _prodotto.AltezzaApplicazioni = Math.Max(_tazza.Altezza, _bordo.Altezza);
+            _prodotto.PresenzaFix = "Si";
+            _prodotto.PresenzaBlinkers = "Si";
+            _prodotto.PistaLaterale = _nastro.LarghezzaUtile;
 
             // Per il display dei risultati
             List<string> TestResults = new List<string>();
@@ -116,7 +123,7 @@ public void Test1()
             distinta.SearchCodFix("FIX", "LAV", _bordo.Altezza);
 
             // COdice blinkers
-            distinta.SearchCodBlk("BLK", _bordo.Altezza, _bordo.SiglaTrattamento);
+            distinta.SearchCodBlk("BLK", _tazza.Altezza, _bordo.SiglaTrattamento);
 
             // Applicazione blinkers
             distinta.SearchCodApplicazioneBlk("APPLI-BLINKERS");
@@ -138,6 +145,10 @@ public void Test1()
 
             // Movimentazione
             distinta.SearchCodMovimentazione("SPESE EXTRA");
+
+            // Genero il txt con le caratteristiche del nastro
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + _prodotto.Codice + "_" + _prodotto.Cliente;
+            distinta.createTXTNastro(path, "English");
 
             // Controllo che gli articoli siano stati pescati correttamente
             Console.WriteLine("CODICI");

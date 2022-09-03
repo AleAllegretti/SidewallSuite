@@ -131,8 +131,8 @@ namespace BeltsPack.Utils
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_ARClasse1 = " + "'" + forma +
-                 "' AND  Altezza <= " + "'" + altezza +
-                "' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%' ORDER BY Altezza DESC");
+                 "' AND  Altezza >= " + "'" + altezza +
+                "' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%' ORDER BY Altezza ASC");
         }
         public SqlCommand AttrezzaggioSearchCommand(int altezza, string famiglia, string sottogruppo, string altezzastr)
         {
