@@ -1346,61 +1346,61 @@ namespace BeltsPack.Models
                     {
                         Strati[i, j] = Strati[i - 1, 1] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
                         // Altezza polistirolo
-                        altezzapolistirolo = this.DiametroPolistirolo;
+                        altezzapolistirolo = this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 3)
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 4)
                     {
                         Strati[i, j] = Strati[i - 1, 1] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
                         // Altezza polistirolo
-                        altezzapolistirolo = 2 * this.DiametroPolistirolo;
+                        altezzapolistirolo = 2 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 5)
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 6)
                     {
                         Strati[i, j] = Strati[i - 1, j] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
                         // Altezza polistirolo
-                        altezzapolistirolo = 3 * this.DiametroPolistirolo;
+                        altezzapolistirolo = 3 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 7)
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = contatorestrati * this._prodotto.AltezzaApplicazioni + DiametroCorrugato;
+                        altezzacorrugati = contatorestrati * this._prodotto.AltezzaApplicazioni + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 8)
                     {
                         Strati[i, j] = Strati[i - 3, j] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
                         // Altezza polistirolo
-                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 9)
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = contatorestrati * this._prodotto.AltezzaApplicazioni + DiametroCorrugato;
+                        altezzacorrugati = contatorestrati * this._prodotto.AltezzaApplicazioni + DiametroCorrugato + this._nastro.Spessore * (contatorestrati +1);
                     }
                     else if (contatorestrati == 10)
                     {
                         Strati[i, j] = Strati[i - 8, j] - 1.5 * this.DiametroCorrugato - this._prodotto.AltezzaApplicazioni * 2;
                         // Altezza polistirolo
-                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo + this._nastro.Spessore* contatorestrati;
                     }
                     else if (contatorestrati % 2 == 0)
                     {
                         Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
                         // Altezza polistirolo
-                        altezzapolistirolo = contatorestrati * this.altezzapolistirolo;
+                        altezzapolistirolo = contatorestrati * this.altezzapolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else
                     {
@@ -1490,85 +1490,85 @@ namespace BeltsPack.Models
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 4)
                     {
                         Strati[i, j] = Strati[i - 1, 1] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
                         // Altezza polistirolo
-                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo;
+                        altezzapolistirolo = contatorestrati / 2 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 5)
                     {
                         Strati[i, j] = Strati[i - 1, j] - this.DiametroPolistirolo;
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 6)
                     {
                         Strati[i, j] = Strati[i - 1, j] + this.DiametroCorrugato + 2 * this._prodotto.AltezzaApplicazioni;
                         // Altezza polistirolo
-                        altezzapolistirolo = 2.5 * this.DiametroPolistirolo;
+                        altezzapolistirolo = 2.5 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 7)
                     {
                         Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 5 + DiametroCorrugato * 2;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 5 + DiametroCorrugato * 2 + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 8)
                     {
                         Strati[i, j] = Strati[i - 3, j];
                         // Altezza polistirolo
-                        altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo;
+                        altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 9)
                     {
                         Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 10)
                     {
                         Strati[i, j] = Strati[i - 8, j];
                         // Altezza polistirolo
-                        altezzapolistirolo = 3.8 * this.DiametroPolistirolo;
+                        altezzapolistirolo = 3.8 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 11)
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 7 + DiametroCorrugato * 3;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 7 + DiametroCorrugato * 3 + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 12)
                     {
                         Strati[i, j] = Strati[i - 1, j];
                         // Altezza polistirolo
-                        altezzapolistirolo = 4.8 * this.DiametroPolistirolo;
+                        altezzapolistirolo = 4.8 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 13)
                     {
                         Strati[i, j] = Strati[i - 4, j];
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 13 + DiametroCorrugato * 2;
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * 13 + DiametroCorrugato * 2 + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 14)
                     {
                         Strati[i, j] = Strati[i - 1, j] - 3 * this.DiametroCorrugato;
                         // Altezza polistirolo
-                        altezzapolistirolo = 4 * this.DiametroPolistirolo;
+                        altezzapolistirolo = 4 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati % 2 == 0)
                     {
                         Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
                         // Altezza polistirolo
-                        altezzapolistirolo = contatorestrati * this.altezzapolistirolo;
+                        altezzapolistirolo = contatorestrati * this.altezzapolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else
                     {
                         Strati[i, j] = Strati[i - 1, j] - 2 * this.DiametroCorrugato;
                         // Altezza corrugato
-                        altezzacorrugati = contatorestrati * this.altezzacorrugati;
+                        altezzacorrugati = contatorestrati * this.altezzacorrugati + this._nastro.Spessore * (contatorestrati + 1);
                     }
 
                     // Calcola la lunghezza del nastro fino ad ora imballato

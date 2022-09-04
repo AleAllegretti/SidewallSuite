@@ -147,18 +147,18 @@ public void Test1()
             distinta.SearchCodMovimentazione("SPESE EXTRA");
 
             // Genero la cartella per contenere la documentazione della distinta
-            string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ "\\" + _prodotto.Cliente;
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
+            //string dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ "\\" + _prodotto.Cliente;
+            //if (!Directory.Exists(dir))
+            //{
+            //    Directory.CreateDirectory(dir);
+            //}
 
             // Genero il txt con le caratteristiche del nastro
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + _prodotto.Cliente;
-            distinta.createTXTNastro(path, "English");
+            //var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + _prodotto.Cliente;
+            //distinta.createTXTNastro(path, "English");
 
             // Creo il CSV per la distinta
-            distinta.creaCSV();
+            // distinta.creaCSV();
 
             // Controllo che gli articoli siano stati pescati correttamente
             Console.WriteLine("CODICI");
@@ -208,7 +208,6 @@ public void Test1()
                     deltaLength = realCassaLength - ((int)imballi.Lunghezza.Max());
                     deltaheight = realcassaheight - ((int)imballi.Altezza.Max());
 
-
                     if (imballi.Numerofile == Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F19")))
                         && imballi.Numerofile == 1)
                     {
@@ -223,8 +222,7 @@ public void Test1()
 
             // IMPORTANTE
             // Nella riga 1645 della classe imballi devo decommentare il messagebox quando non sono in ambiente di test
-
-            
+       
         }
     }
 }

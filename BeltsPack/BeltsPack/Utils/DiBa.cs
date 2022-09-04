@@ -1282,7 +1282,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         public void createTXTTrasporto(string path)
@@ -1317,7 +1317,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del trasporto.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del trasporto.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

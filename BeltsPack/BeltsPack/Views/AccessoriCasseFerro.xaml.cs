@@ -233,7 +233,7 @@ namespace BeltsPack.Views
                     }
                     else
                     {
-                        ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa in ferro non rientra in nessuna categoria, conttatare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                        ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa in ferro non rientra in nessuna categoria, contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
                         break;
                     }
 
