@@ -231,8 +231,8 @@ namespace BeltsPack.Utils
 
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGRuppo3,Lunghezza FROM " +
                 TABELLA_ARTICOLI +
-                " Where Descrizione LIKE " + "'%" + forma + " %'" +
-                " AND  Lunghezza > " + larghezza  +
+                " Where Descrizione LIKE " + "'%" + forma + "%'" +
+                " AND  Lunghezza >= " + larghezza  +
                 " AND  Descrizione LIKE " + "'%" + altezza +
                 "%' AND  Cd_ARGRuppo3 LIKE " + "'%" + sottogruppo +
                 "%' AND  Cd_ARGruppo2 LIKE " + "'" + famiglia + "' ORDER BY Lunghezza ASC");
