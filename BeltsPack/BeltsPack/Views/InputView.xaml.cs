@@ -466,7 +466,7 @@ namespace BeltsPack.Views
             else if (prodotto.Tipologia == "Bordi e tazze")
             {
                 if (nastro.Lunghezza == 0 | nastro.Larghezza == 0 | ComboAperto.SelectedItem == null | ComboAltezzaBordi.SelectedItem == null | 
-                    ComboAltezzaTazze.SelectedItem == null | prodotto.PistaLaterale == null)
+                    ComboAltezzaTazze.SelectedItem == null)
                 {
                     ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati che tutti i campi siano stati riempiti", ConfirmDialog.ButtonConf.OK_ONLY);
                     formfilled = false;
@@ -478,7 +478,7 @@ namespace BeltsPack.Views
             }
             else if (prodotto.Tipologia == "Solo tazze")
             {
-                if (nastro.Lunghezza == 0 | nastro.Larghezza == 0 | ComboAperto.SelectedItem == null | ComboAltezzaTazze.SelectedItem == null | prodotto.PistaLaterale == 0)
+                if (nastro.Lunghezza == 0 | nastro.Larghezza == 0 | ComboAperto.SelectedItem == null | ComboAltezzaTazze.SelectedItem == null)
                 {
                     ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati che tutti i campi siano stati riempiti", ConfirmDialog.ButtonConf.OK_ONLY);
                     formfilled = false;
@@ -490,7 +490,7 @@ namespace BeltsPack.Views
             }
             else if (prodotto.Tipologia == "Solo bordi")
             {
-                if (nastro.Lunghezza == 0 | nastro.Larghezza == 0 | ComboAperto.SelectedItem == null | ComboAltezzaBordi.SelectedItem == null | prodotto.PistaLaterale == 0)
+                if (nastro.Lunghezza == 0 | nastro.Larghezza == 0 | ComboAperto.SelectedItem == null | ComboAltezzaBordi.SelectedItem == null)
                 {
                     ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati che tutti i campi siano stati riempiti", ConfirmDialog.ButtonConf.OK_ONLY);
                 }
