@@ -163,13 +163,20 @@ namespace BeltsPack.Utils
         }
         public SqlCommand PreparazioneSearchCommand(int altezza, string famiglia, string sottogruppo, string descrizione)
         {
-            if (descrizione !="")
+            if (descrizione !="" && altezza != 0)
             {
                 return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura FROM " +
                TABELLA_ARTICOLI +
                " Where Cd_ARGruppo3 = " + "'" + altezza +
                "' AND  Descrizione LIKE " + "'%" + "Preparazione nastro Cleated Belt"  +
                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
+            }
+            else if (descrizione != "" && altezza == 0)
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura FROM " +
+                               TABELLA_ARTICOLI +
+                               " Where Descrizione LIKE " + "'%" + "Preparazione nastro Cleated Belt" +
+                               "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
             }
             else
             {
@@ -194,9 +201,9 @@ namespace BeltsPack.Utils
         }
         public SqlCommand ProdottoSearchCommand(string descrizione)
         {
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura FROM " +
+            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARGruppo1,Cd_ARMisura FROM " +
                 TABELLA_ARTICOLI +
-                " Where  Descrizione LIKE '%" + descrizione + "%'");
+                " Where  Descrizione LIKE '%" + descrizione + "%' AND Cd_ARGruppo1 is NULL");
         }
         public SqlCommand ImballoSearchCommand(string descrizione)
         {

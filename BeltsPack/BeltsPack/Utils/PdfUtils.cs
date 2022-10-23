@@ -124,19 +124,47 @@ namespace BeltsPack.Utils
             string pdfTemplate = "";
             if (prodotto.Tipologia == "Bordi e tazze")
             {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+                if (tazza.Forma == "TB")
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + "T" + ".pdf";
+                }
+                else
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+                }
             }
             else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile == 1)
             {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + ".pdf";
+                if (tazza.Forma == "TB")
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + "T" + ".pdf";
+                }
+                else
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+                }
             }
             else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile != 1 && tazza.NumeroFile <= 5)
             {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + "_x_" + tazza.NumeroFile + ".pdf";
+                if (tazza.Forma == "TB")
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + "T" + "_x_" + tazza.NumeroFile + ".pdf";
+                }
+                else
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + "_x_" + tazza.NumeroFile + ".pdf";
+                }
             }
             else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile != 1 && tazza.NumeroFile > 5)
             {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + "_x_5" + ".pdf";
+                if (tazza.Forma == "TB")
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + "T" + "_x_5" + ".pdf";
+                }
+                else
+                {
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + "_x_5" + ".pdf";
+                }
             }
             else
             {
@@ -186,7 +214,15 @@ namespace BeltsPack.Utils
             // Larghezza utile
             if (fieldCollection.TryGetField("8", out loadedField))
             {
-                (loadedField as PdfLoadedTextBoxField).Text = nastro.LarghezzaUtile.ToString();
+                if (tazza.NumeroFile == 1)
+                {
+                    (loadedField as PdfLoadedTextBoxField).Text = nastro.LarghezzaUtile.ToString();
+                }
+                else
+                {
+                    (loadedField as PdfLoadedTextBoxField).Text = (tazza.Lunghezza / tazza.NumeroFile).ToString();
+                }
+                
             }
             // Altezza bordo
             if (fieldCollection.TryGetField("9", out loadedField))

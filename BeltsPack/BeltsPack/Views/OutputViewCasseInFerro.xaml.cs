@@ -336,9 +336,6 @@ namespace BeltsPack.Views
                         // Raspatura bordo
                         distinta.searchCodRaspaturaBordo("RAB", this._bordo.Altezza, this._bordo.SiglaTrattamento);
 
-                        // Attrezzaggio bordo
-                        distinta.SearchCodAttAppBor("ATT", "LAV", _bordo.Altezza, _prodotto.Tipologia);
-
                         // Applicazione bordo
                         distinta.SearchCodAppBor("APP", "BOR", _bordo.Altezza, _prodotto.Tipologia);
 
@@ -347,20 +344,28 @@ namespace BeltsPack.Views
                     {
                         // Calcolo il numero e di tazze totali
                         this._tazza.NumeroTazzeTotali(this._nastro.Lunghezza, this._tazza.Passo);
+
                         // Lunghezza delle tazze
                         this._tazza.SetLunghezzaTotale(this._nastro.LarghezzaUtile);
+
                         // Caratteristiche
                         this._tazza.CarattersticheTazza();
+
                         // Tazze
                         distinta.searchCodTazza(this._tazza.Altezza, this._nastro.LarghezzaUtile,
                             this._tazza.SiglaTrattamento, this._tazza.SiglaTele, this._tazza.Forma, "LIS");
+
                         // Raspatura tazze
                         distinta.searchCodRaspaturaTazze("RAL", this._tazza.Altezza, this._bordo.Trattamento, this._tazza.Forma);
+
                         // Applicazione tazze
                         distinta.searchCodApplicazioneTazze("APP", "LIS", this._tazza.Altezza, this._tazza.Forma, this._tazza.Lunghezza);
                     }
                     if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
                     {
+                        // Attrezzaggio bordo
+                        distinta.SearchCodAttAppBor("ATT", "LAV", _bordo.Altezza, _prodotto.Tipologia);
+
                         // Preparazione nastro
                         distinta.SearchCodPrepNastro("NAS", "LAV", this._bordo.Altezza, this._prodotto.Tipologia);
                     }

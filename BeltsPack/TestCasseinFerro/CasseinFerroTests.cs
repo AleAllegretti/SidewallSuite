@@ -45,43 +45,45 @@ public void Test1()
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 800;
-            _nastro.Classe = 630;
-            _nastro.Tipo = "TEXRIGID";
+            _nastro.Larghezza = 1400;
+            _nastro.Classe = 400;
+            _nastro.Tipo = "EP";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
             _nastro.NumTele = 0;
             _nastro.NumTessuti = 0;
-            _nastro.SiglaTrattamento = "AW";
+            _nastro.SiglaTrattamento = "OR";
             _nastro.Aperto = true;
-            _nastro.LarghezzaUtile = 420;
+            _nastro.LarghezzaUtile = 1120;
             _nastro.SetCaratterisitche();
-            _nastro.Lunghezza = 57000;
+            _nastro.Lunghezza = 33000;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 70;
-            _bordo.Altezza = 160;
+            _bordo.Larghezza = 0;
+            _bordo.Altezza = 0;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 140;
-            _tazza.Forma = "TC";
+            _tazza.Altezza = 40;
+            _tazza.Forma = "TB";
             _tazza.SiglaTrattamento = "AW";
-            _tazza.SiglaTele = "HBF";
+            _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();
             _tazza.NumeroFile = 1;
             _tazza.Lunghezza = _nastro.LarghezzaUtile;
-            _tazza.Passo = 330;
+            _tazza.Passo = 500;
+            _tazza.NumeroFile = 2;
+            _tazza.SpazioFileMultiple = 80;
 
             // CARATTERISTICHE PRODOTTO
-            _prodotto.Tipologia = "Bordi e tazze";
+            _prodotto.Tipologia = "Solo tazze";
             _prodotto.Cliente = "EZZ";
             _prodotto.SetDettagliCliente();
             _prodotto.AltezzaApplicazioni = Math.Max(_tazza.Altezza, _bordo.Altezza);
-            _prodotto.PresenzaFix = "Si";
-            _prodotto.PresenzaBlinkers = "Si";
-            _prodotto.PistaLaterale = _nastro.LarghezzaUtile;
+            _prodotto.PresenzaFix = "No";
+            _prodotto.PresenzaBlinkers = "No";
+            _prodotto.PistaLaterale = 140;
 
             // Per il display dei risultati
             List<string> TestResults = new List<string>();
@@ -174,11 +176,12 @@ public void Test1()
             Console.WriteLine("10. Blinkers:" + _bordo.CodiceBlk);                      //
             Console.WriteLine("11. Appl. blinkers:" + _bordo.CodiceApplicazionexBlk);   //
             Console.WriteLine("12. Giunzione:" + _bordo.CodiceApplicazionexBlk);        //
-            Console.WriteLine("13. Prodotto finito:" + _prodotto.CodiceProdotto);       //
-            Console.WriteLine("14. Imballo:" + _prodotto.CodiceImballo);                //
-            Console.WriteLine("15. Trasporto:" + _prodotto.CodiceTrasporto);            //
-            Console.WriteLine("16. Commissioni:" + _prodotto.CodiceCommissioni);        //
-            Console.WriteLine("17. Movimentazione:" + _prodotto.CodiceMovimentazione);  //
+            Console.WriteLine("13. Preparazione nastro:" + _nastro.CodicePreparazione); //
+            Console.WriteLine("14. Prodotto finito:" + _prodotto.CodiceProdotto);       //
+            Console.WriteLine("15. Imballo:" + _prodotto.CodiceImballo);                //
+            Console.WriteLine("16. Trasporto:" + _prodotto.CodiceTrasporto);            //
+            Console.WriteLine("17. Commissioni:" + _prodotto.CodiceCommissioni);        //
+            Console.WriteLine("18. Movimentazione:" + _prodotto.CodiceMovimentazione);  //
 
             // Scorro tra gli imballi presenti a db
             while (reader.Read() & reader.GetValue(reader.GetOrdinal("F6")).ToString() != "")

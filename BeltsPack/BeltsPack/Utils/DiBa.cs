@@ -539,7 +539,7 @@ namespace BeltsPack.Utils
             string descrizione;
             descrizione = "";
 
-            if (tipologiaProdotto == "Solo tazza")
+            if (tipologiaProdotto == "Solo tazze")
             {
                 descrizione = "Cleated belt";
             }
