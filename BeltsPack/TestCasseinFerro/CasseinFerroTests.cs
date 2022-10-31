@@ -45,45 +45,45 @@ public void Test1()
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 1400;
-            _nastro.Classe = 400;
-            _nastro.Tipo = "EP";
+            _nastro.Larghezza = 799;
+            _nastro.Classe = 315;
+            _nastro.Tipo = "TEXRIGID";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
             _nastro.NumTele = 0;
             _nastro.NumTessuti = 0;
-            _nastro.SiglaTrattamento = "OR";
-            _nastro.Aperto = true;
-            _nastro.LarghezzaUtile = 1120;
+            _nastro.SiglaTrattamento = "AY";
+            _nastro.Aperto = false;
+            _nastro.LarghezzaUtile = 257;
             _nastro.SetCaratterisitche();
-            _nastro.Lunghezza = 33000;
+            _nastro.Lunghezza = 15690;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 0;
-            _bordo.Altezza = 0;
+            _bordo.Larghezza = 100;
+            _bordo.Altezza = 80;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 40;
-            _tazza.Forma = "TB";
+            _tazza.Altezza = 75;
+            _tazza.Forma = "C";
             _tazza.SiglaTrattamento = "AW";
             _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();
             _tazza.NumeroFile = 1;
             _tazza.Lunghezza = _nastro.LarghezzaUtile;
             _tazza.Passo = 500;
-            _tazza.NumeroFile = 2;
-            _tazza.SpazioFileMultiple = 80;
+            _tazza.NumeroFile = 1;
+            _tazza.SpazioFileMultiple = 0;
 
             // CARATTERISTICHE PRODOTTO
-            _prodotto.Tipologia = "Solo tazze";
+            _prodotto.Tipologia = "Bordi e tazze";
             _prodotto.Cliente = "EZZ";
             _prodotto.SetDettagliCliente();
             _prodotto.AltezzaApplicazioni = Math.Max(_tazza.Altezza, _bordo.Altezza);
             _prodotto.PresenzaFix = "No";
             _prodotto.PresenzaBlinkers = "No";
-            _prodotto.PistaLaterale = 140;
+            _prodotto.PistaLaterale = 50;
 
             // Per il display dei risultati
             List<string> TestResults = new List<string>();
@@ -175,7 +175,7 @@ public void Test1()
             Console.WriteLine("9. Fix:" + _bordo.CodiceFix);                            //
             Console.WriteLine("10. Blinkers:" + _bordo.CodiceBlk);                      //
             Console.WriteLine("11. Appl. blinkers:" + _bordo.CodiceApplicazionexBlk);   //
-            Console.WriteLine("12. Giunzione:" + _bordo.CodiceApplicazionexBlk);        //
+            Console.WriteLine("12. Giunzione:" + _nastro.CodiceGiunzione);              //
             Console.WriteLine("13. Preparazione nastro:" + _nastro.CodicePreparazione); //
             Console.WriteLine("14. Prodotto finito:" + _prodotto.CodiceProdotto);       //
             Console.WriteLine("15. Imballo:" + _prodotto.CodiceImballo);                //

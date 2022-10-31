@@ -898,7 +898,6 @@ namespace BeltsPack.Utils
                 // Creo la TDS
                 this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
-
                 // Creo le note del nastro
                 this.createTXTNastro(path, selectedLogo.Language);
             }

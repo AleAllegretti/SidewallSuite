@@ -168,7 +168,7 @@ namespace BeltsPack.Utils
                 return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura FROM " +
                TABELLA_ARTICOLI +
                " Where Cd_ARGruppo3 = " + "'" + altezza +
-               "' AND  Descrizione LIKE " + "'%" + "Preparazione nastro Cleated Belt"  +
+               "' AND  Descrizione LIKE " + "'%" + "Preparazione nastro"  +
                "%' AND  Cd_ARGruppo1 LIKE " + "'" + famiglia + "'");
             }
             else if (descrizione != "" && altezza == 0)
@@ -246,13 +246,44 @@ namespace BeltsPack.Utils
         }
         public SqlCommand GiunzioneSearchCommand(string famiglia, string gruppo, int altezzabordo, int larghezzanas)
         {
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARMisura,Cd_ARClasse1,Cd_ARClasse2 FROM " +
+            if (altezzabordo > 160 && larghezzanas > 800)
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARMisura,Cd_ARClasse1,Cd_ARClasse2 FROM " +
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
                 " AND  Cd_ARGruppo2 LIKE " + "'" + gruppo +
-                "' AND  Cd_ARClasse1 >= " + "'" + altezzabordo / 10 +
-                "' AND  Cd_ARClasse2 >= " + "'" + larghezzanas/10 + "'");
+                "' AND  Cd_ARClasse1 = " + "'" + 63 +
+                "' AND  Cd_ARClasse2 = " + "'" + 160 + "'");
+            }
+            else if (altezzabordo > 160 && larghezzanas <= 800)
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARMisura,Cd_ARClasse1,Cd_ARClasse2 FROM " +
+                TABELLA_ARTICOLI +
+                " Where Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
+                " AND  Cd_ARGruppo2 LIKE " + "'" + gruppo +
+                "' AND  Cd_ARClasse1 = " + "'" + 63 +
+                "' AND  Cd_ARClasse2 = " + "'" + 80 + "'");
+            }
+            else if (altezzabordo <= 160 && larghezzanas <= 800)
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARMisura,Cd_ARClasse1,Cd_ARClasse2 FROM " +
+               TABELLA_ARTICOLI +
+               " Where Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
+               " AND  Cd_ARGruppo2 LIKE " + "'" + gruppo +
+               "' AND  Cd_ARClasse1 = " + "'" + 16 +
+               "' AND  Cd_ARClasse2 = " + "'" + 80 + "'");
+            }
+            else
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARMisura,Cd_ARClasse1,Cd_ARClasse2 FROM " +
+               TABELLA_ARTICOLI +
+               " Where Cd_ARGruppo1 LIKE " + "'" + famiglia + "'" +
+               " AND  Cd_ARGruppo2 LIKE " + "'" + gruppo +
+               "' AND  Cd_ARClasse1 = " + "'" + 16 +
+               "' AND  Cd_ARClasse2 = " + "'" + 160 + "'");
+            }
         }
+
         public SqlCommand GiunzioneBordiSearchCommand(string codice)
         {
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARMisura FROM " +

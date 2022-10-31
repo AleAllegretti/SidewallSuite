@@ -141,7 +141,7 @@ namespace BeltsPack.Utils
                 }
                 else
                 {
-                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI_E_TAZZE + tazza.Forma + ".pdf";
+                    pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_TAZZE + tazza.Forma + ".pdf";
                 }
             }
             else if (prodotto.Tipologia == "Solo tazze" && tazza.NumeroFile != 1 && tazza.NumeroFile <= 5)
