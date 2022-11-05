@@ -16,7 +16,7 @@ namespace BeltsPack
         public App()
         {
             // Syncfusion licence
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjE4MjIwQDMyMzAyZTMxMmUzMGpzM0x4STQyOEJtNXNZY3lhMHF0OXJJTTlLK085QVBoZDNVSnVLeUdQdkk9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzU0NzYzQDMyMzAyZTMzMmUzMFlMVEhJTjRGS1o3Smg0K2J5VmtOd0FYbHRwVjJzZkZmbXYxbFJxcC8zNzQ9");
         }
     }
 }

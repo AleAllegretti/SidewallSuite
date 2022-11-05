@@ -522,7 +522,8 @@ namespace BeltsPack.Utils
 
         public SqlCommand CreateDbTestCommand()
         {
-            return this.CreateCommand("SELECT INPUT, F2, F3, F4, F5, F6, F7, CALCOLATA, F9, F10, F11, F12, F13, REALE, F15, F16, F17, F18, F19, RISULTATO, NOTE FROM " + TABELLA_TEST);
+            //return this.CreateCommand("SELECT INPUT, F2, F3, F4, F5, F6, F7, CALCOLATA, F9, F10, F11, F12, F13, REALE, F15, F16, F17, F18, F19, RISULTATO, NOTE FROM " + TABELLA_TEST);
+            return this.CreateCommand("SELECT LunghezzaNastro, LarghezzaNastro, AltezzaBordo, AltezzaTazze, ApertoChiuso, Codice FROM " + TABELLA_IMBALLI_TOTALI);
         }
 
         public SqlCommand ConsultaListinoPaladini()

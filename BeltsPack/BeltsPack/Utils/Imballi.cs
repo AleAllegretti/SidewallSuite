@@ -144,6 +144,8 @@ namespace BeltsPack.Models
             this._cassainferro.PresenzaGanci = new string[10];
             this._cassainferro.IncrociSpalle = new string[10];
             this._cassainferro.PresenzaSoloRitti = new string[10];
+            this._cassainferro.PrezzoPannelliSandwich = new double[10];
+            this._cassainferro.PesoPannelliSandwich = new double[10];
 
             this.Lunghezza = new double[10];
             this.Larghezza = new double[10];
@@ -348,7 +350,7 @@ namespace BeltsPack.Models
                 this.SpessorePolistirolo = 60;
                 this.CodicePolistirolo = "POLISTIROLO350";
             }
-            else if (this._bordo.Altezza == 160)
+            else if (this._bordo.Altezza == 160 || this._bordo.Altezza == 140)
             {
                 this.DiametroCorrugato = 315;
                 this.CodiceCorrugato = "TUBO315";
@@ -468,16 +470,18 @@ namespace BeltsPack.Models
             // Verifico se è possibile disporre il nastro in doppia fila
             this.PossibilitaCassaDoppia();
 
-            if (this._prodotto.AltezzaApplicazioni == 160 && this._prodotto.AltezzaApplicazioni == 120)
+            if (this._prodotto.AltezzaApplicazioni == 160 || 
+                this._prodotto.AltezzaApplicazioni == 120 ||
+                this._prodotto.AltezzaApplicazioni == 140)
             {
-                // CONFGURAZIONE 1 - Configurazione principale               
-                this.CalcolaImballoConfigurazione1();
+                // CONFGURAZIONE 7 - Configurazione principale               
+                this.CalcolaImballoConfigurazione7();
 
             }
            else if (this._prodotto.AltezzaApplicazioni <= 120)
             {
-                // CONFIGURAZIONE 7
-                this.CalcolaImballoConfigurazione7();
+                // CONFIGURAZIONE 1
+                this.CalcolaImballoConfigurazione1();
             }
             else
             {
@@ -743,6 +747,22 @@ namespace BeltsPack.Models
                     // Peso e prezzo della rete di tamponatura sui fianchi
                     this._cassainferro.PrezzoGestioneCassa[ContatoreConfigurazioni] = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo")));
                     
+                    break;
+                }
+            }
+
+            // Prezzo gestione pannelli sandwich
+            reader.Close();
+            creaComando = dbSQL.CreateSettingCostiGestioneCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("ID"));
+                if (temp.ToString() == "4")
+                {
+                    // Peso e prezzo della rete di tamponatura sui fianchi
+                    this._cassainferro.PrezzoManodoperaPannelliSandwich = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo")));
+
                     break;
                 }
             }
@@ -1506,33 +1526,33 @@ namespace BeltsPack.Models
                     }
                     else if (contatorestrati == 6)
                     {
-                        Strati[i, j] = Strati[i - 1, j] + this.DiametroCorrugato + 2 * this._prodotto.AltezzaApplicazioni;
+                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato /2 -  this._prodotto.AltezzaApplicazioni;
                         // Altezza polistirolo
                         altezzapolistirolo = 2.5 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 7)
                     {
-                        Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
+                        Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo * 1.5;
                         // Altezza corrugato
                         altezzacorrugati = this._prodotto.AltezzaApplicazioni * 5 + DiametroCorrugato * 2 + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 8)
                     {
-                        Strati[i, j] = Strati[i - 3, j];
+                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
                         // Altezza polistirolo
                         altezzapolistirolo = (contatorestrati - 2) / 2 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 9)
                     {
-                        Strati[i, j] = Strati[i - 1, j] + this.DiametroPolistirolo;
+                        Strati[i, j] = Strati[i - 1, j];
                         // Altezza corrugato
-                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
+                        altezzacorrugati = this._prodotto.AltezzaApplicazioni * contatorestrati + this.DiametroCorrugato + this._nastro.Spessore * (contatorestrati + 1);
                     }
                     else if (contatorestrati == 10)
                     {
-                        Strati[i, j] = Strati[i - 8, j];
+                        Strati[i, j] = Strati[i - 1, j] - this.DiametroCorrugato / 2 - this._prodotto.AltezzaApplicazioni;
                         // Altezza polistirolo
-                        altezzapolistirolo = 3.8 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
+                        altezzapolistirolo = 4 * this.DiametroPolistirolo + this._nastro.Spessore * contatorestrati;
                     }
                     else if (contatorestrati == 11)
                     {

@@ -45,7 +45,7 @@ public void Test1()
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 799;
+            _nastro.Larghezza = 1200;
             _nastro.Classe = 315;
             _nastro.Tipo = "TEXRIGID";
             _nastro.SpessoreInf = 0;
@@ -56,10 +56,10 @@ public void Test1()
             _nastro.Aperto = false;
             _nastro.LarghezzaUtile = 257;
             _nastro.SetCaratterisitche();
-            _nastro.Lunghezza = 15690;
+            _nastro.Lunghezza = 66800;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 100;
+            _bordo.Larghezza = 140;
             _bordo.Altezza = 80;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
@@ -184,42 +184,53 @@ public void Test1()
             Console.WriteLine("18. Movimentazione:" + _prodotto.CodiceMovimentazione);  //
 
             // Scorro tra gli imballi presenti a db
-            while (reader.Read() & reader.GetValue(reader.GetOrdinal("F6")).ToString() != "")
+            //while (reader.Read() & reader.GetValue(reader.GetOrdinal("F6")).ToString() != "")
+            while (reader.Read())
             {
-                var temp = reader.GetValue(reader.GetOrdinal("F6"));
-                if (temp.ToString() != null &&
-                    reader.GetValue(reader.GetOrdinal("F12")).ToString() == "Cassa in ferro")
+                if (reader.GetValue(reader.GetOrdinal("Codice")).ToString() == "2022006402")
                 {
+                    //var temp = reader.GetValue(reader.GetOrdinal("F6"));
+                    //if (temp.ToString() != null &&
+                    //    reader.GetValue(reader.GetOrdinal("F12")).ToString() == "Cassa in ferro")
+                    //{
                     // NASTRO
-                    _nastro.Lunghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F3")));
-                    _nastro.Larghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F4")));
+                    //_nastro.Lunghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F3")));
+                    //_nastro.Larghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F4")));
+                    _nastro.Lunghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("LunghezzaNastro")));
+                    _nastro.Larghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("LarghezzaNastro")));
 
                     // BORDO           
-                    _bordo.Altezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F5")));
+                    //_bordo.Altezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F5")));
+                    _bordo.Altezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("AltezzaBordo")));
 
                     // PRODOTTO
-                    _prodotto.Aperto = reader.GetValue(reader.GetOrdinal("F6")).ToString();
-                    _prodotto.Codice = reader.GetValue(reader.GetOrdinal("INPUT")).ToString();
+                    //_prodotto.Aperto = reader.GetValue(reader.GetOrdinal("F6")).ToString();
+                    _prodotto.Aperto = reader.GetValue(reader.GetOrdinal("ApertoChiuso")).ToString();
+                    _prodotto.Codice = reader.GetValue(reader.GetOrdinal("Codice")).ToString();
+                    //_prodotto.Codice = reader.GetValue(reader.GetOrdinal("INPUT")).ToString();
 
                     // INIZIALIZZO GLI IMBALLI
                     var imballi = new Imballi(_nastro, _bordo, _tazza, _prodotto, _cassainferro);
                     _imballi = imballi;
 
                     // CONTROLLO CHE L'IMBALLO SIA CORRETTO
-                    realCassaLength = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("REALE")));
-                    realcassaheight = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F16")));
+                    //realCassaLength = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("REALE")));
+                    //realcassaheight = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F16")));
+                    realCassaLength = 7800;
+                    realcassaheight = 2100;
                     deltaLength = realCassaLength - ((int)imballi.Lunghezza.Max());
                     deltaheight = realcassaheight - ((int)imballi.Altezza.Max());
 
-                    if (imballi.Numerofile == Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F19")))
-                        && imballi.Numerofile == 1)
-                    {
-                        Assert.That(imballi.Lunghezza.Max(), Is.EqualTo(realCassaLength).Within(2000));
-                        Console.WriteLine("DIMENSIONI CASSA");
-                        Console.WriteLine(_prodotto.Codice + "| D_l: " + deltaLength);
-                        Console.WriteLine(_prodotto.Codice + "| D_h: " + deltaheight);
-                    }
+                //if (imballi.Numerofile == Convert.ToInt32(reader.GetValue(reader.GetOrdinal("F19")))
+                //    && imballi.Numerofile == 1)
+                //{
+                    Assert.That(imballi.Lunghezza.Max(), Is.EqualTo(realCassaLength).Within(2000));
+                    Console.WriteLine("DIMENSIONI CASSA");
+                    Console.WriteLine(_prodotto.Codice + "| L: " + (int)imballi.Lunghezza.Max() + "| D_l: " + deltaLength);
+                    Console.WriteLine(_prodotto.Codice + "| H: " + (int)imballi.Altezza.Max() + "| D_h: " + deltaheight);
                 }
+                    //}
+                //}
             }
             reader.Close();
 

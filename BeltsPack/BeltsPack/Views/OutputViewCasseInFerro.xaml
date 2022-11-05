@@ -109,7 +109,8 @@
         <StackPanel Margin="100,0,0,0" Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="top" HorizontalAlignment="Left">
             <Label HorizontalAlignment="Left" FontWeight="Bold" x:Name="labelNote"  Content="Note produzione" Margin="0,10,0,0" VerticalAlignment="Top"/>
             <Border Margin="0,0,0,0" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
-                <TextBox IsReadOnly="False" Background="{DynamicResource MaterialDesignPaper}" BorderThickness="0" x:Name="TBNote" Width="380" Height="60"  Margin="20,0,0,0" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
+                <TextBox IsReadOnly="False" Background="{DynamicResource MaterialDesignPaper}" BorderThickness="0" x:Name="TBNote" 
+                         Width="380" Height="60"  Margin="20,0,0,0" TextWrapping="Wrap" AcceptsReturn="True" FontSize="14"></TextBox>
             </Border>
         </StackPanel>
 

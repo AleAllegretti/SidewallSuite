@@ -73,13 +73,20 @@ namespace BeltsPack.Models
 			get { return lunghezzainiziale; }
 			set { lunghezzainiziale = value; }
 		}
-
-		// Diagonali ad incrocio
-		public bool DiagonaliIncrocio { get; set; }
+        // Pannelli sandwich
+        public bool PannelliSandwich { get; set; }
+        // Diagonali ad incrocio
+        public bool DiagonaliIncrocio { get; set; }
 		// Prezzo gestione cassa
 		public double[] PrezzoGestioneCassa { get; set; }
-		// Prezzo manodopera diagonali
-		public double[] PrezzoManodoperaDiagonali { get; set; }
+        // Prezzo pannelli sandwich
+        public double[] PrezzoPannelliSandwich { get; set; }
+        // Peso pannelli sandwich
+        public double[] PesoPannelliSandwich { get; set; }
+        // Prezzo manodopera pannelli sandwich
+        public double PrezzoManodoperaPannelliSandwich { get; set; }
+        // Prezzo manodopera diagonali
+        public double[] PrezzoManodoperaDiagonali { get; set; }
 		// Prezzo manodopera incrocio
 		public double[] PrezzoManodoperaIncroci { get; set; }
 		// Tamponatura con rete

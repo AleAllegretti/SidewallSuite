@@ -51,7 +51,7 @@ namespace BeltsPack.Views
             this._cassaInFerro = cassaInFerro;
             this._prodotto = prodotto;
 
-            this.DataContext = this;
+            this.DataContext = this;     
 
             // Inizializzo il fattore che mi dice se uno dei pesi dei componenti è nullo o meno
             this.pesoNullo = false;
@@ -83,7 +83,6 @@ namespace BeltsPack.Views
 
             // COntrollo se i pesi sono presenti, altrimenti lo comunico
             this.CheckPesi();
-            
         }
         private void CheckPesi()
         {
@@ -556,6 +555,12 @@ namespace BeltsPack.Views
             this.CKCassa.IsEnabled = true;
             this.CKNastro.IsEnabled = true;
 
+            // Se presenti pannelli sandwich metto avviso
+            if (this._cassaInFerro.PannelliSandwich)
+            {
+                this.TBNote.Text = "Cassa con pannelli sandwich, considerare tolleranza di 4cm in altezza e 3cm x parte in larghezza.\n";
+            }
+
             // Controllo che la selezione non sia nulla
             if (this.ComboTipologiaTrasporto.SelectedItem != null)
             {
@@ -566,7 +571,7 @@ namespace BeltsPack.Views
                     if(this._cassaInFerro.TipoTrasporto[counter].ToString() == this.ComboTipologiaTrasporto.SelectedItem.ToString().Replace(" (Sugg.)", string.Empty))
                     {
                         // Tipologia cassa
-                        this.TBNote.Text = "Cassa di " + this._cassaInFerro.TipologiaCassa[counter];
+                        this.TBNote.Text = this.TBNote.Text.ToString() +  " Cassa di " + this._cassaInFerro.TipologiaCassa[counter];
 
                         // Lunghezza imballo
                         this.TBLunghezzaImballo.Text = this._imballi.Lunghezza[counter].ToString();

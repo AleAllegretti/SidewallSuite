@@ -84,8 +84,6 @@
 
                 <Image x:Name="image" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="153" Grid.Column="0" Stretch="Fill" Source="/Assets/Images/LOGO_SIDEWALL.png"/>
 
-                <Label Content="{Binding _nomeutente}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Foreground="White" FontWeight="Light" FontSize="13" Grid.Column="0" Grid.ColumnSpan="5"/>
             </Grid>
 
             <!-- Griglia menù laterale -->
@@ -179,7 +177,6 @@
                                 </StackPanel>
                             </ListViewItem>
                         </ListView>
-
                     </Grid>
 
                 </DockPanel>
@@ -191,26 +188,24 @@
             <Grid x:Name="GridBottom" Grid.Row="2" Cursor="SizeAll" Background="#FFD1D1D1" VerticalAlignment="Stretch" Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="0.13*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.83*"/>
                 </Grid.ColumnDefinitions>
 
                 <!--Logo A-Squared-->
-                <StackPanel Margin="5,0,0,0"  Grid.Column="0" VerticalAlignment="Center">
+                <StackPanel Margin="5,0,0,0"  Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
                     <Image x:Name="LogoASquared" HorizontalAlignment="Left"  Stretch="Fill"  Source="/Assets/Images/ASquaredLogo.png" Height="16" Width="24"/>
+                    
+                    <Label Content="{Binding _nomeutente}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="White" FontWeight="Light" FontSize="13" Grid.Column="0" Grid.ColumnSpan="5" Margin="20,0,0,0"/>
                 </StackPanel>
 
                 <!--Nome programma-->
-                <StackPanel  Grid.Column="1" VerticalAlignment="Center" >
-                    <Label FontSize="14" Grid.Column="1" HorizontalAlignment="Center" Foreground="WhiteSmoke" VerticalAlignment="Center">SIDEWALL - CALCOLO IMBALLI NASTRI TRASPORTATORI</Label>
-                </StackPanel>
-
-                <!--Versione-->
-                <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" >
+                <StackPanel  Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,20,0">
+                    <Label FontSize="14" Grid.Column="1" HorizontalAlignment="Center" Foreground="WhiteSmoke" VerticalAlignment="Center">SIDEWALL - CALCOLO IMBALLI NASTRI TRASPORTATORI - </Label>
                     <Label Content="{Binding currentVersion}" FontSize="14" Foreground="WhiteSmoke" VerticalAlignment="Center"/>
                 </StackPanel>
-
-
+                
             </Grid>
         </Grid>
     </md:DialogHost>

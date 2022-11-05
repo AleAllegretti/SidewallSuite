@@ -183,6 +183,24 @@ namespace BeltsPack.ViewModels
                 this._cassaInFerro.PesoReteTamponatura[NumeroConfigurazione] * 0.001));
             }
             
+            // Pannelli sandwich
+            if (this._cassaInFerro.PannelliSandwich)
+            {
+                // Costo e peso pannelli
+                _distintaBase.Add(new DistintaBase("Pannelli sandwich",
+                this._imballi.Lunghezza[NumeroConfigurazione] * 0.001,
+                4,
+                this._cassaInFerro.PrezzoPannelliSandwich[NumeroConfigurazione],
+                this._cassaInFerro.PesoPannelliSandwich[NumeroConfigurazione]));
+
+                // Costo manodopera aggiunta pannelli
+                _distintaBase.Add(new DistintaBase("Gestione pannelli sandwich",
+                this._imballi.Lunghezza[NumeroConfigurazione] * 0.001,
+                4,
+                this._cassaInFerro.PrezzoManodoperaPannelliSandwich,
+                0));
+            }
+
             // Se c'è la vernicitura
             if(this._cassaInFerro.Verniciatura)
             {

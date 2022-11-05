@@ -137,6 +137,33 @@ namespace BeltsPack.Views
                 this._cassaInFerro.Verniciatura = false;
             }
 
+            // Pannelli sandwich
+            if (this.PannelliSandwich.IsChecked == true)
+            {
+                this._cassaInFerro.PannelliSandwich = true;
+ 
+                // Calcolo il prezzo ed il peso
+                i = 0;
+                while (this._imballi.Lunghezza.Length - 1 >= i)
+                {
+                    // Prezzo
+                    this._cassaInFerro.PrezzoPannelliSandwich[i] = Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", true) * 
+                        ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1);
+
+                    // Peso
+                    this._cassaInFerro.PesoPannelliSandwich[i] = Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", false) * 
+                        ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1);
+                    i += 1;
+                }
+            }
+            else
+            {
+                // Prezzo fisso
+                this._cassaInFerro.PrezzoManodoperaPannelliSandwich = 0;
+
+                this._cassaInFerro.PannelliSandwich = false;
+            }
+
             // Fondo in lamiera
             if (this.FondoInLamiera.IsChecked == true)
             {
@@ -277,7 +304,9 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PrezzoCorrugati[i] +
                             this._cassaInFerro.PrezzoSubbiPolistirolo[i] +
                             this._cassaInFerro.PrezzoIncroci[i] +
-                            this._cassaInFerro.PrezzoIncrocioUltimaCampata[i], 2);
+                            this._cassaInFerro.PrezzoIncrocioUltimaCampata[i] +
+                            this._cassaInFerro.PrezzoPannelliSandwich[i] +
+                            this._cassaInFerro.PrezzoManodoperaPannelliSandwich, 2);
 
                         // Sommo tutti i pesi
                         this._cassaInFerro.PesoFinale[i] = Math.Round((this._cassaInFerro.PesoLongheroni[i] +
@@ -295,7 +324,8 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PesoSubbiPolistirolo[i] +
                             this._cassaInFerro.PesoIncroci[i] +
                             this._cassaInFerro.PesoIncrocioUltimaCampata[i] +
-                            this._cassaInFerro.PesoDiagonaliUltimaCampata[i]) * 0.001, 2);
+                            this._cassaInFerro.PesoDiagonaliUltimaCampata[i] +
+                            this._cassaInFerro.PesoPannelliSandwich[i] * 1000) * 0.001, 2);
                     }
                 }                  
             }

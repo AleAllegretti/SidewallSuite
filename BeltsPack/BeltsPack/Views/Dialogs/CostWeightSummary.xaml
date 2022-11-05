@@ -54,11 +54,11 @@
                 HeaderStyle="{StaticResource headerStyle}" FontSize="16"
                            RowSelectionBrush="LightGray" >
 
-                <sf:SfDataGrid.CellStyle>
+                <!--<sf:SfDataGrid.CellStyle>
                     <Style TargetType="sf:GridCell">
                         <Setter Property="Background" Value="{Binding NomeMateriale, Converter = {StaticResource RowFormatting}}" />
                     </Style>
-                </sf:SfDataGrid.CellStyle>
+                </sf:SfDataGrid.CellStyle>-->
                 
             </sf:SfDataGrid>
 
