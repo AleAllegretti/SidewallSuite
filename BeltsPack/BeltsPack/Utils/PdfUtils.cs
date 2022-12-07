@@ -21,7 +21,7 @@ namespace BeltsPack.Utils
         private static readonly string RESOURCE_NAME_SCHEDA_PALADINI = "Scheda_Tecnica_Paladini3.pdf";
         private static readonly string RESOURCE_NAME_SCHEDA_POSTPRODUZIONE = "Scheda_Tecnica_PostProduzione_Mod.pdf";
         private static readonly string RESOURCE_NAME_TDS_BORDI_E_TAZZE = "Sidewalls_Cleats_";
-        private static readonly string RESOURCE_NAME_TDS_BORDI = "Sidewalls.pdf";
+        private static readonly string RESOURCE_NAME_TDS_BORDI = "Sidewalls";
         private static readonly string RESOURCE_NAME_TDS_TAZZE = "Cleats_";
 
         public string SAVING_PATH;
@@ -168,7 +168,7 @@ namespace BeltsPack.Utils
             }
             else
             {
-                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI;
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_TDS_BORDI + ".pdf";
             }
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);

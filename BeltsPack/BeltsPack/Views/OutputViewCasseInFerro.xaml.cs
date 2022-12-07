@@ -558,7 +558,7 @@ namespace BeltsPack.Views
             // Se presenti pannelli sandwich metto avviso
             if (this._cassaInFerro.PannelliSandwich)
             {
-                this.TBNote.Text = "Cassa con pannelli sandwich, considerare tolleranza di 4cm in altezza e 3cm x parte in larghezza.\n";
+                this.TBNote.Text = "ATTENZIONE! Cassa con pannelli sandwich, considerare tolleranza di 4cm in altezza e 3cm x parte in larghezza.\n";
             }
 
             // Controllo che la selezione non sia nulla

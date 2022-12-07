@@ -234,6 +234,12 @@ namespace BeltsPack.Utils
             trattamento = "AW";
         }
 
+        // Controllo la forma e se C, considero la T - Eccezione autorizzata da Maurizio il 31/10/2022
+        if(forma == "C")
+            {
+                forma = "T";
+            }
+
         // Crea il comando SQL
         SqlDataReader reader;
         SqlCommand creaComando = dbSQL.RaspaturaTazzeSearchCommand(gruppo, altezza, trattamento, forma);
@@ -859,7 +865,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione della cartella di salvataggio.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione della cartella di salvataggio.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
             // Path di salvataggio del CSV
@@ -887,7 +893,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("C'è stato un problema nella creazione del file .CSV.\nSe il problema persiste contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
             // Faccio comparire il menù per la scelta del logo
@@ -903,7 +909,7 @@ namespace BeltsPack.Utils
             }
             catch (Exception ex)
             {
-                //System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             
 
@@ -930,7 +936,7 @@ namespace BeltsPack.Utils
             // Avviso quali codici sono mancanti
             if (allertCodiceMancante == false)
             {
-                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("File CSV è stato creato sul Destop. Tutti i codici sono stati trovati.", ConfirmDialog.ButtonConf.OK_ONLY);
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("File CSV è stato creato sul Destop. Tutti i codici sono stati trovati.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
             else
             {
@@ -946,8 +952,8 @@ namespace BeltsPack.Utils
                     }
                 }
                 // Faccio l'elenco dei codici mancanti
-                //ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il CSV è stato creato sul Desktop, ma i seguenti codici non sono stati trovati:" + "\n" +
-                    //codiciMancanti, ConfirmDialog.ButtonConf.OK_ONLY);
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il CSV è stato creato sul Desktop, ma i seguenti codici non sono stati trovati:" + "\n" +
+                    codiciMancanti, ConfirmDialog.ButtonConf.OK_ONLY);
             }
 
             // Apro la directory per visualizzare i file
@@ -1248,7 +1254,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         public void createTXTTazze(string path)
@@ -1281,7 +1287,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note dell'imballo.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         public void createTXTTrasporto(string path)
@@ -1316,7 +1322,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del trasporto.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del trasporto.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

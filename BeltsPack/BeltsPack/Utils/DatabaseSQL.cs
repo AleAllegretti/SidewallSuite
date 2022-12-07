@@ -119,7 +119,7 @@ namespace BeltsPack.Utils
 
         public SqlCommand RaspaturaBordoSearchCommand(string gruppo, int altezza, string trattamento)
         {
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGruppo3 FROM " +
+            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGruppo3,Altezza FROM " +
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Altezza LIKE " + "'%" + altezza +
@@ -236,13 +236,28 @@ namespace BeltsPack.Utils
                 altezza = 110;
             }
 
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGRuppo3,Lunghezza FROM " +
+            if (forma == "TC" || forma == "TB")
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGRuppo3,Lunghezza FROM " +
                 TABELLA_ARTICOLI +
                 " Where Descrizione LIKE " + "'%" + forma + "%'" +
-                " AND  Lunghezza >= " + larghezza  +
+                " AND  Lunghezza >= " + larghezza +
                 " AND  Descrizione LIKE " + "'%" + altezza +
                 "%' AND  Cd_ARGRuppo3 LIKE " + "'%" + sottogruppo +
                 "%' AND  Cd_ARGruppo2 LIKE " + "'" + famiglia + "' ORDER BY Lunghezza ASC");
+            }
+            else
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGRuppo3,Lunghezza FROM " +
+                TABELLA_ARTICOLI +
+                " Where Descrizione LIKE " + "'%" + forma + "%'" +
+                " AND Descrizione NOT LIKE " + "'%TC%'" +
+                " AND Descrizione NOT LIKE " + "'%TB%'" +
+                " AND  Lunghezza >= " + larghezza +
+                " AND  Descrizione LIKE " + "'%" + altezza +
+                "%' AND  Cd_ARGRuppo3 LIKE " + "'%" + sottogruppo +
+                "%' AND  Cd_ARGruppo2 LIKE " + "'" + famiglia + "' ORDER BY Lunghezza ASC");
+            }
         }
         public SqlCommand GiunzioneSearchCommand(string famiglia, string gruppo, int altezzabordo, int larghezzanas)
         {

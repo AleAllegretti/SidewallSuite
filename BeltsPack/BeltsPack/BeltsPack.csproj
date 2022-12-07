@@ -667,6 +667,7 @@
     <Content Include="Assets\Pdf\Sidewalls_Cleats_TC.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Assets\Pdf\Sidewalls.pdf" />
     <None Include="BeltsPack_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

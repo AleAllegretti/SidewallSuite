@@ -45,8 +45,8 @@ public void Test1()
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 1200;
-            _nastro.Classe = 315;
+            _nastro.Larghezza = 800;
+            _nastro.Classe = 500;
             _nastro.Tipo = "TEXRIGID";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
@@ -54,19 +54,19 @@ public void Test1()
             _nastro.NumTessuti = 0;
             _nastro.SiglaTrattamento = "AY";
             _nastro.Aperto = false;
-            _nastro.LarghezzaUtile = 257;
+            _nastro.LarghezzaUtile = 540;
             _nastro.SetCaratterisitche();
-            _nastro.Lunghezza = 66800;
+            _nastro.Lunghezza = 21400;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 140;
-            _bordo.Altezza = 80;
+            _bordo.Larghezza = 75;
+            _bordo.Altezza = 200;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 75;
-            _tazza.Forma = "C";
+            _tazza.Altezza = 180;
+            _tazza.Forma = "TC";
             _tazza.SiglaTrattamento = "AW";
             _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();
@@ -78,7 +78,7 @@ public void Test1()
 
             // CARATTERISTICHE PRODOTTO
             _prodotto.Tipologia = "Bordi e tazze";
-            _prodotto.Cliente = "EZZ";
+            _prodotto.Cliente = "BRA Nastri srl";
             _prodotto.SetDettagliCliente();
             _prodotto.AltezzaApplicazioni = Math.Max(_tazza.Altezza, _bordo.Altezza);
             _prodotto.PresenzaFix = "No";
