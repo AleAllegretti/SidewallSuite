@@ -1244,10 +1244,14 @@ namespace BeltsPack.Utils
                     sw.WriteLine("L: " + this._imballi.Lunghezza[numeroConf] + " [mm]" + "  -  W:" +
                         this._imballi.Larghezza[numeroConf] + " [mm]" + "  -  H:" +
                         this._imballi.Altezza[numeroConf] + " [mm]");
-                    sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
+
                     if (this._prodotto.ProvenienzaClienteContinente == "EXTRA-EU")
                     {
-                        sw.WriteLine("Certified pallet required.");
+                        sw.WriteLine("Gross Weight: " + grossWeight + " [kg] - Certified pallet required.");
+                    }
+                    else
+                    {
+                        sw.WriteLine("Gross Weight: " + grossWeight + " [kg]");
                     }
                     sw.WriteLine("-");
                 }
