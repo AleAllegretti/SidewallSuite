@@ -214,7 +214,7 @@ namespace BeltsPack.Utils
             // Larghezza utile
             if (fieldCollection.TryGetField("8", out loadedField))
             {
-                if (tazza.NumeroFile == 1)
+                if (tazza.NumeroFile == 1 || tazza.NumeroFile == 0)
                 {
                     (loadedField as PdfLoadedTextBoxField).Text = nastro.LarghezzaUtile.ToString();
                 }
