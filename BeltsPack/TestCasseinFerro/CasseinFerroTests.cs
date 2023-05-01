@@ -59,14 +59,14 @@ public void Test1()
             _nastro.Lunghezza = 21400;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 75;
-            _bordo.Altezza = 200;
+            _bordo.Larghezza = 50;
+            _bordo.Altezza = 60;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 180;
-            _tazza.Forma = "TC";
+            _tazza.Altezza = 75;
+            _tazza.Forma = "C";
             _tazza.SiglaTrattamento = "AW";
             _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();

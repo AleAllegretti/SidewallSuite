@@ -122,7 +122,7 @@ namespace BeltsPack.Utils
             return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo2,Cd_ARMisura,Cd_ARGruppo3,Altezza FROM " +
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo2 = " + "'" + gruppo +
-                "' AND  Altezza LIKE " + "'%" + altezza +
+                "' AND  Altezza LIKE " + "'" + altezza +
                 "%' AND  Cd_ARGruppo3 LIKE " + "'%" + trattamento + "%'");
         }
         public SqlCommand RaspaturaTazzeSearchCommand(string gruppo, int altezza, string trattamento, string forma)
