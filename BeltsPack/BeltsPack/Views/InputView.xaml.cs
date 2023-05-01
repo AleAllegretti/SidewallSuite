@@ -660,6 +660,8 @@ namespace BeltsPack.Views
                 this.ComboBlk.IsEnabled = false;
                 this.ComboPassoFix.IsEnabled = false;
                 this.PassoSenzaFix.IsEnabled = true;
+                this.prodotto.PresenzaBlinkers = "No";
+                this.ComboFix.SelectedValue = "No";
             }
         }
         private void ComboAltezzaBordi_DropDownOpened(object sender, EventArgs e)
