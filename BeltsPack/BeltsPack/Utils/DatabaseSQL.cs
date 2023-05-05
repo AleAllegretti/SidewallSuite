@@ -519,6 +519,10 @@ namespace BeltsPack.Utils
         {
             return this.CreateCommand("SELECT DISTINCT NomeNastro FROM " + TABELLA_NASTRI);
         }
+        public SqlCommand CreateSettingDistinctClasseCommand(string NomeNastro)
+        {
+            return this.CreateCommand("SELECT DISTINCT Classe, NomeNastro FROM " + TABELLA_NASTRI + " where NomeNastro like '" + NomeNastro + "'");
+        }
         public SqlCommand CreateSettingTazzeCommand()
         {
             return this.CreateCommand("SELECT ID,Altezza,FormaTC,FormaTCW,FormaT,FormaTW,FormaTB,FormaC,PesoTC,PesoTCW,PesoT,PesoTW,PesoTB,PesoC,LarghezzaTazzeTC,LarghezzaTazzeTCW," +

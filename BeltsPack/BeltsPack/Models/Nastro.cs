@@ -179,7 +179,32 @@ namespace BeltsPack.Models
             // Determino la sigla del trattamento
             this.RangeTemperatura = tempTrattamento[key];
         }
-        public List<string> ListaTiplogieNastro()
+        public List<string> ListaClassiNastro(string NomeNastro)
+        {
+            List<string> ClassiNastro = new List<string>();
+
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingDistinctClasseCommand(NomeNastro);
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("Classe"));
+                if (temp.ToString() != null)
+                {
+                    ClassiNastro.Add(reader.GetValue(reader.GetOrdinal("Classe")).ToString());
+                }
+            }
+
+            // Metto gli elementi della lista in ordine crescente
+
+            return ClassiNastro;
+        }
+            public List<string> ListaTiplogieNastro()
         {
             List<string> TipologieNastro = new List<string>();
 

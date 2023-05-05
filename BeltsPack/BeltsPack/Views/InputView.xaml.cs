@@ -991,7 +991,8 @@ namespace BeltsPack.Views
             if (this.CBTipologiaNastro.SelectedItem.ToString() != "NON CODIFICATO")
             {
                 // Popola la combo delle classi in base al tipo di nastro
-                this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
+                // this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
+                this.ComboClasseNastro.ItemsSource = this.nastro.ListaClassiNastro(this.nastro.Tipo).ToArray();
                 // Abilito la combo della classe nel caso in cui fosse stata disabilitata
                 this.ComboClasseNastro.IsEnabled = true;
             }
