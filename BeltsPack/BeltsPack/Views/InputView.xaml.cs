@@ -417,32 +417,6 @@ namespace BeltsPack.Views
             }
 
         }
-        public List<int> ListaClassi(string tipoNastro)
-        {
-            List<int> Classi = new List<int>();
-            if (tipoNastro == "TEXRIGID")
-            {
-                Classi.Add(315);
-                Classi.Add(500);
-                Classi.Add(630);
-                Classi.Add(800);
-                Classi.Add(1000);
-                Classi.Add(1250);
-                Classi.Add(1600);
-            }
-            else
-            {
-                Classi.Add(500);
-                Classi.Add(630);
-                Classi.Add(800);
-                Classi.Add(1000);
-                Classi.Add(1250);
-                Classi.Add(1600);
-                Classi.Add(2000);
-            }
-
-            return Classi;
-        }
 
         private async void Calcola_Click_1(object sender, RoutedEventArgs e)
         {
@@ -982,7 +956,7 @@ namespace BeltsPack.Views
             this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
         }
 
-        private void CBTipologiaNastro_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        private async void CBTipologiaNastro_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
             // Assegno la tipologia di nastro
             this.nastro.Tipo = this.CBTipologiaNastro.SelectedItem.ToString();
@@ -991,8 +965,13 @@ namespace BeltsPack.Views
             if (this.CBTipologiaNastro.SelectedItem.ToString() != "NON CODIFICATO")
             {
                 // Popola la combo delle classi in base al tipo di nastro
-                // this.ComboClasseNastro.ItemsSource = this.ListaClassi(this.nastro.Tipo).ToArray();
                 this.ComboClasseNastro.ItemsSource = this.nastro.ListaClassiNastro(this.nastro.Tipo).ToArray();
+                // Se il menù è vuoto, blocco il flusso e mando al menù impostazioni per inserire la classe
+                if (this.ComboClasseNastro.Items[0].ToString() == "")
+                {
+                    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Per questo nastro non sono ancora state inserite le classi. \nPer aggiungere: Impostazioni -> Nastri.", ConfirmDialog.ButtonConf.OK_ONLY);
+                }
+
                 // Abilito la combo della classe nel caso in cui fosse stata disabilitata
                 this.ComboClasseNastro.IsEnabled = true;
             }
