@@ -507,7 +507,7 @@ namespace BeltsPack.Utils
 
         public SqlCommand CreateSettingNastriCommand()
         {
-            return this.CreateCommand("SELECT ID,NomeNastro,SiglaNastro,Classe,PesoMQ,SpessoreSup,SpessoreInf,NumeroTele,NumeroTessuti,MinimoDiametroPulley,DataUltimoAggiornamento FROM " + TABELLA_NASTRI);
+            return this.CreateCommand("SELECT ID,NomeNastro,SiglaNastro,Classe,PesoMQ,SpessoreSup,SpessoreInf,NumeroTele,NumeroTessuti,MinimoDiametroPulley,LunghezzaGradinoGiunta,DataUltimoAggiornamento FROM " + TABELLA_NASTRI);
         }
 
         public SqlCommand CreateSettingCasseCommand()

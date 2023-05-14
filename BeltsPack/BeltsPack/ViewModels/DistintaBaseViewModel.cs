@@ -43,7 +43,7 @@ namespace BeltsPack.ViewModels
         {
             // Nastro
             _distintaBase.Add(new DistintaBase("Nastro base " + this._nastro.Tipo + " " + this._nastro.Classe,
-                this._nastro.Lunghezza * 0.001,
+                (this._nastro.Lunghezza + this._nastro.lunghezzaGiunta) * 0.001,
                 1,
                 0,
                 this._nastro.PesoTotale));

@@ -661,7 +661,7 @@ namespace BeltsPack.Utils
                     SpazioDiba = "",
                     Codice = nastro.Codice,
                     Descrizione = nastro.Descrizione,
-                    QuantitaDiba = nastro.Lunghezza * 0.001,
+                    QuantitaDiba = (nastro.Lunghezza + nastro.lunghezzaGiunta) * 0.001,
                     SpazioDiba1 = "",
                     SpazioDiba2 = "",
                     UM = nastro.UM

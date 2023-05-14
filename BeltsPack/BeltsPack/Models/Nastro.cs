@@ -23,6 +23,8 @@ namespace BeltsPack.Models
     }
     public class Nastro
     {
+        // Lunghezza gradino giunta
+        public int LunghGradinoGiunta { get; set; }
         // Range temperatura
         public string RangeTemperatura { get; set; }
         // Spessore superiore
@@ -89,6 +91,10 @@ namespace BeltsPack.Models
         public bool Aperto { get; set; }
         // Lunghezza nastro imballato
         private double lunghezzaimballato;
+        // Lunghezza giunta
+        public double lunghezzaGiunta { get; set; }
+        // Tolleranza lunghezza giunta
+        public double tollLunghezzaGiunta { get; set; }
 
         public double LunghezzaImballato
         {
@@ -111,6 +117,33 @@ namespace BeltsPack.Models
         {
             this.LarghezzaUtile = this.Larghezza - (larghezzaBordo * 2) - (pistaLaterale * 2);
         }
+
+        public void SetLunghezzaGiunta()
+        {
+            // Vado a leggere la tolleranza
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingParametriCommand();
+            reader = creaComando.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("Elemento"));
+                if (temp.ToString() == "TolleranzaGiunte")
+                {
+                    this.tollLunghezzaGiunta = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+            }
+
+            reader.Close();
+
+            // Calcolo la lunghezza della giunta
+            this.lunghezzaGiunta = this.Larghezza * 0.3 + this.tollLunghezzaGiunta + this.LunghGradinoGiunta * (this.NumTessuti - 1);
+        }
+
         public void SetCaratterisitche()
         {
             // Crea il wrapper del database
@@ -134,6 +167,7 @@ namespace BeltsPack.Models
                         this.NumTele = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTele")));
                         this.NumTessuti = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("NumeroTessuti")));
                         this.SiglaTipo = reader.GetValue(reader.GetOrdinal("SiglaNastro")).ToString();
+                        this.LunghGradinoGiunta = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("LunghezzaGradinoGiunta")));
                         break;
                     }
                 }
@@ -143,6 +177,8 @@ namespace BeltsPack.Models
                 //System.Windows.MessageBox.Show("Assicurati che il nastro che hai scelto abbia tutte le CARATTERISTICHE (peso, costo ecc...) nel menù impostazioni.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
+            // Calcolo la lunghezza della giunta
+            this.SetLunghezzaGiunta();
         }
         public void SetPeso()
         {
@@ -204,7 +240,7 @@ namespace BeltsPack.Models
 
             return ClassiNastro;
         }
-            public List<string> ListaTiplogieNastro()
+        public List<string> ListaTiplogieNastro()
         {
             List<string> TipologieNastro = new List<string>();
 

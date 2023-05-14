@@ -2,9 +2,11 @@
 using BeltsPack.Views.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,11 +26,13 @@ namespace BeltsPack.Views
     /// </summary>
     public partial class SettingsNastri : Page
     {
+
         SqlDataAdapter dataAdapter;
         DataSet DataSet;
         Boolean TabellaModificata = false;
         public SettingsNastri()
         {
+
             InitializeComponent();
 
             // Crea il wrapper del database
@@ -41,12 +45,63 @@ namespace BeltsPack.Views
             DataSet = new DataSet();
             dataAdapter = new SqlDataAdapter(creacomando);
             SqlCommandBuilder builder = new SqlCommandBuilder(dataAdapter);
-            dataAdapter.Fill(DataSet);
-
+            dataAdapter.Fill(DataSet);          
             dataGrid.DataContext = DataSet.Tables[0];
 
             // Chiude la connessione
             databaseSQL.CloseConnection();
+
+        }
+        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            
+            switch (e.Column.Header.ToString())
+            {
+                case "NomeNastro":
+                    e.Column.Header = "Nome nastro";
+                    break;
+
+                case "SiglaNastro":
+                    e.Column.Header = "Sigla Nastro Arca";
+                    break;
+
+                case "Classe":
+                    e.Column.Header = "Classe [N/mm]";
+                    break;
+
+                case "PesoMQ":
+                    e.Column.Header = "Peso [kg/m2]";
+                    break;
+
+                case "SpessoreSup":
+                    e.Column.Header = "Spessore sup. [mm]";
+                    break;
+
+                case "SpessoreInf":
+                    e.Column.Header = "Spessore inf. [mm]";
+                    break;
+
+                case "NumeroTele":
+                    e.Column.Header = "N. breaker";
+                    break;
+
+                case "NumeroTessuti":
+                    e.Column.Header = "N. tele";
+                    break;
+
+                case "MinimoDiametroPulley":
+                    e.Column.Header = "Min. diam. pulley [mm]";
+                    break;
+
+                case "LunghezzaGradinoGiunta":
+                    e.Column.Header = "Lungh. gradino giunta [mm]";
+                    break;
+
+                case "DataUltimoAggiornamento":
+                    e.Column.Header = "Ultimo aggiornamento";
+                    break;
+
+            }
         }
         public async void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -136,5 +191,20 @@ namespace BeltsPack.Views
             dataAdapter.Fill(dataTable);
             dataGrid.DataContext = dataTable;
         }
+
+        // This snippet can be used if you can be sure that every
+        // member will be decorated with a [DisplayNameAttribute]
+        
+
     }
+
+    public class Client
+    {
+        [DisplayName("Name")]
+        public String name { set; get; }
+
+        [DisplayName("Claim Number")]
+        public String claim_number { set; get; }
+    }
+
 }

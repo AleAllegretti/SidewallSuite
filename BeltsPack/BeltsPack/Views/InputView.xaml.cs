@@ -37,6 +37,7 @@ namespace BeltsPack.Views
         public int ntazzeXFila { get; set; }
         public int spazioTazzeFileMultiple { get; set; }
         public int lunghezzaNastro { get; set; }
+        public string nastroSelezionato { get; set; }
         public int larghezzaTazze { get; set; }
         public int larghezzaNastro { get; set; }
         public string cliente { get; set; }
@@ -89,7 +90,7 @@ namespace BeltsPack.Views
             }          
             this.altezzaTazza = this.prodotto.AltezzaTazze;
 
-            // Riempio il ombo con tutte le tipologie di nastro
+            // Riempio il combo con tutte le tipologie di nastro
             this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
             this.CBTipologiaNastro.SelectedItem = this.prodotto.TipoNastro;
             
@@ -490,8 +491,6 @@ namespace BeltsPack.Views
             {
                 // Larghezza utile
                 this.nastro.SetLarghezzautile(this.bordo.Larghezza, this.prodotto.PistaLaterale);
-                // Caratteristiche nastro
-                this.nastro.SetCaratterisitche();
                 // Calcolo il peso del nastro base
                 this.nastro.SetPeso();
                 // Determino i dettagli del cliente
@@ -682,9 +681,24 @@ namespace BeltsPack.Views
             { }   
         }
 
-        private void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Determino la classe
             this.nastro.Classe = Convert.ToInt32(this.ComboClasseNastro.SelectedValue);
+            // Determino le caratteristiche del nastro
+            this.nastro.SetCaratterisitche();
+            if(this.nastro.NumTessuti == 0 || this.nastro.NumTele == 0)
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il nome del nastro non può essere completato perchè mancano il numero di breaker e/o di tele. \nPer aggiungere: Impostazioni -> Nastri.", ConfirmDialog.ButtonConf.OK_ONLY);
+            }
+            else
+            {
+                // Vado a completare il nome finale del nastro
+                this.nastroSelezionato = this.nastro.Tipo + " " + this.nastro.Classe + "/" + this.nastro.NumTessuti + "+" + this.nastro.NumTele + "  " + this.nastro.SpessoreSup + "+" + this.nastro.SpessoreInf ;
+                // Mostro a schermo il nome intero del nastro selezionato
+                this.NastroSel.Text = "(" + this.nastroSelezionato + ")";
+            }         
+            
         }
 
         private void ComboAltezzaTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)
