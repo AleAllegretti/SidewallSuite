@@ -327,7 +327,7 @@ namespace BeltsPack.Views
                     if (_prodotto.Tipologia == "Bordi e tazze" || _prodotto.Tipologia == "Solo bordi")
                     {
                         // Lunghezza bordo
-                        this._bordo.SetLunghezzaTotaleBordo(this._nastro.Lunghezza);
+                        this._bordo.SetLunghezzaTotaleBordo(this._nastro.Lunghezza, this._nastro.Aperto);
 
                         // Codice Bordo
                         distinta.searchCodBordo(this._bordo.Altezza, this._bordo.Larghezza, "BOR", this._bordo.SiglaTele, this._bordo.SiglaTrattamento);

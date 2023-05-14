@@ -10,7 +10,6 @@ namespace BeltsPack.Models
 {
     public class BordiInfoMap : ClassMap<Bordo>
     {
-
         public BordiInfoMap()
         {
             Map(Bordo => Bordo.Codice).Name("codice");
@@ -105,8 +104,10 @@ namespace BeltsPack.Models
         public int PassoOnda { get; set; }
         // Altezza
         private int altezza;
+        // Lunghezza aggiuntiva per nastro chiuso ad anello
+        private int LunghAggiuntivaNastroChiuso;
 
-		public int Altezza
+        public int Altezza
 		{
 			get { return altezza; }
 			set { altezza = value; }
@@ -120,15 +121,6 @@ namespace BeltsPack.Models
 			get { return larghezza; }
 			set { larghezza = value; }
 		}
-		public void SetLunghezzaTotaleBordo(int lunghezzanastro)
-        {
-			this.LunghezzaTotale = lunghezzanastro * 2;
-        }
-		public void SetPesoTotale()
-        {
-			this.PesoTotale = this.LunghezzaTotale * 0.001 * this.Peso;
-        }
-
         public void GetInfoBordo()
         {
             // Crea il wrapper del database
@@ -154,7 +146,50 @@ namespace BeltsPack.Models
                 }
             }
 
+            // Determino la tolleranza aggiuntiva della lunghezza del bordo nel caso di nastro chiuso
+            this.SetLunghezzaTolleranza();
         }
+        public void SetLunghezzaTotaleBordo(int lunghezzanastro, bool aperto)
+        {
+            if (aperto)
+            {
+                this.LunghezzaTotale = lunghezzanastro * 2;
+            }
+            else
+            {
+                this.LunghezzaTotale = (lunghezzanastro + this.LunghAggiuntivaNastroChiuso) * 2;
+            }
+			
+        }
+		public void SetPesoTotale()
+        {
+			this.PesoTotale = this.LunghezzaTotale * 0.001 * this.Peso;
+        }
+
+       
+        public void SetLunghezzaTolleranza()
+        {
+            // Vado a leggere la tolleranza
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingParametriCommand();
+            reader = creaComando.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("Elemento"));
+                if (temp.ToString() == "TolleranzaBordiChiusi")
+                {
+                    this.LunghAggiuntivaNastroChiuso = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+            }
+
+            reader.Close();
+        }
+
         public List<int> ListaBasiBordo()
         {
             List<int> Basi = new List<int>();

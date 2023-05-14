@@ -517,7 +517,7 @@ namespace BeltsPack.Views
                 if (this.prodotto.Tipologia == "Solo bordi" | this.prodotto.Tipologia == "Bordi e tazze")
                 {
                     // Lunghezza bordo
-                    this.bordo.SetLunghezzaTotaleBordo(this.nastro.Lunghezza);
+                    this.bordo.SetLunghezzaTotaleBordo(this.nastro.Lunghezza, this.nastro.Aperto);
                     // Peso bordo
                     this.bordo.SetPesoTotale();
                 }
