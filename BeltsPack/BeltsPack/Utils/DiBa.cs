@@ -1021,7 +1021,6 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Endless belt length: " + this._nastro.Lunghezza + " [mm]");
                         }
-                        sw.WriteLine("Plastic weight: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1073,7 +1072,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Nastro chiuso: " + this._nastro.Lunghezza + " [mm]");
                         }
-                        sw.WriteLine("Peso materiale in plastica: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
+                        // sw.WriteLine("Peso materiale in plastica: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1130,7 +1129,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Basisgurtkörper offer: " + this._nastro.Lunghezza + " [mm]");
                         }
-                        sw.WriteLine("Kunststoffgewicht: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
+                        // sw.WriteLine("Kunststoffgewicht: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1182,7 +1181,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Banda cerrada: " + this._nastro.Lunghezza + " [mm]");
                         }
-                        sw.WriteLine("Peso de plástico: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
+                        //sw.WriteLine("Peso de plástico: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1218,6 +1217,7 @@ namespace BeltsPack.Utils
                         this._imballi.Altezza[numeroConf] + " [mm]");
                     sw.WriteLine("Gross Weight: " + grossWeight + " [kg] - Type: " + this._cassaInFerro.TipologiaCassa[numeroConf].Substring(5,1));
                     sw.WriteLine("Price: " + this._cassaInFerro.PrezzoCassaFinale[numeroConf] + " [€]");
+                    sw.WriteLine("Plastic weight: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                     sw.WriteLine("-");
                 }
             }

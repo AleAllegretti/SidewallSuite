@@ -333,7 +333,8 @@ namespace BeltsPack.Views
                         this._cassaInFerro.PesoPlastica[i] = this._cassaInFerro.PesoEtichetteGanci +
                             this._cassaInFerro.PesoPluriballAlluminio[i] +
                             this._cassaInFerro.PesoCorrugati[i] +
-                            this._cassaInFerro.PesoSubbiPolistirolo[i];
+                            this._cassaInFerro.PesoSubbiPolistirolo[i] +
+                            this._cassaInFerro.PesoPannelliSandwich[i];
                     }
                 }                  
             }
