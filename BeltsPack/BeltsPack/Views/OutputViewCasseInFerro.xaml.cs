@@ -597,7 +597,7 @@ namespace BeltsPack.Views
                         // Prezzo dei pannelli sandwich
                         if(this._cassaInFerro.PrezzoPannelliSandwich[counter] != 0)
                         {
-                            this.CostoPannelliSandwich.Text = "(Pannelli sandwich: " + Convert.ToString(this._cassaInFerro.PrezzoPannelliSandwich[counter]) + "€ )";
+                            this.CostoPannelliSandwich.Text = "(*) Pannelli sandwich: " + Convert.ToString(this._cassaInFerro.PrezzoPannelliSandwich[counter]) + "€";
                         }                 
 
                         // Assegno il dettaglio della tipologia di trasporto

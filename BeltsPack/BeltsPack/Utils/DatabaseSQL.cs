@@ -557,7 +557,7 @@ namespace BeltsPack.Utils
 
         public SqlCommand CreateSettingCostiGestioneCommand()
         {
-            return this.CreateCommand("SELECT ID,Descrizione,Prezzo,DataUltimoAggiornamento FROM " + TABELLA_COSTI_GESTIONE);
+            return this.CreateCommand("SELECT ID,Codice,Descrizione,Prezzo,DataUltimoAggiornamento FROM " + TABELLA_COSTI_GESTIONE);
         }
 
         public SqlCommand CreateSettingCostiFerroCommand()

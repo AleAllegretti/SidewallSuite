@@ -147,8 +147,10 @@ namespace BeltsPack.Views
                 while (this._imballi.Lunghezza.Length - 1 >= i)
                 {
                     // Prezzo
-                    this._cassaInFerro.PrezzoPannelliSandwich[i] = Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", true) * 
-                        ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1);
+                    this._cassaInFerro.PrezzoPannelliSandwich[i] = 
+                        Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", true) * ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1) +
+                        Math.Round((this.InterrogaListinoPaladini("PANSANDWICH", true) * (this._imballi.Lunghezza[i] * 3 + this._imballi.Altezza[i] * 4 + this._imballi.Larghezza[i] * 3) * Math.Pow(10, -3)),1) +
+                        this.InterrogaListinoCostiGestione("PANSANDWICH", true);
 
                     // Peso
                     this._cassaInFerro.PesoPannelliSandwich[i] = Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", false) * 
@@ -416,6 +418,36 @@ namespace BeltsPack.Views
             return Prezzo;
         }
 
+        public double InterrogaListinoCostiGestione(string CodiceAccessorio, bool PresenzaPrezzo)
+        {
+            double Prezzo = 0;
+
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingCostiGestioneCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("Codice"));
+                if (temp.ToString() == CodiceAccessorio)
+                {
+                    if (PresenzaPrezzo == true)
+                    {
+                        // Prezzo
+                        Prezzo = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Prezzo")));
+                    }
+                    else
+                    {
+                        // Peso
+                        Prezzo = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Peso")));
+                    }
+                }
+            }
+
+            // Output
+            return Prezzo;
+        }
         private void RadioSidewall_Checked(object sender, RoutedEventArgs e)
         {
             this.logo.Source = new BitmapImage(new Uri(@"\Assets\Images\LOGO_SIDEWALL.png", UriKind.Relative));
