@@ -218,5 +218,7 @@ namespace BeltsPack.Models
         public int AltezzaLongherone { get; set; }
         // Cassa doppia
         public bool DoppiaFila { get; set; }
+        // Peso componenti in plastica
+        public double[] PesoPlastica { get; set; }
     }
 }

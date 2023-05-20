@@ -905,7 +905,7 @@ namespace BeltsPack.Utils
                 this.PdfUtils.FillSchedaTDSSidewallsCleats(this._prodotto, path, this._nastro, this._bordo, selectedLogo, this._tazza);
 
                 // Creo le note del nastro
-                this.createTXTNastro(path, selectedLogo.Language);
+                this.createTXTNastro(path, selectedLogo.Language, this._numeroConfigurazione);
             }
             catch (Exception ex)
             {
@@ -959,7 +959,7 @@ namespace BeltsPack.Utils
             // Apro la directory per visualizzare i file
             Process.Start(path);
         }
-        public void createTXTNastro(string path, string language)
+        public void createTXTNastro(string path, string language, int numeroconf)
         {
             string fileName = "Caratteristiche_Nastro.txt";
             path = path + "\\" + fileName;
@@ -1021,6 +1021,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Endless belt length: " + this._nastro.Lunghezza + " [mm]");
                         }
+                        sw.WriteLine("Plastic weight: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1072,6 +1073,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Nastro chiuso: " + this._nastro.Lunghezza + " [mm]");
                         }
+                        sw.WriteLine("Peso materiale in plastica: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1128,6 +1130,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Basisgurtkörper offer: " + this._nastro.Lunghezza + " [mm]");
                         }
+                        sw.WriteLine("Kunststoffgewicht: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }
@@ -1179,6 +1182,7 @@ namespace BeltsPack.Utils
                         {
                             sw.WriteLine("Banda cerrada: " + this._nastro.Lunghezza + " [mm]");
                         }
+                        sw.WriteLine("Peso de plástico: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
                         sw.WriteLine("-");
                     }
                 }

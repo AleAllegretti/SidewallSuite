@@ -326,6 +326,12 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PesoIncrocioUltimaCampata[i] +
                             this._cassaInFerro.PesoDiagonaliUltimaCampata[i] +
                             this._cassaInFerro.PesoPannelliSandwich[i] * 1000) * 0.001, 2);
+
+                        // Sommo i pesi dei componenti in plastica
+                        this._cassaInFerro.PesoPlastica[i] = this._cassaInFerro.PesoEtichetteGanci +
+                            this._cassaInFerro.PesoPluriballAlluminio[i] +
+                            this._cassaInFerro.PesoCorrugati[i] +
+                            this._cassaInFerro.PesoSubbiPolistirolo[i];
                     }
                 }                  
             }

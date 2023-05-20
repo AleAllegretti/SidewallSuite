@@ -527,10 +527,10 @@ namespace BeltsPack.Views
             this.TBPesoImballo.Text = "";
 
             // Peso del nastro
-                this.TBPesoNastro.Text = "";
+            this.TBPesoNastro.Text = "";
 
             // Peso totale
-                this.TBPesoTotale.Text = "";
+            this.TBPesoTotale.Text = "";
         }
         private void CKNave_Checked(object sender, RoutedEventArgs e)
         {
@@ -593,6 +593,12 @@ namespace BeltsPack.Views
 
                         // Peso totale
                         this.TBPesoTotale.Text = Convert.ToString(this._cassaInFerro.PesoFinale[counter] + this._prodotto.PesoTotaleNastro);
+
+                        // Prezzo dei pannelli sandwich
+                        if(this._cassaInFerro.PrezzoPannelliSandwich[counter] != 0)
+                        {
+                            this.CostoPannelliSandwich.Text = "(Pannelli sandwich: " + Convert.ToString(this._cassaInFerro.PrezzoPannelliSandwich[counter]) + "€ )";
+                        }                 
 
                         // Assegno il dettaglio della tipologia di trasporto
                         this._prodotto.tipologiaTrasportoDett = this.ComboTipologiaTrasporto.SelectedItem.ToString();

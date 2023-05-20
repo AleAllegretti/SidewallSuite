@@ -93,6 +93,7 @@ namespace BeltsPack.Models
             this._cassainferro.PesoDiagonali = new double[10];
             this._cassainferro.PrezzoDiagonali = new double[10];
             this._cassainferro.PesoFinale = new double[10];
+            this._cassainferro.PesoPlastica = new double[10];
             this._cassainferro.PrezzoCassaFinale = new double[10];
             this._cassainferro.PrezzoCassaSenzaAcc = new double[10];
             this._cassainferro.PesoLongheroni = new double[10];

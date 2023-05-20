@@ -121,9 +121,11 @@
         </StackPanel>
 
         <!--Costo imballo-->
-        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1">
+        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1" >
             <Label FontWeight="Bold" x:Name="labelCostoImballo" Content="Costo imballo  [€]" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" x:Name="TBCostoImballo" Width="160" Margin="0,0,0,0" Loaded="TBCostoImballo_Loaded"></TextBox>
+            <TextBox HorizontalAlignment="Left"  Name ="CostoPannelliSandwich" VerticalAlignment="Top" 
+                         Margin="0,0,0,0"  BorderThickness="0" FontSize="10" Width="300" Background="{DynamicResource MaterialDesignPaper}"></TextBox>
         </StackPanel>
 
         <!--Configurazione imballo-->
