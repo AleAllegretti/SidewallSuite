@@ -149,7 +149,7 @@ namespace BeltsPack.Views
                     // Prezzo
                     this._cassaInFerro.PrezzoPannelliSandwich[i] = 
                         Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", true) * ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1) +
-                        Math.Round((this.InterrogaListinoPaladini("PANSANDWICH", true) * (this._imballi.Lunghezza[i] * 3 + this._imballi.Altezza[i] * 4 + this._imballi.Larghezza[i] * 3) * Math.Pow(10, -3)),1) +
+                        Math.Round((this.InterrogaListinoPaladini("PANSANDWICH", true) * (this._imballi.Lunghezza[i] * 3 +  this._imballi.Larghezza[i] * 2) * Math.Pow(10, -3)),1) +
                         this.InterrogaListinoCostiGestione("PANSANDWICH", true);
 
                     // Peso
@@ -160,9 +160,7 @@ namespace BeltsPack.Views
             }
             else
             {
-                // Prezzo fisso
-                this._cassaInFerro.PrezzoManodoperaPannelliSandwich = 0;
-
+                // Comunico che i pannelli sandwich non sono presenti
                 this._cassaInFerro.PannelliSandwich = false;
             }
 
@@ -307,8 +305,7 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PrezzoSubbiPolistirolo[i] +
                             this._cassaInFerro.PrezzoIncroci[i] +
                             this._cassaInFerro.PrezzoIncrocioUltimaCampata[i] +
-                            this._cassaInFerro.PrezzoPannelliSandwich[i] +
-                            this._cassaInFerro.PrezzoManodoperaPannelliSandwich, 2);
+                            this._cassaInFerro.PrezzoPannelliSandwich[i], 2);
 
                         // Sommo tutti i pesi
                         this._cassaInFerro.PesoFinale[i] = Math.Round((this._cassaInFerro.PesoLongheroni[i] +
@@ -330,8 +327,7 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PesoPannelliSandwich[i] * 1000) * 0.001, 2);
 
                         // Sommo i pesi dei componenti in plastica
-                        this._cassaInFerro.PesoPlastica[i] = this._cassaInFerro.PesoEtichetteGanci +
-                            this._cassaInFerro.PesoPluriballAlluminio[i] +
+                        this._cassaInFerro.PesoPlastica[i] = this._cassaInFerro.PesoPluriballAlluminio[i] +
                             this._cassaInFerro.PesoCorrugati[i] +
                             this._cassaInFerro.PesoSubbiPolistirolo[i] +
                             this._cassaInFerro.PesoPannelliSandwich[i];

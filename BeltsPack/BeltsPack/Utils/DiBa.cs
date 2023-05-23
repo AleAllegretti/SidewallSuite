@@ -1217,7 +1217,7 @@ namespace BeltsPack.Utils
                         this._imballi.Altezza[numeroConf] + " [mm]");
                     sw.WriteLine("Gross Weight: " + grossWeight + " [kg] - Type: " + this._cassaInFerro.TipologiaCassa[numeroConf].Substring(5,1));
                     sw.WriteLine("Price: " + this._cassaInFerro.PrezzoCassaFinale[numeroConf] + " [€]");
-                    sw.WriteLine("Plastic weight: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroconf]) + " [kg]");
+                    sw.WriteLine("Plastic weight: " + Math.Round(this._cassaInFerro.PesoPlastica[numeroConf]) + " [kg]");
                     sw.WriteLine("-");
                 }
             }
