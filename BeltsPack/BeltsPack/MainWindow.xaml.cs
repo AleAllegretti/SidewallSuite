@@ -150,5 +150,11 @@ namespace BeltsPack
             // Navigo alla schermata del PIM
             this._mainFrame.NavigationService.Navigate(new PimView());
         }
+
+        private void Calcoli_Selected(object sender, RoutedEventArgs e)
+        {
+            // Navigo alla schermata dei calcoli
+            this._mainFrame.NavigationService.Navigate(new CalcoliView(prodotto));
+        }
     }
 }

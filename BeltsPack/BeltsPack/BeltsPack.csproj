@@ -220,10 +220,15 @@
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="Models\Bordo.cs" />
     <Compile Include="Models\CassaInFerro.cs" />
+    <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\DistintaBase.cs" />
+    <Compile Include="Models\Materiale.cs" />
+    <Compile Include="Models\Motore.cs" />
     <Compile Include="Models\Nastro.cs" />
     <Compile Include="Models\Pim.cs" />
     <Compile Include="Models\Prodotto.cs" />
+    <Compile Include="Models\Rullo.cs" />
+    <Compile Include="Models\Tamburo.cs" />
     <Compile Include="Models\Tazza.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -233,6 +238,7 @@
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\CalcoliImpianto.cs" />
     <Compile Include="Utils\DatabaseSQL.cs" />
     <Compile Include="Utils\DiBa.cs" />
     <Compile Include="Utils\EsportatorePDF.cs" />
@@ -257,6 +263,9 @@
     </Compile>
     <Compile Include="Views\AccessoriCasseFerro.xaml.cs">
       <DependentUpon>AccessoriCasseFerro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CalcoliView.xaml.cs">
+      <DependentUpon>CalcoliView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DatabaseView.xaml.cs">
       <DependentUpon>DatabaseView.xaml</DependentUpon>
@@ -376,6 +385,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AccessoriCasseFerro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CalcoliView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

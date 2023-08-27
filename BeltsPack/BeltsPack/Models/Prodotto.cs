@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -242,6 +243,88 @@ namespace BeltsPack.Models
 
 			return Clienti;
 		}
+
+		public void OrigineCLiente()
+		{
+            // Capisco la nazionalità del cliente
+            DatabaseSQL dbSQL = DatabaseSQL.CreateARCF();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.ClienteSearchCommand(this.Cliente);
+            reader = creaComando.ExecuteReader();
+
+            // Trovo la sigla della nazione di provenienza del cliente
+            while (reader.Read())
+            {
+                this.ProvenienzaClienteSigla = reader.GetValue(reader.GetOrdinal("Cd_Nazione")).ToString();
+            }
+
+            reader.Close();
+
+            // In base alla sigla del cliente mi trovo le info della nazione
+            try
+            {
+                RegionInfo info = new RegionInfo(this.ProvenienzaClienteSigla);
+                this.ProvenienzaClienteNazione = info.EnglishName;
+            }
+            catch (ArgumentException argEx)
+            {
+                // The code was not a valid country code
+            }
+
+            // Capisco se il paese è in europa o meno
+            if (this.ProvenienzaClienteNazione.ToLower().Contains("russia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("germany") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("united kingdom") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("france") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("italy") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("spain") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("ukraine") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("poland") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("netherlands") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("belgium") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("czech republic") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("greece") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("portugal") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("sweden") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("hungary") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("belarus") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("austria") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("switzerland") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("bulgaria") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("denmark") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("finland") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("slovakia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("norway") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("ireland") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("croatia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("moldova") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("bosnia and herzegovina") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("albania") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("lithuania") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("north macedonia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("slovenia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("latvia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("estonia") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("montenegro") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("luxembourg") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("malta") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("iceland") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("andorra") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("monaco") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("liechtestein") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("san marino") ||
+                this.ProvenienzaClienteNazione.ToLower().Contains("holy see"))
+            {
+                this.ProvenienzaClienteContinente = "EU";
+            }
+            else
+            {
+                this.ProvenienzaClienteContinente = "EXTRA-EU";
+            }
+        }
 
 		public void SetDettagliCliente()
         {

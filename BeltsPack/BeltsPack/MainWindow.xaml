@@ -128,7 +128,14 @@
                                 </StackPanel>
                             </ListViewItem>
 
-                            <ListViewItem x:Name="Database" ToolTip="Database totale" Height="60" Selected="ListViewItem_Selected_1" Cursor="Hand" >
+                            <ListViewItem x:Name="Calcoli" ToolTip="Foglio calcoli" Height="60"  Cursor="Hand" Selected="Calcoli_Selected" >
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Calculator" Width="25" Height="25" VerticalAlignment="Center"  Margin="3.5"/>
+                                    <TextBlock Text="Foglio calcoli" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            
+                            <ListViewItem x:Name="Database" ToolTip="Database generale" Height="60" Selected="ListViewItem_Selected_1" Cursor="Hand" >
                                 <StackPanel Orientation="Horizontal">
                                     <md:PackIcon Kind="Database" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
                                     <TextBlock Text="Database" VerticalAlignment="Center" Margin="20 10"/>

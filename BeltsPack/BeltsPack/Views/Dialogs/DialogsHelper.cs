@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BeltsPack.Models;
 using BeltsPack.Views.Dialogs;
 using MaterialDesignThemes.Wpf;
 using static BeltsPack.Models.Pim;
@@ -82,5 +83,11 @@ namespace BeltsPack.Views.Dialogs
 
             return (Categoria)await DialogHost.Show(view, DIALOG_HOST_ID);
         }
+        //public static async Task<Categoria> ShowCopyDialog(Prodotto prodotto)
+        //{
+        //    var view = new CopyDialog(prodotto);
+
+        //    return (Categoria)await DialogHost.Show(view, DIALOG_HOST_ID);
+        //}
     }
 }

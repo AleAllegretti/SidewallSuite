@@ -74,11 +74,11 @@ namespace BeltsPack.Views
                     break;
 
                 case "SpessoreSup":
-                    e.Column.Header = "Spessore sup. [mm]";
+                    e.Column.Header = "Cop. sup. [mm]";
                     break;
 
                 case "SpessoreInf":
-                    e.Column.Header = "Spessore inf. [mm]";
+                    e.Column.Header = "Cop inf. [mm]";
                     break;
 
                 case "NumeroTele":

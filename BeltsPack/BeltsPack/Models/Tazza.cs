@@ -10,6 +10,8 @@ namespace BeltsPack.Models
 {
     public class Tazza
     {
+        // Spessore
+        public  double Spessore { get; set; }
         // Sigla tele
         public string SiglaTele { get; set; }
         // Presenza tele

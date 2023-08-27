@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using CsvHelper.Configuration;
 using System.Windows;
+using iTextSharp.text;
 
 namespace BeltsPack.Models
 {
@@ -23,6 +24,24 @@ namespace BeltsPack.Models
     }
     public class Nastro
     {
+        // Peso specifico in larghezza
+        public double pesoSpecLargh { get; set; }
+        // Angolo d'inclinazione medio
+        public double inclinazioneMed { get; set; }
+        // Lunghezza orizzontale per nastro inclinato che consideriamo nei calcoli
+        public double lunghOriz { get; set; }
+        // Coefficiente di lunghezza
+        public double lengthCoeff { get; set; }
+        // Percentuale di carico extra
+        public double caricoExtra { get; set; }
+        // Lunghezza tratto di carico
+        public double lunghTrattoCarico { get; set; }
+        // Elevazione - [m]
+        public double elevazione { get; set; }
+        // Centro delle distance - [m]
+        public double centerDistance { get; set; }
+        // Inclincazione - [deg]
+        public int inclinazione { get; set; }
         // Lunghezza gradino giunta
         public int LunghGradinoGiunta { get; set; }
         // Range temperatura
@@ -95,6 +114,8 @@ namespace BeltsPack.Models
         public double lunghezzaGiunta { get; set; }
         // Tolleranza lunghezza giunta
         public double tollLunghezzaGiunta { get; set; }
+        // Velocità nastro - [m/s]
+        public double speed { get; set; }
 
         public double LunghezzaImballato
         {
@@ -265,6 +286,44 @@ namespace BeltsPack.Models
 
             return TipologieNastro;
     }
+        public void SetLengthCoeff()
+        {
+            if(this.centerDistance == 0)
+            {
+                this.lengthCoeff = 0;
+            }
+            else if (this.centerDistance < 55)
+            {
+                this.lengthCoeff = 2.4 + 2.8 * (Math.Pow(1.8, (-0.22 * (this.centerDistance - 16))));
+            }
+            else if (this.centerDistance >= 251)
+            {
+                this.lengthCoeff = 1.03 + (Math.Pow(8.31, -0.001 * (this.centerDistance + 325)));
+            }
+            else
+            {
+                this.lengthCoeff = 1.38 + 0.92 * (Math.Pow(80, -0.004 * (this.centerDistance - 52)));
+            }
+            this.lengthCoeff = Math.Round(this.lengthCoeff, 2);
+        }
+        public void SetLunghOriz()
+        {
+            if((Math.Pow(this.centerDistance,2) - Math.Pow(this.elevazione,2))>0)
+            {
+                this.lunghOriz = Math.Pow((Math.Pow(this.centerDistance, 2) - Math.Pow(this.elevazione, 2)), 0.5);
+            }
+        }
+        public void SetAngoloMedio()
+        {
+            if(this.lunghOriz > 0)
+            {
+                this.inclinazioneMed = Math.Atan(this.elevazione / this.lunghOriz);
+            }
+        }
+        public void SetSpecWeightWidth()
+        {
+            this.pesoSpecLargh = this.Peso * 1000 / this.Larghezza;
+        }
     }
     
     enum ApertoChiuso

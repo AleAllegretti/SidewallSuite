@@ -53,5 +53,6 @@ namespace BeltsPack.Views.Dialogs
             // this enable the Data Binding
             this.DataContext = this;
         }
+
     }
 }
