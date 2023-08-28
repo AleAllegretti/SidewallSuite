@@ -1,5 +1,7 @@
 ﻿using BeltsPack.Models;
 using iTextSharp.text;
+using Syncfusion.XlsIO.Implementation.PivotAnalysis;
+using Syncfusion.XlsIO.Implementation.XmlSerialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
@@ -14,6 +16,14 @@ namespace BeltsPack.Utils
 
         // CAPACITY OF THE BELT
         // OUTPUT
+        // Minimum motor power - [kW]
+        public double Pmin { get; set; }
+        // Required power - [kW]
+        public double Pa { get; set; }
+        // Fvmin
+        public double Fvmin { get; set; }
+        // Fv
+        public double Fv { get; set; }
         // Massimo sag al top - Valore fisso
         public double S2 { get; set; }
         // Massimo sag at bottom- Valore fisso
@@ -280,6 +290,16 @@ namespace BeltsPack.Utils
 
         public void TensionsCalculation()
         {
+            // Forza gravtazionale
+            double G = 9.80665;
+
+            // Altre variabili utili
+            double dTv, T2, T1, TH1, TH11, TT1, TT11, TT1n, TT11n, F_v, Tmax, Cl, CRmin, fsl, Nu;
+            TT1n = 0;
+            TT11n = 0;
+            Cl = 0;
+            Nu = 0.85;
+
             if (this._nastro.centerDistance > 0)
             {
                 // Calcolo il coefficiente di avvolgimento
@@ -294,10 +314,10 @@ namespace BeltsPack.Utils
                 if (totForcePeriphe >= 0)
                 {
                     // Tensione testa del tamburo
-                    this.TH1n = T1n;
+                    this.TH1n = this.T1n;
                     this.TH11n = this.T2n;
-                    this.TTH1n = this.T2n + this.totPeripheForceRet;
-                    this.TTH11n = this.T2n + this.totPeripheForceRet;
+                    TT1n = this.T2n + this.totPeripheForceRet;
+                    TT11n = this.T2n + this.totPeripheForceRet;
                 }
                 else
                 {
@@ -306,12 +326,6 @@ namespace BeltsPack.Utils
                     this.TTH1n = 0;
                 }
             }
-        }
-
-        public void TakeUpCalculations()
-        {
-            // Forza gravtazionale
-            double G = 9.80665;
 
             if (this._nastro.centerDistance > 0)
             {
@@ -328,6 +342,39 @@ namespace BeltsPack.Utils
 
             this.Tv2 = this.Tsup;
             this.Tv3 = this.Tinf;
+
+            Fvmin = Math.Max(Tv1, Tv2);
+            Fvmin = 2 * Math.Max(Tv3, Fvmin);
+
+            F_v = Fvmin;
+
+            dTv = F_v / 2 - Tvn;
+
+            T1 = T1n + dTv;
+            TH1 = TH1n + dTv;
+            TH11 = TH11n + dTv;
+            TT1 = TT1n + dTv;
+            TT11 = TT11n + dTv;
+
+            Tmax = Math.Max(Math.Max(T1, TH1), Math.Max(TH11, Math.Max(TH1, TT11)));
+            if (this._nastro.Larghezza > 0)
+            {
+                Cl = Tmax / this._nastro.Larghezza;
+            }
+
+            if (Cl > 0)
+            {
+                fsl = this._nastro.Classe / Cl;
+            }
+
+            // Motor power calculation
+            this.Pa = this.totForcePeriphe * this._nastro.speed / 1000;
+            this.Pmin = Pa / Nu;
+        }
+
+        public void TakeUpCalculations()
+        {
+           
         }
     }
 

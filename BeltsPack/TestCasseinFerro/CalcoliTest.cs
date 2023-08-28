@@ -53,6 +53,7 @@ namespace TestCasseinFerro
             _nastro.lunghTrattoCarico = 4;
             _nastro.caricoExtra = 1.2;
             _nastro.Larghezza = 1400;
+            _nastro.Classe = 4500;
 
             // CARATTERISTICHE MATERIALE
             _material.density = 1.60;
