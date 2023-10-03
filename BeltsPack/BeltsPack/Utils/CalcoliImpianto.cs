@@ -1,5 +1,6 @@
 ﻿using BeltsPack.Models;
 using iTextSharp.text;
+using Syncfusion.DocIO.DLS;
 using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using Syncfusion.XlsIO.Implementation.XmlSerialization;
 using System;
@@ -16,6 +17,10 @@ namespace BeltsPack.Utils
 
         // CAPACITY OF THE BELT
         // OUTPUT
+        // Coefficiente di sicurezza nastro
+        public double Sfactor { get; set; }
+        // Coefficiente di sicurezza piste laterali
+        public double Sfactor_pista { get; set; }
         // Minimum motor power - [kW]
         public double Pmin { get; set; }
         // Required power - [kW]
@@ -294,11 +299,12 @@ namespace BeltsPack.Utils
             double G = 9.80665;
 
             // Altre variabili utili
-            double dTv, T2, T1, TH1, TH11, TT1, TT11, TT1n, TT11n, F_v, Tmax, Cl, CRmin, fsl, Nu;
+            double dTv, T2, T1, TH1, TH11, TT1, TT11, TT1n, TT11n, F_v, Tmax, Cl, CRmin, fsl, Nu, Plut, WheelWidth, CLpista, Sfactor, Sfactor_pista;
             TT1n = 0;
             TT11n = 0;
             Cl = 0;
             Nu = 0.85;
+            CLpista = 0;
 
             if (this._nastro.centerDistance > 0)
             {
@@ -350,6 +356,7 @@ namespace BeltsPack.Utils
 
             dTv = F_v / 2 - Tvn;
 
+            T2 = T2n + dTv;
             T1 = T1n + dTv;
             TH1 = TH1n + dTv;
             TH11 = TH11n + dTv;
@@ -370,6 +377,51 @@ namespace BeltsPack.Utils
             // Motor power calculation
             this.Pa = this.totForcePeriphe * this._nastro.speed / 1000;
             this.Pmin = Pa / Nu;
+
+            // Belt class and safety factors
+            if (this._nastro.Larghezza > 0)
+            {
+                Cl = T1 / this._nastro.Larghezza;
+            }
+
+            Plut = Math.Max(0.8 * this._prodotto.PistaLaterale, this._prodotto.PistaLaterale - 40);
+            Plut = Plut - this._nastro.edgetype;
+
+            if (this._prodotto.PistaLaterale > 0)
+            {
+                WheelWidth = Plut;
+                this._bordo.GetInfoBordo();
+
+                if (this._nastro.forma == "S-Shape")
+                {
+                    CLpista = T2 / (2 * Plut);
+
+                }
+                else if (this._nastro.forma == "L-Shape")
+                {
+                    CLpista = TT1 / (2 * Plut);
+                }
+                else
+                {
+                    CLpista = 0;
+                    WheelWidth = 0;
+                    this._bordo.MinWheelDiam = 0;
+                }
+            }
+
+            if (Cl > 0)
+            {
+                Sfactor = this._nastro.Classe / Cl;
+            }
+
+            if (CLpista > 0)
+            {
+                Sfactor_pista = this._nastro.Classe / CLpista;
+            }
+            else
+            {
+                Sfactor_pista = 0;
+            }
         }
 
         public void TakeUpCalculations()

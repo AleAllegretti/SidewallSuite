@@ -24,6 +24,10 @@ namespace BeltsPack.Models
     }
     public class Nastro
     {
+        // Tipo di forma nastro
+        public string forma { get; set; }
+        // Tipo di edge
+        public double edgetype  { get; set; }
         // Peso specifico in larghezza
         public double pesoSpecLargh { get; set; }
         // Angolo d'inclinazione medio

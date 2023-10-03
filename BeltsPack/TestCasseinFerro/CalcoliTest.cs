@@ -54,6 +54,14 @@ namespace TestCasseinFerro
             _nastro.caricoExtra = 1.2;
             _nastro.Larghezza = 1400;
             _nastro.Classe = 4500;
+            _nastro.edgetype = 25;
+            _nastro.forma = "S-Shape";
+
+            // CARATTERISTICHE BORDO
+            _bordo.Altezza = 280;
+
+            // CARATTERISTICHE PRODOTTO
+            _prodotto.PistaLaterale = 200;
 
             // CARATTERISTICHE MATERIALE
             _material.density = 1.60;
@@ -111,7 +119,9 @@ namespace TestCasseinFerro
             Console.WriteLine("---");
             Console.WriteLine("CALCOLO COEFF. SICUREZZA");
             Console.WriteLine("Length coeff: " + _nastro.lengthCoeff);
-            Console.WriteLine("Length coeff: " + _nastro.lengthCoeff);
+            Console.WriteLine("Coeff. di sicurezza: " + _calcoloCapacity.sfa);
+            Console.WriteLine("Coeff. di sicurezza piste lat.: " + _calcoloCapacity.CLpista);
+            Console.WriteLine("Pot. richiesta in coda: " + _nastro.lengthCoeff);
 
             // Verico che i valori calcolati siano corretti
             Assert.That(_calcoloCapacity.Qeff, Is.EqualTo(738).Within(2));
