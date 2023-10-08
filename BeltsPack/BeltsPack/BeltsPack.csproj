@@ -334,6 +334,9 @@
     <Compile Include="Views\Settings\SettingsBordi.xaml.cs">
       <DependentUpon>SettingsBordi.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\SettingsFoglioCalcoli.xaml.cs">
+      <DependentUpon>SettingsFoglioCalcoli.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\SettingsListinoPaladini.xaml.cs">
       <DependentUpon>SettingsListinoPaladini.xaml</DependentUpon>
     </Compile>
@@ -477,6 +480,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\SettingsBordi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\SettingsFoglioCalcoli.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

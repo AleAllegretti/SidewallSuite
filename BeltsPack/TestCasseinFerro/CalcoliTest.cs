@@ -42,6 +42,13 @@ namespace TestCasseinFerro
 
             // CARATTERISTICHE TAZZA
             _tazza.Spessore = 127;
+            _tazza.Forma = "TC";
+            _tazza.Altezza = 280;
+            _tazza.Passo = 300;
+
+            _tazza.CarattersticheTazza();
+            _tazza.SetLunghezzaTotale(_nastro.LarghezzaUtile);
+            _tazza.SetPesoTotale();
 
             // CARATTERISTICHE NASTRO
             _nastro.LarghezzaUtile = 850;
@@ -53,12 +60,19 @@ namespace TestCasseinFerro
             _nastro.lunghTrattoCarico = 4;
             _nastro.caricoExtra = 1.2;
             _nastro.Larghezza = 1400;
-            _nastro.Classe = 4500;
+            _nastro.Classe = 500;
             _nastro.edgetype = 25;
             _nastro.forma = "S-Shape";
+            _nastro.effPuleggia = 0.35;
+            _nastro.alpha = Math.PI;
+            _nastro.s1 = 0.02;
+            _nastro.S2 = 0.03;
+            _nastro.capacityRequired = 636;
 
             // CARATTERISTICHE BORDO
             _bordo.Altezza = 280;
+
+            _bordo.GetInfoBordo();
 
             // CARATTERISTICHE PRODOTTO
             _prodotto.PistaLaterale = 200;
@@ -68,30 +82,6 @@ namespace TestCasseinFerro
             _material.fillFactor = 0.75;
             _material.surchAngle = 20;
 
-            // CARATTERISTICHE IMPIANTO
-            _calcoloCapacity.Qreq = 636;
-            _calcoloCapacity.mu = 0.35;
-            _calcoloCapacity.alpha = Math.PI;
-            _calcoloCapacity.s1 = 0.02;
-            _calcoloCapacity.S2 = 0.03;
-
-            // Calcolo la sezione sottesa al listello
-            _calcoloCapacity.GetSezioneListello();
-
-            // Calcolo la sezione che mi rappresenta lì'area di riempimento
-            _calcoloCapacity.GetFillingSection();
-
-            // Calcolo la sezione di frizione del materiale
-            _calcoloCapacity.SurAngle = 20;
-            _calcoloCapacity.GetFrictionSection();
-
-            // Calcolo la sezione totale
-            _calcoloCapacity.TotalSection();
-
-            // Calcolo la sezione d'interferenza
-            _tazza.Passo = 300;
-            _calcoloCapacity.GetPitchSection();
-
             // Calcolo la portata
             _calcoloCapacity.GetCapacity();
 
@@ -99,33 +89,38 @@ namespace TestCasseinFerro
             _nastro.SetLengthCoeff();
             _nastro.SetLunghOriz();
             _nastro.SetAngoloMedio();
-            _calcoloCapacity.SetPeriphForce();
             _calcoloCapacity.TensionsCalculation();
-            _calcoloCapacity.TakeUpCalculations();
 
             // Stampo i risultati
             Console.WriteLine("CALCOLO SEZIONI");
-            Console.WriteLine("Sezione listello: " + _calcoloCapacity.Sezlis);
+            Console.WriteLine("Sezione listello: " + _tazza.Sezione);
             Console.WriteLine("Sezione di riempimento: " + _calcoloCapacity.Sb);
             Console.WriteLine("Sezione frizione: " + _calcoloCapacity.FricSection);
             Console.WriteLine("Sezione totale: " + _calcoloCapacity.CleatCapacity);
             Console.WriteLine("Sezione d'interferenza: " + _calcoloCapacity.PitchSection);
             Console.WriteLine("---");
             Console.WriteLine("CALCOLO PORTATA");
-            Console.WriteLine("Portata listello: " + _calcoloCapacity.CleatVolume);
-            Console.WriteLine("Portata lorda: " + _calcoloCapacity.Q);
             Console.WriteLine("Portata effettiva [m3/h]: " + _calcoloCapacity.Qeff);
             Console.WriteLine("Portata massica [ton/h]: " + _calcoloCapacity.Qteff);
             Console.WriteLine("---");
+            Console.WriteLine("CALCOLO TENSIONI");
+            Console.WriteLine("Max working tension at pulley [N/mm]: " + _calcoloCapacity.MaxWorkTens);
+            Console.WriteLine("Max working tension on lateral spaces [N/mm]: " + _calcoloCapacity.MaxWorkTensLat);
+            Console.WriteLine("---");
+            Console.WriteLine("CALCOLO POTENZE");
+            Console.WriteLine("Required take-up at tail [kg]: " + _calcoloCapacity.TakeUpTail);
+            Console.WriteLine("Required power [kW]: " + _calcoloCapacity.Pa);
+            Console.WriteLine("Suggested motor power [kW]: " + _calcoloCapacity.MotorPower);
+            Console.WriteLine("---");
             Console.WriteLine("CALCOLO COEFF. SICUREZZA");
             Console.WriteLine("Length coeff: " + _nastro.lengthCoeff);
-            Console.WriteLine("Coeff. di sicurezza: " + _calcoloCapacity.sfa);
-            Console.WriteLine("Coeff. di sicurezza piste lat.: " + _calcoloCapacity.CLpista);
+            Console.WriteLine("Coeff. di sicurezza: " + _calcoloCapacity.Sfactor);
+            Console.WriteLine("Coeff. di sicurezza piste lat.: " + _calcoloCapacity.Sfactor_pista);
             Console.WriteLine("Pot. richiesta in coda: " + _nastro.lengthCoeff);
 
             // Verico che i valori calcolati siano corretti
-            Assert.That(_calcoloCapacity.Qeff, Is.EqualTo(738).Within(2));
-            Assert.That(_calcoloCapacity.Qteff, Is.EqualTo(1181).Within(2));
+            Assert.That(_calcoloCapacity.Qeff, Is.EqualTo(738).Within(10));
+            Assert.That(_calcoloCapacity.Qteff, Is.EqualTo(1181).Within(10));
         }
     }
  

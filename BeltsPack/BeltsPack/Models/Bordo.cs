@@ -20,6 +20,8 @@ namespace BeltsPack.Models
     }
     public class Bordo
     {
+        // Minimum wheel width
+        public double MinWheelWidth { get; set; }
         // Sigla tele
         public string SiglaTele { get; set; }
         // Codice Giunzione

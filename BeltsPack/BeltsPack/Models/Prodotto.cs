@@ -62,8 +62,11 @@ namespace BeltsPack.Models
 	}
     public class Prodotto
     {
-		// Codice movimentazione
-		public string CodiceMovimentazione { get; set; }
+
+        // Peso al metro quadro
+        public double PesoM2 { get; set; }
+        // Codice movimentazione
+        public string CodiceMovimentazione { get; set; }
 		// Descrizione movimentazione
 		public string DescrizioneMovimentazione { get; set; }
 		// Quantita movimentazione

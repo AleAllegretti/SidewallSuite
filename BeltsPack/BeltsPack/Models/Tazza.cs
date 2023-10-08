@@ -10,6 +10,10 @@ namespace BeltsPack.Models
 {
     public class Tazza
     {
+        // Altezza utile
+        public double AltezzaUtile { get; set; }
+        // Sezione
+        public double Sezione { get; set; }
         // Spessore
         public  double Spessore { get; set; }
         // Sigla tele
@@ -118,6 +122,9 @@ namespace BeltsPack.Models
                 {
                     this.Peso = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Peso" + this.Forma)));
                     this.Larghezza = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("LarghezzaTazze" + this.Forma)));
+                    this.Sezione = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Sezione" + this.Forma)));
+                    this.Spessore = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Spessore" + this.Forma)));
+                    this.AltezzaUtile = this.Altezza * 0.94;
                     break;
                 }
             }

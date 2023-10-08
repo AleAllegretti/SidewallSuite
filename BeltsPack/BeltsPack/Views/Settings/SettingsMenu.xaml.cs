@@ -70,5 +70,10 @@ namespace BeltsPack.Views
         {
             this.NavigationService.Navigate(new SettingsTipologiaCasse());
         }
+
+        private void Foglio_Calcoli_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new SettingsFoglioCalcoli());
+        }
     }
 }

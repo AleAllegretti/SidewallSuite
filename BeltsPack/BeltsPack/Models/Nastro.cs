@@ -24,6 +24,16 @@ namespace BeltsPack.Models
     }
     public class Nastro
     {
+        // Massimo sag al top - Valore fisso
+        public double S2 { get; set; }
+        // Massimo sag at bottom- Valore fisso
+        public double s1 { get; set; }
+        // Angolo avvoglimento nastro su tamburo
+        public double alpha { get; set; }
+        // Efficienza puleggia
+        public double effPuleggia { get; set; }
+        // Capacità richiesta
+        public double capacityRequired { get; set; }
         // Tipo di forma nastro
         public string forma { get; set; }
         // Tipo di edge
@@ -327,6 +337,45 @@ namespace BeltsPack.Models
         public void SetSpecWeightWidth()
         {
             this.pesoSpecLargh = this.Peso * 1000 / this.Larghezza;
+        }
+
+        public void SetLunghezzaTrattodiCarico()
+        {
+            // Crea il wrapper del database
+            DatabaseSQL dbSQL = DatabaseSQL.CreateDefault();
+            dbSQL.OpenConnection();
+
+            // Crea il comando SQL
+            SqlDataReader reader;
+            SqlCommand creaComando = dbSQL.CreateSettingsCalcoliCommand();
+            reader = creaComando.ExecuteReader();
+            while (reader.Read())
+            {
+                var temp = reader.GetValue(reader.GetOrdinal("ID"));
+                if (temp.ToString() == "6")
+                {
+                    this.lunghTrattoCarico = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+                if (temp.ToString() == "7")
+                {
+                    this.caricoExtra = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+                if (temp.ToString() == "8")
+                {
+                    this.effPuleggia = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+                if (temp.ToString() == "9")
+                {
+                    this.s1 = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+                if (temp.ToString() == "10")
+                {
+                    this.S2 = Convert.ToDouble(reader.GetValue(reader.GetOrdinal("Valore")));
+                }
+            }
+
+            // Angolo avvolgimento nastro su tamburo
+            this.alpha = Math.PI;
         }
     }
     

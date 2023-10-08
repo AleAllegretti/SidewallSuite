@@ -20,6 +20,13 @@ namespace BeltsPack
     {
         public string _nomeutente { get; set; }
         Prodotto prodotto = new Prodotto();
+        Nastro nastro = new Nastro();
+        Bordo bordo = new Bordo();
+        Tazza tazza = new Tazza();
+        Materiale materiale = new Materiale();
+        Rullo rullo = new Rullo();
+        Tamburo tamburo = new Tamburo();
+        Motore motore = new Motore();
         public string currentVersion { get; set; }
         public MainWindow()
         {
@@ -154,7 +161,7 @@ namespace BeltsPack
         private void Calcoli_Selected(object sender, RoutedEventArgs e)
         {
             // Navigo alla schermata dei calcoli
-            this._mainFrame.NavigationService.Navigate(new CalcoliView(prodotto));
+            this._mainFrame.NavigationService.Navigate(new CalcoliView(prodotto, nastro, tazza, bordo, materiale, rullo, tamburo, motore));
         }
     }
 }

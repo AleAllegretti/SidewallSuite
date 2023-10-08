@@ -153,5 +153,14 @@
             </StackPanel>
         </Button>
 
+        <!-- Parametri foglio calcoli-->
+        <Button Width="160" Height="160" ToolTip="Parametri tipologia casse" Name="Foglio_Calcoli" Grid.Row="2" Grid.Column="4"  Margin="0,0,0,0" Click="Foglio_Calcoli_Click" >
+            <StackPanel>
+                <md:PackIcon Kind="Calculator" Width="60" Height="60" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="Parametri foglio calcoli" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,10,0,0" 
+                   TextWrapping="Wrap" TextAlignment="Center" />
+            </StackPanel>
+        </Button>
+        
     </Grid>
 </Page>

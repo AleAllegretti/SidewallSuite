@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,14 @@ namespace BeltsPack.Utils
 
         // CAPACITY OF THE BELT
         // OUTPUT
+        // Potenza motore
+        public double MotorPower { get; set; }
+        // Required take-up at tail
+        public double TakeUpTail { get; set; }
+        // Max working tension
+        public double MaxWorkTens { get; set; }
+        // Max tension at lateral spaces
+        public double MaxWorkTensLat { get; set; }
         // Coefficiente di sicurezza nastro
         public double Sfactor { get; set; }
         // Coefficiente di sicurezza piste laterali
@@ -29,10 +38,6 @@ namespace BeltsPack.Utils
         public double Fvmin { get; set; }
         // Fv
         public double Fv { get; set; }
-        // Massimo sag al top - Valore fisso
-        public double S2 { get; set; }
-        // Massimo sag at bottom- Valore fisso
-        public double s1 { get; set; }
         // Take 1
         public double Tvn { get; set; }
         // Take up 2
@@ -59,8 +64,6 @@ namespace BeltsPack.Utils
         public double T1n { get; set; }
         // Coefficiente di tensione slack-side
         public double T2n { get; set; }
-        // Angolo avvoglimento nastro su tamburo
-        public double alpha { get; set; }
         // Fattore di attrito
         public double mu { get; set; }
         // Coefficiente di avvolgimento
@@ -76,8 +79,6 @@ namespace BeltsPack.Utils
 
         // Forza resistente speciale portata
         public double peripheForce6 { get; set; }
-        // Capcita richiesta [ton/h]
-        public double Qreq { get; set; }
         // Energia potenziale materiale
         public double matPotEnergy { get; set; }
         // Material inertia
@@ -105,8 +106,6 @@ namespace BeltsPack.Utils
         public double Sb { get; set; }
         // Friction height. Altezza del materiale dovuta al fatto che non scivola per l'inclinazione - H2
         public double FriHeight { get; set; }
-        // Angolo di carico del materiale
-        public double SurAngle { get; set; }
         // Lunghezza friction section - l2
         public double FricLength { get; set; }
         // Lunghezza superiore di frizione - l1
@@ -156,50 +155,41 @@ namespace BeltsPack.Utils
             this._motore = motore;
         }
 
-        public void GetSezioneListello()
+        public void GetCapacity()
         {
-            // Al momento hard coded ma poi bisognerà cambiare lo schema del dB per far fronte a questa esigenza - TC110
-            this.Sezlis = 1.95; // [dm2]
-        }
+            // Definisco le prorpietà del motore
+            this._motore.GetCarattersticheMotore();
 
-        public void GetFillingSection()
-        {
-            // In questa fase approssimo l'altezza utile del listello a quella del listello stesso
-            this.HLuse = 265;
+            // Definisco le caratteristiche del tamburo
+            this._tamburo.GetCarattersticheTamburo();
+
+            // Definisco le caratteristiche del rullo
+            this._rullo.GetCarattersticheRullo();
 
             //Calcolo l'altezza di riempimento. Cioè fino che punto il materiale sarà contenuto tra i listelli [mm]
-            this.FillingHeight = HLuse * Math.Tan(Math.PI/2 - this.FromDegToRad(this._nastro.inclinazione));  
+            this.FillingHeight = this._tazza.AltezzaUtile * Math.Tan(Math.PI / 2 - this.FromDegToRad(this._nastro.inclinazione));
 
             // Calcolo la sezione di riempimento del materiale [dm2]
-            this.Sb = Math.Round((this.HLuse * this.FillingHeight) / 20000,3);
-        }
+            this.Sb = Math.Round((this._tazza.AltezzaUtile * this.FillingHeight) / 20000, 3);
 
-        public void GetFrictionSection()
-        {
             // Altezza relativa al fatto che il materiale non scivola per l'inclinazione
-            this.FriHeight = this.HLuse * Math.Tan(Math.PI/2 - this.FromDegToRad(this._nastro.inclinazione) + this.FromDegToRad(this._material.surchAngle));
+            this.FriHeight = this._tazza.AltezzaUtile * Math.Tan(Math.PI / 2 - this.FromDegToRad(this._nastro.inclinazione) + this.FromDegToRad(this._material.surchAngle));
 
             // Lunghezza frizione materiale
-            this.FricLength = (this.HLuse) / Math.Cos(Math.PI/2 - this.FromDegToRad(this._nastro.inclinazione));
+            this.FricLength = (this._tazza.AltezzaUtile) / Math.Cos(Math.PI / 2 - this.FromDegToRad(this._nastro.inclinazione));
 
             // Lunghezza superiore di frizione
-            this.FricLength2 = (this.HLuse) / Math.Cos(Math.PI / 2 - this.FromDegToRad(this._nastro.inclinazione) + this.FromDegToRad(this._material.surchAngle));
+            this.FricLength2 = (this._tazza.AltezzaUtile) / Math.Cos(Math.PI / 2 - this.FromDegToRad(this._nastro.inclinazione) + this.FromDegToRad(this._material.surchAngle));
 
             // Altezza sezione di frizione
             this.FricHeight3 = this.FricLength * Math.Sin(this.FromDegToRad(this._material.surchAngle));
 
             // Sezione di frizione - dm2
-            this.FricSection = Math.Round((this.FricHeight3 * this.FricLength2) / 20000,3);
-        }
+            this.FricSection = Math.Round((this.FricHeight3 * this.FricLength2) / 20000, 3);
 
-        public void TotalSection()
-        {
             // Calcolo la capacità di ciascun listello
-            this.CleatCapacity = this.Sezlis + this.Sb + this.FricSection;
-        }
+            this.CleatCapacity = this._tazza.Sezione + this.Sb + this.FricSection;
 
-        public void GetPitchSection()
-        {
             // Calcolo l'interferenza
             this.CleatInterference = this._tazza.Spessore + this.FriHeight - this._tazza.Passo;
 
@@ -210,32 +200,29 @@ namespace BeltsPack.Utils
             }
             else
             {
-                this.PitchSection = Math.Round(this.CleatCapacity - Math.Pow(this.CleatInterference,2) * Math.Tan(this.FromDegToRad(this._nastro.inclinazione) - this.FromDegToRad(this._material.surchAngle))/20000,3);
+                this.PitchSection = Math.Round(this.CleatCapacity - Math.Pow(this.CleatInterference, 2) * Math.Tan(this.FromDegToRad(this._nastro.inclinazione) - this.FromDegToRad(this._material.surchAngle)) / 20000, 3);
             }
 
             // Faccio l'eccezione nel caso in cui l'angolo di carico sia maggiore dell'inclinazione del nastro
-            if (this.SurAngle >= this._nastro.inclinazione)
+            if (this._material.surchAngle >= this._nastro.inclinazione)
             {
-                this.PitchSection = Math.Round(this.Sezlis + this.HLuse * (this._tazza.Passo - this._tazza.Spessore) / 10000,3);
+                this.PitchSection = Math.Round(this._tazza.Sezione + this._tazza.AltezzaUtile * (this._tazza.Passo - this._tazza.Spessore) / 10000, 3);
             }
-        }
 
-        public void GetCapacity()
-        {
             // Calcolo il volume di materiale che ogni tazza può contenere [dm3]
             this.CleatVolume = this.PitchSection * this._nastro.LarghezzaUtile / 100;
 
             // Capacità totale del nastro senza considerare il filling factor - m3/h
-            if(this._tazza.Passo > 0)
+            if (this._tazza.Passo > 0)
             {
-                this.Q = Math.Round(this.CleatVolume / this._tazza.Passo * this._nastro.speed * 3600,3);
+                this.Q = Math.Round(this.CleatVolume / this._tazza.Passo * this._nastro.speed * 3600, 3);
             }
 
-            // Capacità effettiva considerando il fattore di riempimento
-            this.Qeff = Math.Round(this.Q * this._material.fillFactor,1);
+            // Capacità effettiva considerando il fattore di riempimento -m3/h
+            this.Qeff = Math.Round(this.Q * this._material.fillFactor, 1);
 
-            // Capacità massica
-            this.Qteff = Math.Round(Qeff * this._material.density,1);
+            // Capacità massica - ton/h
+            this.Qteff = Math.Round(Qeff * this._material.density, 1);
         }
 
         public double FromDegToRad(double deg)
@@ -245,22 +232,35 @@ namespace BeltsPack.Utils
             return rad;
         }
 
-        public void SetPeriphForce()
+        public void TensionsCalculation()
         {
+            // Calcolo la lunghezza del tratto di carico del nastro e il carico extra
+            this._nastro.SetLunghezzaTrattodiCarico();
+
             // Calcolo il peso specifico in larghezza
             this._nastro.SetSpecWeightWidth();
+
+            // Setto l'incilinazione media del nastro
+            this._nastro.SetLunghOriz();
+            this._nastro.SetAngoloMedio();
 
             // Calcolo la forza periferica
             double G = 9.80665;
 
+            // Calcolo il peso al metro del prodotto
+            this._prodotto.PesoM2 = this._prodotto.PesoTotaleNastro / (this._nastro.Lunghezza*Math.Pow(10,-3) * this._nastro.Larghezza * Math.Pow(10, -3));
+
+            // Calcoli il peso del rullo
+            this._rullo.GetRulloWeight(this._nastro.Larghezza);
+
             this.peripheForce = G * (this._nastro.lengthCoeff * this._rullo.coeffAttrito * this._nastro.centerDistance *
-                (this._nastro.Peso * this._nastro.Larghezza / 1000 * Math.Cos(this._nastro.inclinazioneMed) +
-                this._rullo.peso / this._rullo.passo) + this._nastro.centerDistance * this._nastro.Peso * this._nastro.Larghezza / 1000 *
+                (this._prodotto.PesoM2 * this._nastro.Larghezza / 1000 * Math.Cos(this._nastro.inclinazioneMed) +
+                this._rullo.peso / this._rullo.passo) + this._nastro.centerDistance * this._prodotto.PesoM2 * this._nastro.Larghezza / 1000 *
                 Math.Sin(this._nastro.inclinazioneMed));
 
             this.peripheForce2 = G * (this._nastro.lengthCoeff * this._rullo.coeffAttrito * this._nastro.centerDistance *
-                (this._nastro.Peso * this._nastro.Larghezza / 1000 * Math.Cos(this._nastro.inclinazioneMed) +
-                this._rullo.peso / this._rullo.passo) - this._nastro.centerDistance * this._nastro.Peso * this._nastro.Larghezza / 1000 *
+                (this._prodotto.PesoM2 * this._nastro.Larghezza / 1000 * Math.Cos(this._nastro.inclinazioneMed) +
+                this._rullo.peso / this._rullo.passo) - this._nastro.centerDistance * this._prodotto.PesoM2 * this._nastro.Larghezza / 1000 *
                 Math.Sin(this._nastro.inclinazioneMed));
 
             // Calcolo il totale della forza resistente del nastro a vuoto [N]
@@ -270,9 +270,9 @@ namespace BeltsPack.Utils
             if (this._nastro.speed != 0)
             {
                 this.matInertia = (G * this._nastro.lengthCoeff * this._rullo.coeffAttrito * this._nastro.centerDistance *
-                this.Qreq * Math.Cos(this._nastro.inclinazioneMed)) / (3.6 * this._nastro.speed);
+                this._nastro.capacityRequired * Math.Cos(this._nastro.inclinazioneMed)) / (3.6 * this._nastro.speed);
 
-                this.matPotEnergy = (G * this.Qreq * this._nastro.elevazione) / (3.6 * this._nastro.speed);
+                this.matPotEnergy = (G * this._nastro.capacityRequired * this._nastro.elevazione) / (3.6 * this._nastro.speed);
             }
 
             // Calcolo le restanti forze resistenti
@@ -291,25 +291,17 @@ namespace BeltsPack.Utils
 
             // Totale forza resistente al tamburo
             this.totForcePeriphe = this.totPeripheForceCar + this.totPeripheForceRet;
-        }
-
-        public void TensionsCalculation()
-        {
-            // Forza gravtazionale
-            double G = 9.80665;
 
             // Altre variabili utili
-            double dTv, T2, T1, TH1, TH11, TT1, TT11, TT1n, TT11n, F_v, Tmax, Cl, CRmin, fsl, Nu, Plut, WheelWidth, CLpista, Sfactor, Sfactor_pista;
+            double dTv, T2, T1, TH1, TH11, TT1, TT11, TT1n, TT11n, F_v, Tmax, fsl, Nu, Plut, WheelWidth;
             TT1n = 0;
             TT11n = 0;
-            Cl = 0;
             Nu = 0.85;
-            CLpista = 0;
 
             if (this._nastro.centerDistance > 0)
             {
                 // Calcolo il coefficiente di avvolgimento
-                this.k = 1 / (Math.Pow(2.718, (this.mu * this.alpha)) - 1);
+                this.k = 1 / (Math.Pow(2.718, (this._nastro.effPuleggia * this._nastro.alpha)) - 1);
 
                 // Primo coefficiente di tensione - Tight-side
                 T1n = Math.Abs(this.totForcePeriphe) * (this.k + 1);
@@ -338,12 +330,12 @@ namespace BeltsPack.Utils
                 this.Tvn = this.T2n + this.totPeripheForceRet;
             }
 
-            this.Tv1 = this.Tvn * (1 + this.extratakeup / 100);
+            this.Tv1 = this.Tvn * (this._nastro.caricoExtra);
 
             if (this._nastro.speed > 0)
             {
-                this.Tsup = (this._rullo.passo / (8 * this.s1)) * G * (this._nastro.Peso * this._nastro.Larghezza / 1000 + this.Qreq / (3.6 * this._nastro.speed));
-                this.Tinf = (this._rullo.passo / (8 * this.S2)) * G * this._nastro.Peso * this._nastro.Larghezza / 1000;
+                this.Tsup = (this._rullo.passo / (8 * this._nastro.s1)) * G * (this._prodotto.PesoM2 * this._nastro.Larghezza / 1000 + this._nastro.capacityRequired / (3.6 * this._nastro.speed));
+                this.Tinf = (this._rullo.passo / (8 * this._nastro.S2)) * G * this._prodotto.PesoM2 * this._nastro.Larghezza / 1000;
             }
 
             this.Tv2 = this.Tsup;
@@ -353,6 +345,9 @@ namespace BeltsPack.Utils
             Fvmin = 2 * Math.Max(Tv3, Fvmin);
 
             F_v = Fvmin;
+
+            // required take-up at tail
+            this.TakeUpTail = Math.Round(F_v / G,1);
 
             dTv = F_v / 2 - Tvn;
 
@@ -364,29 +359,43 @@ namespace BeltsPack.Utils
             TT11 = TT11n + dTv;
 
             Tmax = Math.Max(Math.Max(T1, TH1), Math.Max(TH11, Math.Max(TH1, TT11)));
+
+            // Max working tension at pulley
             if (this._nastro.Larghezza > 0)
             {
-                Cl = Tmax / this._nastro.Larghezza;
+                this.MaxWorkTens = Math.Round(Tmax / this._nastro.Larghezza,1);
             }
 
-            if (Cl > 0)
+            if (this.MaxWorkTens > 0)
             {
-                fsl = this._nastro.Classe / Cl;
+                fsl = this._nastro.Classe / this.MaxWorkTens;
             }
 
             // Motor power calculation
-            this.Pa = this.totForcePeriphe * this._nastro.speed / 1000;
-            this.Pmin = Pa / Nu;
+            this.Pa = Math.Round(this.totForcePeriphe * this._nastro.speed / 1000,1);
+            this.Pmin = Math.Round(Pa / Nu,1);
+            this._motore.GetMotorPower(Pmin);
+
+            // Calcolo la larghezza minima della puleggia
+            if (this._prodotto.PistaLaterale > 0)
+            {
+                this._bordo.MinWheelWidth = Math.Max(0.8 * this._prodotto.PistaLaterale, this._prodotto.PistaLaterale - 40);
+            }
+            else
+            {
+                this._bordo.MinWheelWidth = 0;
+            }
 
             // Belt class and safety factors
             if (this._nastro.Larghezza > 0)
             {
-                Cl = T1 / this._nastro.Larghezza;
+                this.MaxWorkTens = Math.Round(T1 / this._nastro.Larghezza,1);
             }
 
             Plut = Math.Max(0.8 * this._prodotto.PistaLaterale, this._prodotto.PistaLaterale - 40);
             Plut = Plut - this._nastro.edgetype;
 
+            // Max working tension at free lateral spaces
             if (this._prodotto.PistaLaterale > 0)
             {
                 WheelWidth = Plut;
@@ -394,40 +403,36 @@ namespace BeltsPack.Utils
 
                 if (this._nastro.forma == "S-Shape")
                 {
-                    CLpista = T2 / (2 * Plut);
+                    this.MaxWorkTensLat = Math.Round(T2 / (2 * Plut));
 
                 }
                 else if (this._nastro.forma == "L-Shape")
                 {
-                    CLpista = TT1 / (2 * Plut);
+                    this.MaxWorkTensLat = Math.Round(TT1 / (2 * Plut));
                 }
                 else
                 {
-                    CLpista = 0;
+                    this.MaxWorkTensLat = 0;
                     WheelWidth = 0;
                     this._bordo.MinWheelDiam = 0;
                 }
             }
 
-            if (Cl > 0)
+            if (this.MaxWorkTens > 0)
             {
-                Sfactor = this._nastro.Classe / Cl;
+                this.Sfactor = Math.Round(this._nastro.Classe / this.MaxWorkTens,1);
             }
 
-            if (CLpista > 0)
+            if (this.MaxWorkTensLat > 0)
             {
-                Sfactor_pista = this._nastro.Classe / CLpista;
+                this.Sfactor_pista = Math.Round(this._nastro.Classe / this.MaxWorkTensLat,1);
             }
             else
             {
-                Sfactor_pista = 0;
+                this.Sfactor_pista = 0;
             }
         }
 
-        public void TakeUpCalculations()
-        {
-           
-        }
     }
 
 }

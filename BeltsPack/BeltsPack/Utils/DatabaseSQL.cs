@@ -33,12 +33,16 @@ namespace BeltsPack.Utils
         public readonly string TABELLA_TEST = "DatabaseTest";
         public readonly string TABELLA_CASSE = "TipologiaCasse";
         public readonly string TABELLA_AGENTI = "Agente";
+        public readonly string TABELLA_CALCOLI = "ParametriFoglioDiCalcolo";
+        public readonly string TABELLA_CALCOLI_INPUT = "InputCalcoli";
+        public readonly string TABELLA_CALCOLI_OUTPUT = "OutputCalcoli";
 
         private Nastro _nastro;
         private Bordo _bordo;
         private Tazza _tazza;
         private Prodotto _prodotto;
         private Imballi _imballi;
+        private Materiale _materiale;
 
         // Properties
         private string ConnectionString { get; }
@@ -468,6 +472,10 @@ namespace BeltsPack.Utils
                 " PistaLaterale, BaseBordo, FormaTazze, NumeroTazzexFila, SpazioFile, TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett FROM " + TABELLA_IMBALLI_TOTALI + " ORDER BY Cliente ASC");
         }
 
+        public SqlCommand CreateDbInputCalcoliCommand()
+        {
+            return this.CreateCommand("SELECT Codice,Versione FROM " + TABELLA_CALCOLI_INPUT );
+        }
         public SqlCommand CreateDbProduzioneCommand(string stato)
         {
             var cmd = this.CreateCommand("SELECT Codice,Versione,DataConsegnaCassa,Cliente,LunghezzaNastro,LunghezzaImballo,AltezzaImballo,LarghezzaImballo FROM " + TABELLA_IMBALLI_TOTALI + " Where Stato = @stato");
@@ -488,6 +496,10 @@ namespace BeltsPack.Utils
         public SqlCommand CreateSettingBordiCommand()
         {
             return this.CreateCommand("SELECT ID,Altezza,LarghezzaBase,PassoOnda,Peso,DiametroCorrugato,DiametroPolistirolo,MinPulleyDiam,MinWheelDiam,DataUltimoAggiornamento FROM " + TABELLA_BORDI + " ORDER BY Altezza ASC");
+        }
+        public SqlCommand CreateSettingsCalcoliCommand()
+        {
+            return this.CreateCommand("SELECT ID, Descrizione, Valore, DataUltimoAggiornamento, Note FROM " + TABELLA_CALCOLI + " ORDER BY ID ASC");
         }
         public SqlCommand CreateClientiCommand()
         {
@@ -526,8 +538,9 @@ namespace BeltsPack.Utils
         public SqlCommand CreateSettingTazzeCommand()
         {
             return this.CreateCommand("SELECT ID,Altezza,FormaTC,FormaTCW,FormaT,FormaTW,FormaTB,FormaC,PesoTC,PesoTCW,PesoT,PesoTW,PesoTB,PesoC,LarghezzaTazzeTC,LarghezzaTazzeTCW," +
-                "LarghezzaTazzeT,LarghezzaTazzeTW," +
-                "LarghezzaTazzeTB,LarghezzaTazzeC,DataUltimoAggiornamento FROM " + TABELLA_TAZZE + " ORDER BY Altezza ASC");
+                "LarghezzaTazzeT,LarghezzaTazzeTW,SezioneTC, SezioneC, SezioneT, SezioneTCW, SezioneTW, SezioneTB " +
+                "LarghezzaTazzeTB,LarghezzaTazzeC,DataUltimoAggiornamento," +
+                "SpessoreT, SpessoreTC, SpessoreC, SpessoreTCW, SpessoreTW, SpessoreTB FROM " + TABELLA_TAZZE + " ORDER BY Altezza ASC");
         }
         public SqlCommand CreateSettingPaladiniCommand()
         {
@@ -636,6 +649,22 @@ namespace BeltsPack.Utils
 
         }
 
+        public SqlCommand UpdateDbCommandInputCalcoli(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Materiale materiale)
+        {
+            // Oggetti
+            this._nastro = nastro;
+            this._bordo = bordo;
+            this._tazza = tazza;
+            this._prodotto = prodotto;
+            this._materiale = materiale;
+
+            return this.CreateCommand("INSERT INTO InputCalcoli(Codice, Capacity, FillingFactor, VelocitaNastro, PendenzaMax, Elevazione, DistDalCentro, NomeMateriale, " +
+                "DensitaMateriale, AngoloCarico, DimensioneSingolo, Versione) VALUES" +
+                "('" + prodotto.Codice + "'," + nastro.capacityRequired + "," + materiale.fillFactor.ToString().Replace(",",".") + "," + nastro.speed.ToString().Replace(",", ".") + "," + nastro.inclinazione + "," + nastro.elevazione.ToString().Replace(",", ".") +
+                "," + nastro.centerDistance.ToString().Replace(",", ".") + ",'" + materiale.Nome + "'," + materiale.density.ToString().Replace(",", ".") + "," +
+                 materiale.surchAngle.ToString().Replace(",", ".") + "," + materiale.DimSingolo.ToString().Replace(",", ".") + "," + this._prodotto.VersioneCodice + ")");
+
+        }
         public SqlCommand DeleteRowImpostazioni(int ID, string nomeTabella)
         {
             var cmd = this.CreateCommand("DELETE from " + nomeTabella + " Where ID = @ID");
