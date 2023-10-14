@@ -104,7 +104,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
-                            <RowDefinition Height="550"/>
+                            <RowDefinition Height="750"/>
                         </Grid.RowDefinitions>
 
                         <Grid Grid.Row="0" Height="44" Background="#FFFF1F1F" Grid.ColumnSpan="3" Margin="0,4,0,3">
@@ -128,6 +128,13 @@
                                 </StackPanel>
                             </ListViewItem>
 
+                            <ListViewItem x:Name="Database" ToolTip="Database generale" Height="60"  Cursor="Hand" Selected="ListViewItem_Selected_1" >
+                                <StackPanel Orientation="Horizontal">
+                                    <md:PackIcon Kind="Database" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Db" VerticalAlignment="Center" Margin="20 10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            
                             <ListViewItem x:Name="Calcoli" ToolTip="Foglio calcoli" Height="60"  Cursor="Hand" Selected="Calcoli_Selected" >
                                 <StackPanel Orientation="Horizontal">
                                     <md:PackIcon Kind="Calculator" Width="25" Height="25" VerticalAlignment="Center"  Margin="3.5"/>
@@ -135,10 +142,10 @@
                                 </StackPanel>
                             </ListViewItem>
                             
-                            <ListViewItem x:Name="Database" ToolTip="Database generale" Height="60" Selected="ListViewItem_Selected_1" Cursor="Hand" >
+                            <ListViewItem x:Name="DatabaseCalcoli" ToolTip="Database generale" Height="60"  Cursor="Hand" Selected="DatabaseCalcoli_Selected" >
                                 <StackPanel Orientation="Horizontal">
-                                    <md:PackIcon Kind="Database" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
-                                    <TextBlock Text="Database" VerticalAlignment="Center" Margin="20 10"/>
+                                    <md:PackIcon Kind="DatabaseSettings" Width="25" Height="25" VerticalAlignment="Center" Margin="3.5"/>
+                                    <TextBlock Text="Db calcoli" VerticalAlignment="Center" Margin="20 10"/>
                                 </StackPanel>
                             </ListViewItem>
 

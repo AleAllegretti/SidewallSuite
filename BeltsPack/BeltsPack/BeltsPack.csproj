@@ -267,6 +267,9 @@
     <Compile Include="Views\CalcoliView.xaml.cs">
       <DependentUpon>CalcoliView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DatabaseCalcoliView.xaml.cs">
+      <DependentUpon>DatabaseCalcoliView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DatabaseView.xaml.cs">
       <DependentUpon>DatabaseView.xaml</DependentUpon>
     </Compile>
@@ -392,6 +395,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CalcoliView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DatabaseCalcoliView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

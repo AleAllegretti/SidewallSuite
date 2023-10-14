@@ -128,7 +128,7 @@
                     <Label Content="Quantità" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Quantità" Name="Quantity" 
                                SelectedValuePath="Content" Margin="15,0,0,0"  
-                               SelectedValue="{Binding qtyProdotto, Mode=TwoWay}" SelectionChanged="Quantity_SelectionChanged" >
+                               SelectedValue="{Binding qty_prodotto, Mode=TwoWay}" SelectionChanged="Quantity_SelectionChanged" >
                         <ComboBoxItem>1</ComboBoxItem>
                         <ComboBoxItem>2</ComboBoxItem>
                         <ComboBoxItem>3</ComboBoxItem>
@@ -386,14 +386,14 @@
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top">
                     <Label Name="labelCapacita"  Content="Cap. rich. [m3/h]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="Inserisci la capacità richiesta" Name="TBCapacita" md:HintAssist.Hint="[ton/h]"  
-                             Margin="15,0,0,0" TextChanged="TBCapacita_TextChanged"  ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding capacityReq, Mode=TwoWay}"   ></TextBox>
                 </StackPanel>
 
                 <!-- Filling factor-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Filling factor" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="inserisci il filling factor. Solitamente = 0.75" Name="TBFillingFactor"  
-                             Margin="15,0,0,0" Text="{Binding commessa, Mode=TwoWay}" TextChanged="TBFillingFactor_TextChanged" ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding fillingFactor, Mode=TwoWay}"  ></TextBox>
                 </StackPanel>
 
                 <!-- Velocità nastro-->
@@ -401,7 +401,7 @@
                     <Label Width="130"  Content="Vel. nastro [m/s]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="inserisci la velocità del nastro" 
                              Name="TBVelNastro" md:HintAssist.Hint="[m/s]"  
-                             Margin="15,0,0,0" Text="{Binding commessa, Mode=TwoWay}" TextChanged="TBVelNastro_TextChanged" ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding velNastro, Mode=TwoWay}"  ></TextBox>
                 </StackPanel>
                 
                 <!-- Tipologia impianto-->
@@ -409,7 +409,7 @@
                     <Label Content="Tipo impianto" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox  HorizontalAlignment="Left"  ToolTip="Quantità" Name="TipImpianto"
                                SelectedValuePath="Content" Margin="15,0,0,0"  
-                               SelectionChanged="TipImpianto_SelectionChanged" >
+                                 SelectedValue="{Binding formaNastro, Mode=TwoWay}" >
                         <ComboBoxItem>S-Shape</ComboBoxItem>
                         <ComboBoxItem>L-Shape</ComboBoxItem>
                         <ComboBoxItem>Dritto</ComboBoxItem>
@@ -420,21 +420,21 @@
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Incl. max [°]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="inserisci la pendenza massima" Name="TBMaxslope" md:HintAssist.Hint="[deg]" 
-                             Margin="15,0,0,0" Text="{Binding commessa, Mode=TwoWay}" TextChanged="TBMaxslope_TextChanged" ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding inclNastro, Mode=TwoWay}"  ></TextBox>
                 </StackPanel>
 
                 <!-- Elevazione-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="5" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Elevazione [m]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="inserisci l'elevazione" Name="TBElevazione" md:HintAssist.Hint="[m]" 
-                             Margin="15,0,0,0" Text="{Binding commessa, Mode=TwoWay}" TextChanged="TBElevazione_TextChanged" ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding elevNastro, Mode=TwoWay}"  ></TextBox>
                 </StackPanel>
 
                 <!-- Distanza dal centro-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="6" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Dist. dal centro [m]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="inserisci la center distance" Name="TBCentreDist" md:HintAssist.Hint="[m]" 
-                             Margin="15,0,0,0" Text="{Binding commessa, Mode=TwoWay}" TextChanged="TBCentreDist_TextChanged" ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding centDist, Mode=TwoWay}"  ></TextBox>
                 </StackPanel>
             </Grid>
         </StackPanel>
@@ -476,21 +476,21 @@
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top">
                     <Label Name="labelMaterialTypre"  Content="Nome materiale" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="Inserisci il nome del materiale" Name="TBCMaterialType"  
-                             Margin="15,0,0,0" TextChanged="TBCMaterialType_TextChanged"   ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding nomeMat, Mode=TwoWay}"    ></TextBox>
                 </StackPanel>
 
                 <!-- Densità materiale-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Dens. m. [ton/m3]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" ToolTip="inserisci la denistà del matriale" Name="TBMaterialDensity" md:HintAssist.Hint="[ton/m3]" 
-                             Margin="15,0,0,0" Text="{Binding commessa, Mode=TwoWay}" TextChanged="TBMaterialDensity_TextChanged" ></TextBox>
+                             Margin="15,0,0,0" Text="{Binding matDens, Mode=TwoWay}"  ></TextBox>
                 </StackPanel>
 
                 <!-- Angolo di carico-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Ang. di carico [°]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left" ToolTip="Imposta angolo di carico" Name="ComboAngCarico"  
-                              SelectedValuePath="Content" Margin="15,0,0,0" SelectedValue="{Binding trattamentoNastro, Mode=TwoWay}" SelectionChanged="ComboAngCarico_SelectionChanged" >
+                              SelectedValuePath="Content" Margin="15,0,0,0" SelectedValue="{Binding surAngle, Mode=TwoWay}"  >
                         <ComboBoxItem >10</ComboBoxItem>
                         <ComboBoxItem >15</ComboBoxItem>
                         <ComboBoxItem >20</ComboBoxItem>
@@ -502,7 +502,7 @@
                 <!-- Dimensione singolo pezzo-->
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="3" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Dim. singolo [mm]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" ToolTip="inserisci la lump size" Name="TBLumpSize" md:HintAssist.Hint="[mm]" 
+                    <TextBox HorizontalAlignment="Left" ToolTip="inserisci la lump size" Text="{Binding dimSingolo, Mode=TwoWay}" Name="TBLumpSize" md:HintAssist.Hint="[mm]" 
                              Margin="15,0,0,0"  ></TextBox>
                 </StackPanel>
 
@@ -510,7 +510,7 @@
                 <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="4" Margin="0,0,0,0" VerticalAlignment="Top">
                     <Label Width="130"  Content="Largh. edge [mm]" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                     <ComboBox HorizontalAlignment="Left" ToolTip="Imposta larghezza spigolo" Name="ComboLarghEdge"  
-                              SelectedValuePath="Content" Margin="15,0,0,0" SelectedValue="{Binding trattamentoNastro, Mode=TwoWay}" SelectionChanged="ComboLarghEdge_SelectionChanged">
+                              SelectedValuePath="Content" Margin="15,0,0,0" SelectedValue="{Binding edgeType, Mode=TwoWay}" >
                         <ComboBoxItem >0</ComboBoxItem>
                         <ComboBoxItem >10</ComboBoxItem>
                         <ComboBoxItem >25</ComboBoxItem>

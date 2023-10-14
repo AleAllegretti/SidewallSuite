@@ -163,5 +163,11 @@ namespace BeltsPack
             // Navigo alla schermata dei calcoli
             this._mainFrame.NavigationService.Navigate(new CalcoliView(prodotto, nastro, tazza, bordo, materiale, rullo, tamburo, motore));
         }
+
+        private void DatabaseCalcoli_Selected(object sender, RoutedEventArgs e)
+        {
+            // Navigo al db dei calcoli
+            this._mainFrame.NavigationService.Navigate(new DatabaseCalcoliView());
+        }
     }
 }

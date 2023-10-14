@@ -5,15 +5,10 @@ using System.Windows.Controls;
 using BeltsPack.Views.Dialogs;
 using System.Data.SqlClient;
 using BeltsPack.Utils;
-using System.Net;
-using System.Reflection;
 using System.Windows.Media;
 using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
-using System.Globalization;
-using Microsoft.Office.Interop.Outlook;
-using System.Windows.Media.Media3D;
-using System.Data;
+using System.Windows.Media.Animation;
 
 namespace BeltsPack.Views
 {
@@ -31,6 +26,9 @@ namespace BeltsPack.Views
         private Rullo rullo;
         private Tamburo _tamburo;
         private Motore _motore;
+        private CalcoliImpianto _calcoliImpianto;
+        private Imballi _imballi;
+        private CassaInFerro _cassainferro;
 
         public string tazzeTelate { get; set; }
         public string trattamentoNastro { get; set; }
@@ -61,6 +59,18 @@ namespace BeltsPack.Views
         public int qty_prodotto { get; set; }
         public bool larghezzaValidity { get; set; }
         public UserControl ParentControl { get; set; }
+        public double capacityReq { get; set; }
+        public double fillingFactor { get; set; }
+        public double velNastro { get; set; }
+        public string formaNastro { get; set; }
+        public int inclNastro { get; set; }
+        public double elevNastro { get; set; }
+        public double centDist { get; set; }
+        public string nomeMat { get; set; }
+        public double matDens { get; set; }
+        public double surAngle { get; set; }
+        public double dimSingolo { get; set; }
+        public double edgeType { get; set; }
         public CalcoliView(Prodotto prodotto, Nastro nastro, Tazza tazza, Bordo bordo, Materiale materiale, Rullo rullo, Tamburo tamburo, Motore motore)
         {
             this._prodotto = prodotto;
@@ -74,11 +84,64 @@ namespace BeltsPack.Views
            
             InitializeComponent();
 
+            // Assegno le grandezze ai rispettivi campi
+            this.cliente = this._prodotto.Cliente;
+            this.commessa = this._prodotto.Codice;
+            this.apertoChiuso = this._prodotto.Aperto;
+            this.qty_prodotto = this._prodotto.Qty;
+            this.lunghezzaNastro = this._prodotto.LunghezzaNastro;
+            this.larghezzaNastro = this._prodotto.LarghezzaNastro;
+            this.trattamentoNastro = this._prodotto.TrattamentoNastro;
+            this.trattamentoBordo = this._prodotto.TrattamentoBordo;
+            this.trattamentoTazza = this._prodotto.TrattamentoTazze;
+            this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
+            this.CBTipologiaNastro.SelectedItem = this._prodotto.TipoNastro;
+            this.ComboAltezzaBordi.ItemsSource = this.bordo.ListaAltezzeBordi().ToArray();
+            this.altezzaBordo = this._prodotto.AltezzaBordo;
+            this.ComboClasseNastro.ItemsSource = this.nastro.ListaClassiNastro(this.nastro.Tipo).ToArray();
+            this.ComboClasseNastro.SelectedItem = this._prodotto.ClasseNastro.ToString();
+            this.baseBordo = this._prodotto.LarghezzaBordo;
+            this.pistaLaterale = this._prodotto.PistaLaterale;
+            this.presenzaFix = this._prodotto.PresenzaFix;
+            this.presenzaBlinkers = this._prodotto.PresenzaBlinkers;
+            this.formaTazza = this._prodotto.FormaTazze;
+            this.altezzaTazza = this._prodotto.AltezzaTazze;
+            this.capacityReq = this.nastro.capacityRequired;
+            this.fillingFactor = this._materiale.fillFactor;
+            this.velNastro = this.nastro.speed;
+            this.formaNastro = this.nastro.forma.ToString();
+            this.formaNastro = this.nastro.forma;
+            this.inclNastro = this.nastro.inclinazione;
+            this.elevNastro = this.nastro.elevazione;
+            this.centDist = this.nastro.centerDistance;
+            this.nomeMat = materiale.Nome;
+            this.matDens = materiale.density;
+            this.surAngle = materiale.surchAngle;
+            this.dimSingolo = materiale.DimSingolo;
+            this.edgeType = nastro.edgetype;
+
+            if (presenzaFix == "Si")
+            {
+                this.passoFix = this._prodotto.PassoTazze;
+            }
+            else
+            {
+                this.passonoFix = this._prodotto.PassoTazze;
+            }
+
+            if (!String.IsNullOrEmpty(this.tazza.Forma))
+            {
+                this.ComboAltezzaTazze.ItemsSource = this.ListaAltezzeTazze().ToArray();
+            }
+            this.altezzaTazza = this._prodotto.AltezzaTazze;
+
+            // Riempio il menù dei clienti
+            ComboClienti.ItemsSource = this._prodotto.ListaClienti().ToArray();
+
             // Abilito il data binding
             this.DataContext = this;
 
-            // Riempio il menù dei clienti
-            // ComboClienti.ItemsSource = this._prodotto.ListaClienti().ToArray();
+            
         }
 
         private void ComboClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -106,7 +169,10 @@ namespace BeltsPack.Views
 
         private void Quantity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this._prodotto.Qty = qty_prodotto;
+            if (this.Quantity.SelectedItem != null)
+            {
+                this._prodotto.Qty = Convert.ToInt32(this.Quantity.SelectedValue);
+            }
         }
 
         private void ComboAperto_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -509,6 +575,7 @@ namespace BeltsPack.Views
 
             // Calcolo le quantità di output
             CalcoliImpianto calcoliImpianto = new CalcoliImpianto(this.nastro, this.tazza, this._prodotto, this.bordo, this._materiale, this.rullo, this._tamburo, this._motore);
+            this._calcoliImpianto = calcoliImpianto;
 
             // Info nastro
             this.TBLarghUtile.Text = Convert.ToString(this.nastro.LarghezzaUtile);
@@ -540,6 +607,34 @@ namespace BeltsPack.Views
             this.TBFattSicurezza.Text = Convert.ToString(calcoliImpianto.Sfactor);
             this.TBFattSicPisteLat.Text = Convert.ToString(calcoliImpianto.Sfactor_pista);
 
+            // Metto un controllo visivo sui fattori di sicurezza - Fattore di sicurezza
+            if (calcoliImpianto.Sfactor >= 10)
+            {
+                this.TBFattSicurezza.Background = Brushes.LightGreen;
+            }
+            else if (calcoliImpianto.Sfactor < 8)
+            {
+                this.TBFattSicurezza.Background = Brushes.Red;
+            }
+            else
+            {
+                this.TBFattSicurezza.Background = Brushes.Yellow;
+            }
+
+            // Fattore di sicurezza piste laterali
+            if (calcoliImpianto.Sfactor_pista >= 10)
+            {
+                this.TBFattSicPisteLat.Background = Brushes.LightGreen;
+            }
+            else if (calcoliImpianto.Sfactor_pista < 8)
+            {
+                this.TBFattSicPisteLat.Background = Brushes.Red;
+            }
+            else
+            {
+                this.TBFattSicPisteLat.Background = Brushes.Yellow;
+            }
+
             // Potenze
             this.TBTailTakeUp.Text = Convert.ToString(calcoliImpianto.TakeUpTail);
             this.TBPotRichiesta.Text = Convert.ToString(calcoliImpianto.Pa);
@@ -550,218 +645,73 @@ namespace BeltsPack.Views
             this.TBMinDiamDeflection.Text = Convert.ToString(this.bordo.MinWheelDiam);
             this.TBMinPulleyDiam.Text = Convert.ToString(this.bordo.MinPulleyDiam);
         }
-
-        private async void TBVelNastro_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBVelNastro.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-
-            if (double.TryParse(this.TBVelNastro.Text, out double _))
-            {
-                this.nastro.speed = Convert.ToDouble(this.TBVelNastro.Text);
-            }
-            else if (this.TBVelNastro.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
-
-        private async void TBMaxslope_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBMaxslope.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-
-            if (int.TryParse(this.TBMaxslope.Text, out int _))
-            {
-                this.nastro.inclinazione = Convert.ToInt32(this.TBMaxslope.Text);
-            }
-            else if (this.TBMaxslope.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
-
-        private async void TBCentreDist_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBCentreDist.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-
-            if (double.TryParse(this.TBCentreDist.Text, out double _))
-            {
-                this.nastro.centerDistance = Convert.ToDouble(this.TBCentreDist.Text);
-            }
-            else if (this.TBCentreDist.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
-
-        private async void TBElevazione_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBElevazione.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-            if (double.TryParse(this.TBElevazione.Text, out double _))
-            {
-                this.nastro.elevazione = Convert.ToDouble(this.TBElevazione.Text);
-            }
-            else if (this.TBElevazione.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
-
-        private void ComboLarghEdge_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.ComboLarghEdge.SelectedValue != null)
-            {
-                // Assegno il trattamento del nastro
-                this.nastro.edgetype = Convert.ToInt32(this.ComboLarghEdge.SelectedValue);
-            }
-        }
-
-        private void TipImpianto_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.ComboLarghEdge.SelectedValue != null)
-            {
-                // Assegno il trattamento del nastro
-                this.nastro.forma = this.TipImpianto.SelectedValue.ToString();
-            }
-        }
-
-        private async void TBMaterialDensity_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBMaterialDensity.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-            if (double.TryParse(this.TBMaterialDensity.Text, out double _))
-            {
-                this._materiale.density = Convert.ToDouble(this.TBMaterialDensity.Text);
-            }
-            else if (this.TBMaterialDensity.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
-
-        private async void TBFillingFactor_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBFillingFactor.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-            if (double.TryParse(this.TBFillingFactor.Text, out double _))
-            {
-                this._materiale.fillFactor = Convert.ToDouble(this.TBFillingFactor.Text);
-            }
-            else if (this.TBFillingFactor.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
-
-        private void ComboAngCarico_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.ComboAngCarico.SelectedValue != null)
-            {
-                // Assegno il trattamento del nastro
-                this._materiale.surchAngle = Convert.ToInt32(this.ComboAngCarico.SelectedValue);
-            }
-        }
-
-        private async void TBCapacita_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Controllo sul separatore dei decimali
-            if (this.TBCapacita.Text.Contains("."))
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Devi utilizzare la virgola come separatore dei decimali", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-            if (double.TryParse(this.TBCapacita.Text, out double _))
-            {
-                this.nastro.capacityRequired = Convert.ToDouble(this.TBCapacita.Text);
-            }
-            else if (this.TBCapacita.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
+       
         private void TBCMaterialType_TextChanged(object sender, TextChangedEventArgs e)
         {
             this._materiale.Nome = this.TBCMaterialType.Text;
         }
-        private void Salva_Click(object sender, RoutedEventArgs e)
+        private async void Salva_Click(object sender, RoutedEventArgs e)
         {
-            // Crea il wrapper del database
-            DatabaseSQL database = DatabaseSQL.CreateDefault();
+            // Prendo tutti i dati di input con binding
+            this.nastro.capacityRequired = this.capacityReq;
+            this._materiale.surchAngle = this.surAngle;
+            this._materiale.fillFactor = this.fillingFactor;
+            this._materiale.density = this.matDens;
+            this.nastro.forma = this.formaNastro;
+            this.nastro.edgetype = this.edgeType;
+            this.nastro.elevazione = this.elevNastro;
+            this.nastro.centerDistance = this.centDist;
+            this.nastro.inclinazione = this.inclNastro;
+            this.nastro.speed = this.velNastro;
 
-            // Verifico che il numero di offerta non sia presente a database
-            this._prodotto.VersioneCodice = 1;
-
-            SqlDataReader reader;
-            SqlCommand creaComando = database.CreateDbInputCalcoliCommand();
-            reader = creaComando.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                var temp = reader.GetValue(reader.GetOrdinal("Codice"));
-                int temp1 = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Versione")));
-                if (temp.ToString() == this._prodotto.Codice.ToString() && Convert.ToInt32(temp1) >= this._prodotto.VersioneCodice)
+                // Crea il wrapper del database
+                DatabaseSQL database = DatabaseSQL.CreateDefault();
+
+                // Verifico che il numero di offerta non sia presente a database
+                this._prodotto.VersioneCodice = 1;
+
+                SqlDataReader reader;
+                SqlCommand creaComando = database.CreateDbInputCalcoliCommand();
+                reader = creaComando.ExecuteReader();
+                while (reader.Read())
                 {
-                    this._prodotto.VersioneCodice = temp1 + 1;
+                    var temp = reader.GetValue(reader.GetOrdinal("Codice"));
+                    int temp1 = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Versione")));
+                    if (temp.ToString() == this._prodotto.Codice.ToString() + "_" + this._prodotto.VersioneCodice && Convert.ToInt32(temp1) >= this._prodotto.VersioneCodice)
+                    {
+                        this._prodotto.VersioneCodice = temp1 + 1;
+                    }
                 }
+
+                // Chiude la connessione
+                database.CloseConnection();
+
+                // Apre la connessione
+                database.OpenConnection();
+
+                // Scrivo le informazioni di input del nastro nel db totale
+                SqlCommand sqlCommand = database.UpdateDbCommandInputDariNastroCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
+                sqlCommand.ExecuteNonQuery();
+
+                // Crea il comando di scrittura sul db di input
+                sqlCommand = database.UpdateDbCommandInputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
+                sqlCommand.ExecuteNonQuery();
+
+                // Crea il comando di scrittura sul db di output
+                sqlCommand = database.UpdateDbCommandOutputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale, this._calcoliImpianto, this._motore);
+                sqlCommand.ExecuteNonQuery();
+
+                // Avviso che la configurazione è stata salvata con successo
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Configurazione salvata correttamente", ConfirmDialog.ButtonConf.OK_ONLY);
             }
-
-            // Chiude la connessione
-            database.CloseConnection();
-
-            // Apre la connessione
-            database.OpenConnection();
-
-            // Crea il comando di scrittura
-            SqlCommand sqlCommand = database.UpdateDbCommandInputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
-            sqlCommand.ExecuteNonQuery();
-
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             // Ritorna va al database
             //this.NavigationService.Navigate(new DatabaseView());
-        }
-
-        private void Imballo_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

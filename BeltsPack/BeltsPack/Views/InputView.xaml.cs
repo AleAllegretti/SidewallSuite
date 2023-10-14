@@ -10,7 +10,6 @@ using System.Reflection;
 using System.IO;
 using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace BeltsPack.Views
 {
@@ -93,8 +92,8 @@ namespace BeltsPack.Views
             // Riempio il combo con tutte le tipologie di nastro
             this.CBTipologiaNastro.ItemsSource = this.nastro.ListaTiplogieNastro().ToArray();
             this.CBTipologiaNastro.SelectedItem = this.prodotto.TipoNastro;
-            
-            this.ComboClasseNastro.SelectedItem = this.prodotto.ClasseNastro;
+            this.ComboClasseNastro.ItemsSource = this.nastro.ListaClassiNastro(this.nastro.Tipo).ToArray();
+            this.ComboClasseNastro.SelectedItem = this.prodotto.ClasseNastro.ToString();
             this.baseBordo = this.prodotto.LarghezzaBordo;
             this.pistaLaterale = this.prodotto.PistaLaterale;
             this.presenzaFix = this.prodotto.PresenzaFix;

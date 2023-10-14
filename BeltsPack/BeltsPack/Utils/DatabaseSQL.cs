@@ -11,6 +11,7 @@ using System.Data;
 using System.Xml;
 using BeltsPack.Views.Dialogs;
 using System.Globalization;
+using System.Reflection;
 
 namespace BeltsPack.Utils
 {
@@ -43,6 +44,8 @@ namespace BeltsPack.Utils
         private Prodotto _prodotto;
         private Imballi _imballi;
         private Materiale _materiale;
+        private CalcoliImpianto _calcoliImpianto;
+        private Motore _motore;
 
         // Properties
         private string ConnectionString { get; }
@@ -474,7 +477,7 @@ namespace BeltsPack.Utils
 
         public SqlCommand CreateDbInputCalcoliCommand()
         {
-            return this.CreateCommand("SELECT Codice,Versione FROM " + TABELLA_CALCOLI_INPUT );
+            return this.CreateCommand("SELECT Codice,Versione, Data FROM " + TABELLA_CALCOLI_INPUT + " Order by Data Asc" );
         }
         public SqlCommand CreateDbProduzioneCommand(string stato)
         {
@@ -649,6 +652,41 @@ namespace BeltsPack.Utils
 
         }
 
+        public SqlCommand UpdateDbCommandInputDariNastroCalcoli(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Materiale materiale)
+        {
+            // Oggetti
+            this._nastro = nastro;
+            this._bordo = bordo;
+            this._tazza = tazza;
+            this._prodotto = prodotto;
+            this._materiale = materiale;
+
+            return this.CreateCommand("INSERT INTO ImballiTotali(Codice, Cliente, Data, LunghezzaNastro, LarghezzaNastro, AltezzaBordo, AltezzaTazze, ApertoChiuso," +
+                "TipoNastro, ClasseNastro, PassoTazze, PistaLaterale, BaseBordo, FormaTazze, PresenzaFix, PresenzaBlinkers," +
+                "TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty) VALUES" +
+                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice +
+                "','" + prodotto.Cliente.ToString() +
+                "','" + DateTime.Now.Date.ToString("d/M/yyyy") +
+                "'," + nastro.Lunghezza +
+                "," + nastro.Larghezza +
+                "," + bordo.Altezza +
+                "," + tazza.Altezza +
+                ",'" + nastro.TipologiaNastro() +
+                "','" + nastro.Tipo +
+                "'," + nastro.Classe +
+                "," + tazza.Passo +
+                "," + prodotto.PistaLaterale +
+                "," + bordo.Larghezza +
+                ",'" + tazza.Forma +
+                "','" + prodotto.PresenzaFix +
+                "','" + prodotto.PresenzaBlinkers +
+                "','" + nastro.Trattamento +
+                "','" + bordo.Trattamento +
+                "','" + tazza.Trattamento +
+                "','" + tazza.Telata +
+                "'," + prodotto.Qty + ")");
+
+        }
         public SqlCommand UpdateDbCommandInputCalcoli(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Materiale materiale)
         {
             // Oggetti
@@ -659,11 +697,42 @@ namespace BeltsPack.Utils
             this._materiale = materiale;
 
             return this.CreateCommand("INSERT INTO InputCalcoli(Codice, Capacity, FillingFactor, VelocitaNastro, PendenzaMax, Elevazione, DistDalCentro, NomeMateriale, " +
-                "DensitaMateriale, AngoloCarico, DimensioneSingolo, Versione) VALUES" +
-                "('" + prodotto.Codice + "'," + nastro.capacityRequired + "," + materiale.fillFactor.ToString().Replace(",",".") + "," + nastro.speed.ToString().Replace(",", ".") + "," + nastro.inclinazione + "," + nastro.elevazione.ToString().Replace(",", ".") +
-                "," + nastro.centerDistance.ToString().Replace(",", ".") + ",'" + materiale.Nome + "'," + materiale.density.ToString().Replace(",", ".") + "," +
-                 materiale.surchAngle.ToString().Replace(",", ".") + "," + materiale.DimSingolo.ToString().Replace(",", ".") + "," + this._prodotto.VersioneCodice + ")");
+                "DensitaMateriale, AngoloCarico, DimensioneSingolo, Versione, Data, Forma, EdgeType) VALUES" +
+                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice + "'," + nastro.capacityRequired + "," + materiale.fillFactor + "," + nastro.speed + "," + nastro.inclinazione + "," + nastro.elevazione +
+                "," + nastro.centerDistance + ",'" + materiale.Nome + "'," + materiale.density + "," +
+                 materiale.surchAngle + "," + materiale.DimSingolo + "," + this._prodotto.VersioneCodice 
+                 + ",'" + DateTime.Now.ToString() + "','" + nastro.forma + "'," + nastro.edgetype + ")");
 
+        }
+        public SqlCommand UpdateDbCommandOutputCalcoli(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Materiale materiale, CalcoliImpianto calcoliImpianto, Motore motore)
+        {
+            // Oggetti
+            this._nastro = nastro;
+            this._bordo = bordo;
+            this._tazza = tazza;
+            this._prodotto = prodotto;
+            this._materiale = materiale;
+            this._motore = motore;
+            this._calcoliImpianto = calcoliImpianto;
+
+            return this.CreateCommand("INSERT INTO OutputCalcoli(Codice, CapacitaTonOra, LarghezzaUtile, PesoNastro, MaxTensPulley, MaxTensLaterale, FattSicurezza, FattSicurezzaPiste, " +
+                "TailTakeUp, PotRichiesta, PotSuggerita, MinPulleyDiameter, MinDeflectionWheel, MinWheelWidth, Versione, Data) VALUES" +
+                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice + "'," + this._calcoliImpianto.Qteff + "," + this._nastro.LarghezzaUtile + "," + nastro.PesoTotale + "," + this._calcoliImpianto.MaxWorkTens
+                + "," + this._calcoliImpianto.MaxWorkTensLat +
+                "," + this._calcoliImpianto.Sfactor + "," + this._calcoliImpianto.Sfactor_pista + "," + calcoliImpianto.TakeUpTail + "," +
+                 calcoliImpianto.Pa + "," + motore.motorPower + "," + this._bordo.MinPulleyDiam
+                 +"," + this._bordo.MinWheelDiam + "," + this._bordo.MinWheelWidth + "," + this._prodotto.VersioneCodice + ",'" + DateTime.Now.ToString() + "')");
+
+        }
+        public SqlCommand CreateCalcoliInputCommand()
+        {
+            return this.CreateCommand("SELECT InputCalcoli.Codice, ImballiTotali.Cliente, ImballiTotali.Data, ImballiTotali.LunghezzaNastro, ImballiTotali.LarghezzaNastro, ImballiTotali.AltezzaBordo, ImballiTotali.AltezzaTazze, ImballiTotali.ApertoChiuso,ImballiTotali.TipoNastro, " +
+                "ImballiTotali.ClasseNastro, ImballiTotali.PassoTazze, ImballiTotali.BaseBordo, ImballiTotali.FormaTazze, ImballiTotali.PresenzaFix, ImballiTotali.PresenzaBlinkers, ImballiTotali.TrattamentoNastro, ImballiTotali.TrattamentoBordo," +
+                "ImballiTotali.TrattamentoTazze, ImballiTotali.TazzeTelate, ImballiTotali.Qty, ImballiTotali.PistaLaterale, " +
+                "InputCalcoli.Capacity,InputCalcoli.FillingFactor,InputCalcoli.VelocitaNastro, InputCalcoli.PendenzaMax, InputCalcoli.Elevazione, InputCalcoli.DistDalCentro,InputCalcoli.NomeMateriale," +
+                "InputCalcoli.DensitaMateriale, InputCalcoli.AngoloCarico, InputCalcoli.Forma, InputCalcoli.EdgeType," +
+                "InputCalcoli.DimensioneSingolo, InputCalcoli.Versione, InputCalcoli.Forma FROM " + TABELLA_CALCOLI_INPUT +
+                " Inner join " + TABELLA_IMBALLI_TOTALI + " on InputCalcoli.Codice = ImballiTotali.Codice");
         }
         public SqlCommand DeleteRowImpostazioni(int ID, string nomeTabella)
         {
