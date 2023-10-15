@@ -390,23 +390,10 @@ namespace BeltsPack.Views
             prodotto.Codice = this.TBCodiceArtiolo.Text;
         }
 
-        private void CalcolaImballo()
+        public void CalcolaImballo()
         {
             // Calcola le dimensioni dell'imballo
-            Imballi imballiBobina = new Imballi(nastro, bordo, tazza, prodotto, cassaInFerro);
-
-            // Naviga nella finestra di output
-            if (imballiBobina.Tipologia.ToString() == TipologiaImballo.Pedana.ToString())
-            {
-               
-                // Navigo nella schermata di output
-                this.NavigationService.Navigate(new OutputView(nastro, imballiBobina, this, prodotto, this.bordo, this.tazza));
-            }
-            else if (imballiBobina.ImballoCalcolabile == true)
-            {
-                // Navigo nella schermata degli accessori in ferro              
-                this.NavigationService.Navigate(new AccessoriCasseFerro(imballiBobina, this, this.nastro, cassaInFerro, bordo, prodotto, tazza));
-            }
+            
         }
 
         private async void TipologiaNastro_DropDownOpened(object sender, EventArgs e)
@@ -525,7 +512,20 @@ namespace BeltsPack.Views
                 this.prodotto.SetPesoTotale(this.nastro.PesoTotale, this.tazza.PesoTotale, this.bordo.PesoTotale, this.prodotto.Tipologia);
 
                 // Calcolo le dimensioni dell'imballo
-                this.CalcolaImballo();
+                Imballi imballiBobina = new Imballi(this.nastro, bordo, tazza, prodotto, this.cassaInFerro);
+
+                // Naviga nella finestra di output
+                if (imballiBobina.Tipologia.ToString() == TipologiaImballo.Pedana.ToString())
+                {
+
+                    // Navigo nella schermata di output
+                    this.NavigationService.Navigate(new OutputView(nastro, imballiBobina, prodotto, this.bordo, this.tazza));
+                }
+                else if (imballiBobina.ImballoCalcolabile == true)
+                {
+                    // Navigo nella schermata degli accessori in ferro              
+                    this.NavigationService.Navigate(new AccessoriCasseFerro(imballiBobina, this.nastro, cassaInFerro, bordo, prodotto, tazza));
+                }
             }
         }
 

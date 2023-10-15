@@ -131,5 +131,52 @@ namespace BeltsPack.Views
                 await DialogsHelper.ShowMessageDialog("Devi prima selezionare l'imballo da copiare.");
             }
         }
+
+        private async void EliminaRiga_Click(object sender, RoutedEventArgs e)
+        {
+            string cellValue;
+            int versionevalue;
+            try
+            {
+                var selectedItem = this.DatabaseTotaleCalcoli.SelectedItems[0];
+                var dataRow = (selectedItem as DataRowView).Row;
+                cellValue = dataRow["Codice"].ToString();
+                versionevalue = Convert.ToInt32(dataRow["Versione"]);
+            }
+            catch
+            {
+                await DialogsHelper.ShowMessageDialog("Devi prima selezionare l'imballo da eliminare");
+                return;
+            }
+
+            var confirmed = await DialogsHelper.ShowConfirmDialog("Sei sicuro di voler cancellare questo imballo?", ConfirmDialog.ButtonConf.YES_NO);
+
+            // Create the Database wrapper
+            DatabaseSQL databaseSQL = DatabaseSQL.CreateDefault();
+
+            // Creates the command to retrieve this check
+            SqlCommand createCommand = databaseSQL.DeleteRowDBTotaleCommand(cellValue, versionevalue);
+            createCommand.ExecuteNonQuery();
+
+            createCommand = databaseSQL.DeleteRowDBInputCommand(cellValue, versionevalue);
+            createCommand.ExecuteNonQuery();
+
+            createCommand = databaseSQL.DeleteRowDBOutputCommand(cellValue, versionevalue);
+            createCommand.ExecuteNonQuery();
+
+            //  The article's been eliminated correctly
+            await DialogsHelper.ShowMessageDialog("Imballo eliminato correttamente");
+
+            // Comando per mostrare la tabella con tutti gli imballi
+            createCommand = databaseSQL.CreateCalcoliInputCommand();
+
+            // Riempie la tabella
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(createCommand);
+            DataTable dataTable = new DataTable();
+            dataAdapter.Fill(dataTable);
+
+            // Popola la tabella
+            this.DatabaseTotaleCalcoli.DataContext = dataTable;
+        }
     }
 }

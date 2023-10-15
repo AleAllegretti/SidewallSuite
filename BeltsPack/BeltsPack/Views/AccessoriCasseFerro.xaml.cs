@@ -33,10 +33,9 @@ namespace BeltsPack.Views
         private Tazza _tazza;
         private Prodotto _prodotto;
 
-        public AccessoriCasseFerro(Imballi imballi, InputView inputView, Nastro nastro, CassaInFerro cassaInFerro, Bordo bordo, Prodotto prodotto, Tazza tazza)
+        public AccessoriCasseFerro(Imballi imballi, Nastro nastro, CassaInFerro cassaInFerro, Bordo bordo, Prodotto prodotto, Tazza tazza)
         {
             this._nastro = nastro;
-            this._inputView = inputView;
             this._tazza = tazza;
             this._bordo = bordo;
             this._imballi = imballi;

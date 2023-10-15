@@ -168,6 +168,8 @@ namespace BeltsPack
         {
             // Navigo al db dei calcoli
             this._mainFrame.NavigationService.Navigate(new DatabaseCalcoliView());
+
+
         }
     }
 }

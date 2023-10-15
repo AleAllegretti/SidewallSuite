@@ -696,13 +696,29 @@ namespace BeltsPack.Utils
             this._prodotto = prodotto;
             this._materiale = materiale;
 
-            return this.CreateCommand("INSERT INTO InputCalcoli(Codice, Capacity, FillingFactor, VelocitaNastro, PendenzaMax, Elevazione, DistDalCentro, NomeMateriale, " +
+            var cmd = this.CreateCommand("INSERT INTO InputCalcoli(Codice, Capacity, FillingFactor, VelocitaNastro, PendenzaMax, Elevazione, DistDalCentro, NomeMateriale, " +
                 "DensitaMateriale, AngoloCarico, DimensioneSingolo, Versione, Data, Forma, EdgeType) VALUES" +
-                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice + "'," + nastro.capacityRequired + "," + materiale.fillFactor + "," + nastro.speed + "," + nastro.inclinazione + "," + nastro.elevazione +
-                "," + nastro.centerDistance + ",'" + materiale.Nome + "'," + materiale.density + "," +
-                 materiale.surchAngle + "," + materiale.DimSingolo + "," + this._prodotto.VersioneCodice 
+                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice +
+                "', @Capacity" +
+                ",@FillingFactor" +
+                ",@VelocitaNastro," +
+                nastro.inclinazione + "," +
+                "@Elevazione" +
+                ",@DistDalCentro,'" + materiale.Nome +
+                "',@DensitaMateriale," +
+                 materiale.surchAngle +
+                 ",@DimensioneSingolo," +
+                 this._prodotto.VersioneCodice 
                  + ",'" + DateTime.Now.ToString() + "','" + nastro.forma + "'," + nastro.edgetype + ")");
 
+            cmd.Parameters.AddWithValue("@FillingFactor", materiale.fillFactor);
+            cmd.Parameters.AddWithValue("@VelocitaNastro", nastro.speed);
+            cmd.Parameters.AddWithValue("@Capacity", nastro.capacityRequired);
+            cmd.Parameters.AddWithValue("@Elevazione", nastro.elevazione);
+            cmd.Parameters.AddWithValue("@DistDalCentro", nastro.centerDistance);
+            cmd.Parameters.AddWithValue("@DensitaMateriale", materiale.density);
+            cmd.Parameters.AddWithValue("@DimensioneSingolo", materiale.DimSingolo);
+            return cmd;
         }
         public SqlCommand UpdateDbCommandOutputCalcoli(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Materiale materiale, CalcoliImpianto calcoliImpianto, Motore motore)
         {
@@ -715,14 +731,23 @@ namespace BeltsPack.Utils
             this._motore = motore;
             this._calcoliImpianto = calcoliImpianto;
 
-            return this.CreateCommand("INSERT INTO OutputCalcoli(Codice, CapacitaTonOra, LarghezzaUtile, PesoNastro, MaxTensPulley, MaxTensLaterale, FattSicurezza, FattSicurezzaPiste, " +
+            var cmd = this.CreateCommand("INSERT INTO OutputCalcoli(Codice, CapacitaTonOra, LarghezzaUtile, PesoNastro, MaxTensPulley, MaxTensLaterale, FattSicurezza, FattSicurezzaPiste, " +
                 "TailTakeUp, PotRichiesta, PotSuggerita, MinPulleyDiameter, MinDeflectionWheel, MinWheelWidth, Versione, Data) VALUES" +
-                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice + "'," + this._calcoliImpianto.Qteff + "," + this._nastro.LarghezzaUtile + "," + nastro.PesoTotale + "," + this._calcoliImpianto.MaxWorkTens
+                "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice + "', @CapacitaTonOra," + this._nastro.LarghezzaUtile +
+                ", @PesoNastro" +
+               ", @MaxTensPulley"
                 + "," + this._calcoliImpianto.MaxWorkTensLat +
-                "," + this._calcoliImpianto.Sfactor + "," + this._calcoliImpianto.Sfactor_pista + "," + calcoliImpianto.TakeUpTail + "," +
-                 calcoliImpianto.Pa + "," + motore.motorPower + "," + this._bordo.MinPulleyDiam
+                ", @FattSicurezza, @FattSicurezzaPiste, @TailTakeUp, @PotRichiesta," + motore.motorPower + "," + this._bordo.MinPulleyDiam
                  +"," + this._bordo.MinWheelDiam + "," + this._bordo.MinWheelWidth + "," + this._prodotto.VersioneCodice + ",'" + DateTime.Now.ToString() + "')");
-
+            
+            cmd.Parameters.AddWithValue("@CapacitaTonOra", this._calcoliImpianto.Qteff);
+            cmd.Parameters.AddWithValue("@FattSicurezzaPiste", this._calcoliImpianto.Sfactor_pista);
+            cmd.Parameters.AddWithValue("@PesoNastro", nastro.PesoTotale);
+            cmd.Parameters.AddWithValue("@MaxTensPulley", this._calcoliImpianto.MaxWorkTens);
+            cmd.Parameters.AddWithValue("@FattSicurezza", this._calcoliImpianto.Sfactor);
+            cmd.Parameters.AddWithValue("@TailTakeUp", calcoliImpianto.TakeUpTail);
+            cmd.Parameters.AddWithValue("@PotRichiesta", calcoliImpianto.Pa);
+            return cmd;
         }
         public SqlCommand CreateCalcoliInputCommand()
         {
@@ -747,6 +772,28 @@ namespace BeltsPack.Utils
         public SqlCommand DeleteRowDBTotaleCommand(string numOfferta, int verImballo)
         {
             var cmd = this.CreateCommand("DELETE from " + TABELLA_IMBALLI_TOTALI + " Where Codice = @Codice AND Versione = @Versione");
+            // Creates the command to retrieve all the checks 
+            // you must use the row "Id" (because you can have multiple checks for the same articleCode)
+            cmd.Parameters.AddWithValue("@Codice", numOfferta);
+            cmd.Parameters.AddWithValue("@Versione", verImballo);
+
+            return cmd;
+        }
+
+        public SqlCommand DeleteRowDBInputCommand(string numOfferta, int verImballo)
+        {
+            var cmd = this.CreateCommand("DELETE from " + TABELLA_CALCOLI_INPUT + " Where Codice = @Codice AND Versione = @Versione");
+            // Creates the command to retrieve all the checks 
+            // you must use the row "Id" (because you can have multiple checks for the same articleCode)
+            cmd.Parameters.AddWithValue("@Codice", numOfferta);
+            cmd.Parameters.AddWithValue("@Versione", verImballo);
+
+            return cmd;
+        }
+
+        public SqlCommand DeleteRowDBOutputCommand(string numOfferta, int verImballo)
+        {
+            var cmd = this.CreateCommand("DELETE from " + TABELLA_CALCOLI_OUTPUT + " Where Codice = @Codice AND Versione = @Versione");
             // Creates the command to retrieve all the checks 
             // you must use the row "Id" (because you can have multiple checks for the same articleCode)
             cmd.Parameters.AddWithValue("@Codice", numOfferta);

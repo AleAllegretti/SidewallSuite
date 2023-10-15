@@ -28,14 +28,13 @@ namespace BeltsPack.Views
         private Bordo _bordo;
         private Tazza _tazza;
         private CassaInFerro _cassaInFerro;
-        public OutputView(Nastro nastro, Imballi imballi, InputView inputView, Prodotto prodotto, Bordo bordo, Tazza tazza)
+        public OutputView(Nastro nastro, Imballi imballi, Prodotto prodotto, Bordo bordo, Tazza tazza)
         {
             this._bordo = bordo;
             this._tazza = tazza;
             this._prodotto = prodotto;
             this._nastro = nastro;
             this._imballi = imballi;
-            this._inputView = inputView;
 
             InitializeComponent();
 

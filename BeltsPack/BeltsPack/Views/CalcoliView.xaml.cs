@@ -28,7 +28,7 @@ namespace BeltsPack.Views
         private Motore _motore;
         private CalcoliImpianto _calcoliImpianto;
         private Imballi _imballi;
-        private CassaInFerro _cassainferro;
+        CassaInFerro _cassaInFerro = new CassaInFerro();
 
         public string tazzeTelate { get; set; }
         public string trattamentoNastro { get; set; }
@@ -73,6 +73,8 @@ namespace BeltsPack.Views
         public double edgeType { get; set; }
         public CalcoliView(Prodotto prodotto, Nastro nastro, Tazza tazza, Bordo bordo, Materiale materiale, Rullo rullo, Tamburo tamburo, Motore motore)
         {
+           
+          
             this._prodotto = prodotto;
             this.nastro = nastro;
             this.tazza = tazza;
@@ -109,7 +111,7 @@ namespace BeltsPack.Views
             this.capacityReq = this.nastro.capacityRequired;
             this.fillingFactor = this._materiale.fillFactor;
             this.velNastro = this.nastro.speed;
-            this.formaNastro = this.nastro.forma.ToString();
+            this.formaNastro = this.nastro.forma;
             this.formaNastro = this.nastro.forma;
             this.inclNastro = this.nastro.inclinazione;
             this.elevNastro = this.nastro.elevazione;
@@ -550,6 +552,30 @@ namespace BeltsPack.Views
 
         private void Calcola_Click(object sender, RoutedEventArgs e)
         {
+            // Prendo tutti i dati di input con binding
+            this.nastro.capacityRequired = this.capacityReq;
+            this._materiale.surchAngle = this.surAngle;
+            this._materiale.fillFactor = this.fillingFactor;
+            this._materiale.density = this.matDens;
+            this.nastro.forma = this.formaNastro;
+            this.nastro.edgetype = this.edgeType;
+            this.nastro.elevazione = this.elevNastro;
+            this.nastro.centerDistance = this.centDist;
+            this.nastro.inclinazione = this.inclNastro;
+            this.nastro.speed = this.velNastro;
+            this._materiale.Nome = this.nomeMat;
+            this._materiale.DimSingolo = this.dimSingolo;
+            if (presenzaFix == "Si")
+            {
+                this._prodotto.PassoTazze = this.passoFix;
+                this.tazza.Passo = this.passoFix;
+            }
+            else
+            {
+                this._prodotto.PassoTazze = this.passonoFix;
+                this.tazza.Passo  = this.passonoFix;
+            }
+
             // Calcolo la larghezza utile del nastro
             this.nastro.SetLarghezzautile(this.bordo.Larghezza, this._prodotto.PistaLaterale);
             this.nastro.SetLengthCoeff();
@@ -663,55 +689,140 @@ namespace BeltsPack.Views
             this.nastro.centerDistance = this.centDist;
             this.nastro.inclinazione = this.inclNastro;
             this.nastro.speed = this.velNastro;
+            this._materiale.Nome = this.nomeMat;
+            this._materiale.DimSingolo = this.dimSingolo;
 
-            try
+            if (presenzaFix == "Si")
             {
-                // Crea il wrapper del database
-                DatabaseSQL database = DatabaseSQL.CreateDefault();
+                this._prodotto.PassoTazze = this.passoFix;
+                this.tazza.Passo = this.passoFix;
+            }
+            else
+            {
+                this._prodotto.PassoTazze = this.passonoFix;
+                this.tazza.Passo = this.passonoFix;
+            }
 
-                // Verifico che il numero di offerta non sia presente a database
-                this._prodotto.VersioneCodice = 1;
-
-                SqlDataReader reader;
-                SqlCommand creaComando = database.CreateDbInputCalcoliCommand();
-                reader = creaComando.ExecuteReader();
-                while (reader.Read())
+            if (this.TBCapacityMcubi.Text != "")
+            {
+                try
                 {
-                    var temp = reader.GetValue(reader.GetOrdinal("Codice"));
-                    int temp1 = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Versione")));
-                    if (temp.ToString() == this._prodotto.Codice.ToString() + "_" + this._prodotto.VersioneCodice && Convert.ToInt32(temp1) >= this._prodotto.VersioneCodice)
+                    // Crea il wrapper del database
+                    DatabaseSQL database = DatabaseSQL.CreateDefault();
+
+                    // Verifico che il numero di offerta non sia presente a database
+                    this._prodotto.VersioneCodice = 1;
+
+                    SqlDataReader reader;
+                    SqlCommand creaComando = database.CreateDbInputCalcoliCommand();
+                    reader = creaComando.ExecuteReader();
+                    while (reader.Read())
                     {
-                        this._prodotto.VersioneCodice = temp1 + 1;
+                        var temp = reader.GetValue(reader.GetOrdinal("Codice"));
+                        int temp1 = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Versione")));
+                        if (temp.ToString() == this._prodotto.Codice.ToString() + "_" + this._prodotto.VersioneCodice && Convert.ToInt32(temp1) >= this._prodotto.VersioneCodice)
+                        {
+                            this._prodotto.VersioneCodice = temp1 + 1;
+                        }
                     }
+
+                    // Chiude la connessione
+                    database.CloseConnection();
+
+                    // Apre la connessione
+                    database.OpenConnection();
+
+                    // Scrivo le informazioni di input del nastro nel db totale
+                    SqlCommand sqlCommand = database.UpdateDbCommandInputDariNastroCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
+                    sqlCommand.ExecuteNonQuery();
+
+                    // Crea il comando di scrittura sul db di input
+                    sqlCommand = database.UpdateDbCommandInputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
+                    sqlCommand.ExecuteNonQuery();
+
+                    // Crea il comando di scrittura sul db di output
+                    sqlCommand = database.UpdateDbCommandOutputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale, this._calcoliImpianto, this._motore);
+                    sqlCommand.ExecuteNonQuery();
+
+                    // Avviso che la configurazione è stata salvata con successo
+                    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Configurazione salvata correttamente", ConfirmDialog.ButtonConf.OK_ONLY);
                 }
-
-                // Chiude la connessione
-                database.CloseConnection();
-
-                // Apre la connessione
-                database.OpenConnection();
-
-                // Scrivo le informazioni di input del nastro nel db totale
-                SqlCommand sqlCommand = database.UpdateDbCommandInputDariNastroCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
-                sqlCommand.ExecuteNonQuery();
-
-                // Crea il comando di scrittura sul db di input
-                sqlCommand = database.UpdateDbCommandInputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale);
-                sqlCommand.ExecuteNonQuery();
-
-                // Crea il comando di scrittura sul db di output
-                sqlCommand = database.UpdateDbCommandOutputCalcoli(this.nastro, this.bordo, this.tazza, this._prodotto, this._materiale, this._calcoliImpianto, this._motore);
-                sqlCommand.ExecuteNonQuery();
-
-                // Avviso che la configurazione è stata salvata con successo
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Configurazione salvata correttamente", ConfirmDialog.ButtonConf.OK_ONLY);
+                catch (System.Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
-            catch (System.Exception ex)
+            else
             {
-                System.Windows.MessageBox.Show(ex.Message, "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Prima di salvare il calcolo, assicurati di aver calcolato i dati di output.", ConfirmDialog.ButtonConf.OK_ONLY);
             }
-            // Ritorna va al database
-            //this.NavigationService.Navigate(new DatabaseView());
+        }
+
+        private async void Imballo_Click(object sender, RoutedEventArgs e)
+        {
+            // Ci dice se il form è stato completato
+            bool formfilled = false;
+
+            if (nastro.Lunghezza == 0 | nastro.Larghezza == 0 | ComboAperto.SelectedItem == null | ComboAltezzaBordi.SelectedItem == null |
+                ComboAltezzaTazze.SelectedItem == null)
+            {
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati che tutti i campi siano stati riempiti", ConfirmDialog.ButtonConf.OK_ONLY);
+                formfilled = false;
+            }
+            else
+            {
+                formfilled = true;
+            }
+
+            if (formfilled == true)
+            {
+                // Larghezza utile
+                this.nastro.SetLarghezzautile(this.bordo.Larghezza, this._prodotto.PistaLaterale);
+                // Calcolo il peso del nastro base
+                this.nastro.SetPeso();
+                // Determino i dettagli del cliente
+                this._prodotto.SetDettagliCliente();
+
+                    // Calcolo il numero e di tazze totali
+                this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo);
+                // Lunghezza delle tazze
+                this.tazza.SetLunghezzaTotale(this.tazza.Lunghezza);
+                // Caratteristiche
+                try
+                {
+                    this.tazza.CarattersticheTazza();
+                }
+                catch
+                {
+                    System.Windows.MessageBox.Show("Non sono riuscito a determinare tutte le caratteristiche della tazza, quindi alcune grandezze potrebbero essere errate. \nAssicurarsi che il dB sia aggiornato.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                // Peso totale tazze [kg]
+                this.tazza.SetPesoTotale();
+
+                // Lunghezza bordo
+                this.bordo.SetLunghezzaTotaleBordo(this.nastro.Lunghezza, this.nastro.Aperto);
+                // Peso bordo
+                this.bordo.SetPesoTotale();
+
+                // Calcolo il peso totale del nastro finito
+                this._prodotto.SetPesoTotale(this.nastro.PesoTotale, this.tazza.PesoTotale, this.bordo.PesoTotale, "Bordi e tazze");
+
+                // Calcolo le dimensioni dell'imballo
+                Imballi imballiBobina = new Imballi(this.nastro, this.bordo, this.tazza, this._prodotto, this._cassaInFerro);
+
+                // Naviga nella finestra di output
+                if (imballiBobina.Tipologia.ToString() == TipologiaImballo.Pedana.ToString())
+                {
+
+                    // Navigo nella schermata di output
+                    this.NavigationService.Navigate(new OutputView(this.nastro, imballiBobina, this._prodotto, this.bordo, this.tazza));
+                }
+                else if (imballiBobina.ImballoCalcolabile == true)
+                {
+                    // Navigo nella schermata degli accessori in ferro              
+                    this.NavigationService.Navigate(new AccessoriCasseFerro(imballiBobina, this.nastro, this._cassaInFerro, this.bordo, this._prodotto, this.tazza));
+                }
+            }
         }
     }
 }
