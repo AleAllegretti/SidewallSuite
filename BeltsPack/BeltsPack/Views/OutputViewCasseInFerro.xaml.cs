@@ -21,6 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace BeltsPack.Views
 {
@@ -268,12 +269,12 @@ namespace BeltsPack.Views
             reader = creaComando.ExecuteReader();
             while (reader.Read())
             {
-                var temp = reader.GetValue(reader.GetOrdinal("Codice"));
-                int temp1 = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Versione")));
-                if (temp.ToString() == this._prodotto.Codice.ToString() && Convert.ToInt32(temp1) >= this._prodotto.VersioneCodice)
-                {
-                    this._prodotto.VersioneCodice = temp1 + 1;
-                }
+                    var temp = reader.GetValue(reader.GetOrdinal("Codice"));
+                    var temp1 = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("Versione")));
+                    if (temp.ToString() == this._prodotto.Codice.ToString() && Convert.ToInt32(temp1) >= this._prodotto.VersioneCodice)
+                    {
+                        this._prodotto.VersioneCodice = temp1 + 1;
+                    }   
             }
           
             // Chiude la connessione
@@ -342,7 +343,7 @@ namespace BeltsPack.Views
                     if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze")
                     {
                         // Calcolo il numero e di tazze totali
-                        this._tazza.NumeroTazzeTotali(this._nastro.Lunghezza, this._tazza.Passo);
+                        this._tazza.NumeroTazzeTotali(this._nastro.Lunghezza, this._tazza.Passo, this._nastro.Aperto);
 
                         // Lunghezza delle tazze
                         this._tazza.SetLunghezzaTotale(this._nastro.LarghezzaUtile);

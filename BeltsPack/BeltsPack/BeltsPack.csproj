@@ -695,6 +695,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\Pdf\Sidewalls.pdf" />
+    <None Include="Assets\Pdf\Sidewall_Calculations.pdf" />
     <None Include="BeltsPack_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -899,6 +900,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\SQL\15_10_2023_Add_Input_Calcoli.sql" />
+    <Content Include="Assets\SQL\15_10_2023_Add_OutputCalcoli.sql" />
+    <Content Include="Assets\SQL\15_10_2023_Add_Parametri_Calcoli.sql" />
     <Content Include="Assets\SQL\Add_Sigla_Column_On_Tabella_Nastri.sql" />
     <Content Include="Assets\SQL\CreateCategoriesTable.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -32,7 +32,9 @@ namespace BeltsPack.Models
         public double alpha { get; set; }
         // Efficienza puleggia
         public double effPuleggia { get; set; }
-        // Capacità richiesta
+        // Capacità richiesta - ton/h
+        public double capacityRequiredTon { get; set; }
+        // Capacità richiesta - m3/h
         public double capacityRequired { get; set; }
         // Tipo di forma nastro
         public string forma { get; set; }
@@ -339,6 +341,23 @@ namespace BeltsPack.Models
             this.pesoSpecLargh = this.Peso * 1000 / this.Larghezza;
         }
 
+        public void SetLunghezzaDaCalcoli(int wheelDiam, int pulleyDiam, double centDist, string shape, bool aperto)
+        {
+               switch (shape)
+                {
+                    case "S-Shape":
+                        this.Lunghezza = Convert.ToInt32(Math.Round(1.5 * Math.PI * pulleyDiam + Math.PI * wheelDiam  * 0.5 + centDist * 2 * 1000,0));
+                        break;
+
+                    case "L-Shape":
+                        this.Lunghezza = Convert.ToInt32(Math.Round(1.25 * Math.PI * pulleyDiam  * 1.25 + Math.PI * wheelDiam * 0.25 + centDist * 2 * 1000));
+                        break;
+
+                    case "Dritto":
+                        this.Lunghezza = Convert.ToInt32(Math.Round(Math.PI * pulleyDiam + centDist * 2 * 1000));
+                        break;
+                }
+        }
         public void SetLunghezzaTrattodiCarico()
         {
             // Crea il wrapper del database

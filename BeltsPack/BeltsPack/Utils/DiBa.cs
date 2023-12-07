@@ -982,7 +982,7 @@ namespace BeltsPack.Utils
                             this._nastro.NumTele + " " + this._nastro.SpessoreSup + "+" + this._nastro.SpessoreInf + " " + this._nastro.SiglaTrattamento);
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo bordi")
                         {
-                            sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza);
+                            sw.WriteLine("Sidewall: HEF" + this._bordo.Altezza + "/" + this._bordo.Larghezza);
                         }
                         if (this._prodotto.Tipologia == "Bordi e tazze" || this._prodotto.Tipologia == "Solo tazze")
                         {

@@ -68,10 +68,13 @@ namespace TestCasseinFerro
             _nastro.s1 = 0.02;
             _nastro.S2 = 0.03;
             _nastro.capacityRequired = 636;
+            _nastro.Lunghezza = 200000;
+            _nastro.SetLengthCoeff();
+            _nastro.SetCaratterisitche();
+            _nastro.SetPeso();
 
             // CARATTERISTICHE BORDO
             _bordo.Altezza = 280;
-
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE PRODOTTO

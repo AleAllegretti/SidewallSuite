@@ -44,7 +44,7 @@
                 ShowSortNumbers="True" SummaryCalculationMode="OnDemandGroupSummary" 
                 HeaderStyle="{StaticResource headerStyle}" 
                 RowSelectionBrush="Gray" 
-                SelectionMode="Single" SelectionChanged="DatabaseTotaleCalcoli_SelectionChanged" >
+                SelectionMode="Multiple" SelectionChanged="DatabaseTotaleCalcoli_SelectionChanged" >
 
                 <sf:SfDataGrid.SortColumnDescriptions>
                     <sf:SortColumnDescription ColumnName="Data" SortDirection="Descending" />
@@ -58,6 +58,17 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Vertical">
+
+            <!--Crea pdf-->
+            <Button ToolTip="Copia imballo selezionato" Name="CreaPdf"  Height="40" Width="180" 
+                        Margin="0,20,0,0" Background="#F6F6F6" IsEnabled="True" Click="CreaPdf_Click"  >
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="FilePdf" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock FontSize="16" Text="Genera pdf" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,0,0" 
+                                TextWrapping="Wrap" TextAlignment="Center" />
+                </StackPanel>
+            </Button>
+            
             <!--Copia imballo-->
             <Button ToolTip="Copia imballo selezionato" Name="CopiaImballo"  Height="40" Width="180" 
                         Margin="0,20,0,0" Background="#F6F6F6" IsEnabled="True" Click="CopiaImballo_Click" >

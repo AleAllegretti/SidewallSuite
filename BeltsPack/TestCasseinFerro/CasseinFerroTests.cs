@@ -66,7 +66,7 @@ public void Test1()
 
             // CARATTERISTICHE TAZZA
             _tazza.Altezza = 75;
-            _tazza.Forma = "C";
+            _tazza.Forma = "T";
             _tazza.SiglaTrattamento = "AW";
             _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();

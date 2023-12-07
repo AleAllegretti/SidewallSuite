@@ -9,6 +9,8 @@ using System.Windows.Media;
 using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Media3D;
+using System.Windows.Markup;
 
 namespace BeltsPack.Views
 {
@@ -29,6 +31,7 @@ namespace BeltsPack.Views
         private CalcoliImpianto _calcoliImpianto;
         private Imballi _imballi;
         CassaInFerro _cassaInFerro = new CassaInFerro();
+        private PdfUtils PdfUtils = new PdfUtils();
 
         public string tazzeTelate { get; set; }
         public string trattamentoNastro { get; set; }
@@ -242,20 +245,20 @@ namespace BeltsPack.Views
             }
         }
 
-        private async void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (int.TryParse(this.Lunghezza.Text, out int _))
-            {
-                this.nastro.Lunghezza = Convert.ToInt32(this.Lunghezza.Text);
-            }
-            else if (this.Lunghezza.Text == "")
-            {
-            }
-            else
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-        }
+        //private async void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if (int.TryParse(this.Lunghezza.Text, out int _))
+        //    {
+        //        this.nastro.Lunghezza = Convert.ToInt32(this.Lunghezza.Text);
+        //    }
+        //    else if (this.Lunghezza.Text == "")
+        //    {
+        //    }
+        //    else
+        //    {
+        //        ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il valore inserito non è valido", ConfirmDialog.ButtonConf.OK_ONLY);
+        //    }
+        //}
 
         private async void Larghezza_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -553,7 +556,7 @@ namespace BeltsPack.Views
         private void Calcola_Click(object sender, RoutedEventArgs e)
         {
             // Prendo tutti i dati di input con binding
-            this.nastro.capacityRequired = this.capacityReq;
+            this.nastro.capacityRequiredTon = this.capacityReq;
             this._materiale.surchAngle = this.surAngle;
             this._materiale.fillFactor = this.fillingFactor;
             this._materiale.density = this.matDens;
@@ -582,9 +585,13 @@ namespace BeltsPack.Views
             this.nastro.SetCaratterisitche();
             this.nastro.SetPeso();
 
+            // Calcolo la lunghezza del nastro
+            this.nastro.SetLunghezzaDaCalcoli(this.bordo.MinWheelDiam, this.bordo.MinPulleyDiam, this.nastro.centerDistance, this.nastro.forma, this.nastro.Aperto);
+            this.TBBeltLength.Text = Convert.ToString(Math.Round(this.nastro.Lunghezza * 0.001,1));
+
             // Prendo le caratteristiche della tazza
             this.tazza.CarattersticheTazza();
-            this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo);
+            this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo, this.nastro.Aperto);
             this.tazza.SetLunghezzaTotale(this.nastro.LarghezzaUtile);
             this.tazza.SetPesoTotale();
 
@@ -605,26 +612,25 @@ namespace BeltsPack.Views
 
             // Info nastro
             this.TBLarghUtile.Text = Convert.ToString(this.nastro.LarghezzaUtile);
-            this.TBPesoNastro.Text = Convert.ToString(this.nastro.PesoTotale);
 
             // Ottengo i dati che mi danno come output la portata del nastro
             calcoliImpianto.GetCapacity();
-            this.TBCapacityMcubi.Text = Convert.ToString(calcoliImpianto.Qeff);
+            this.TBCapacityTon.Text = Convert.ToString(calcoliImpianto.Qteff);
 
-            if (calcoliImpianto.Qeff <= (this.nastro.capacityRequired + 10) && calcoliImpianto.Qeff >= (this.nastro.capacityRequired - 10))
+            if (calcoliImpianto.Qteff <= (this.nastro.capacityRequiredTon * 1.2) && calcoliImpianto.Qteff >= (this.nastro.capacityRequiredTon))
             {
-                this.TBCapacityMcubi.Background = Brushes.LightGreen;
+                this.TBCapacityTon.Background = Brushes.LightGreen;
             }
-            else if (calcoliImpianto.Qeff <= (this.nastro.capacityRequired + 50) && calcoliImpianto.Qeff >= (this.nastro.capacityRequired - 50))
+            else if (calcoliImpianto.Qteff > (this.nastro.capacityRequiredTon * 1.2))
             {
-                this.TBCapacityMcubi.Background = Brushes.Yellow;
+                this.TBCapacityTon.Background = Brushes.Yellow;
             }            
             else
             {
-                this.TBCapacityMcubi.Background = Brushes.Red;
+                this.TBCapacityTon.Background = Brushes.Red;
             }
 
-            this.TBCapacityTon.Text = Convert.ToString(calcoliImpianto.Qteff);
+            this.TBCapacityMcubi.Text = Convert.ToString(calcoliImpianto.Qeff);
 
             // Tensioni e fattori di sicurezza
             calcoliImpianto.TensionsCalculation();
@@ -632,13 +638,14 @@ namespace BeltsPack.Views
             this.TBTensPisteLat.Text = Convert.ToString(calcoliImpianto.MaxWorkTensLat);
             this.TBFattSicurezza.Text = Convert.ToString(calcoliImpianto.Sfactor);
             this.TBFattSicPisteLat.Text = Convert.ToString(calcoliImpianto.Sfactor_pista);
+            this.TBPesoNastro.Text = Convert.ToString(Math.Round(this._prodotto.PesoM2, 1));
 
             // Metto un controllo visivo sui fattori di sicurezza - Fattore di sicurezza
             if (calcoliImpianto.Sfactor >= 10)
             {
                 this.TBFattSicurezza.Background = Brushes.LightGreen;
             }
-            else if (calcoliImpianto.Sfactor < 8)
+            else if (calcoliImpianto.Sfactor < 9.5)
             {
                 this.TBFattSicurezza.Background = Brushes.Red;
             }
@@ -652,7 +659,7 @@ namespace BeltsPack.Views
             {
                 this.TBFattSicPisteLat.Background = Brushes.LightGreen;
             }
-            else if (calcoliImpianto.Sfactor_pista < 8)
+            else if (calcoliImpianto.Sfactor_pista < 9.5)
             {
                 this.TBFattSicPisteLat.Background = Brushes.Red;
             }
@@ -691,7 +698,7 @@ namespace BeltsPack.Views
             this.nastro.speed = this.velNastro;
             this._materiale.Nome = this.nomeMat;
             this._materiale.DimSingolo = this.dimSingolo;
-
+            
             if (presenzaFix == "Si")
             {
                 this._prodotto.PassoTazze = this.passoFix;
@@ -783,8 +790,8 @@ namespace BeltsPack.Views
                 // Determino i dettagli del cliente
                 this._prodotto.SetDettagliCliente();
 
-                    // Calcolo il numero e di tazze totali
-                this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo);
+                // Calcolo il numero e di tazze totali
+                this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo, this.nastro.Aperto);
                 // Lunghezza delle tazze
                 this.tazza.SetLunghezzaTotale(this.tazza.Lunghezza);
                 // Caratteristiche
@@ -823,6 +830,27 @@ namespace BeltsPack.Views
                     this.NavigationService.Navigate(new AccessoriCasseFerro(imballiBobina, this.nastro, this._cassaInFerro, this.bordo, this._prodotto, this.tazza));
                 }
             }
+        }
+
+        private async void Stampa_Click(object sender, RoutedEventArgs e)
+        {
+            // Stampo il pdf
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + this._prodotto.Codice + "_" + this._prodotto.Cliente;
+            string control;
+            control = this.PdfUtils.FillSidewallCalculations(this._prodotto, path, this.nastro, this.bordo, this.tazza, this._materiale, this._calcoliImpianto, this._motore, 1, "");
+
+            if (control != "") 
+            {
+                // Avviso che il pdf è sato stampato correttamente sul desktiop
+                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("PDF salvato correttamente sul desktop.", ConfirmDialog.ButtonConf.OK_ONLY);
+                // Impostazioni del saving dialog
+                string FileName;
+                // Nome del file
+                FileName = "Sidewall_Calculations" + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".pdf";
+                // Aper il file
+                System.Diagnostics.Process.Start(path + "\\" + FileName);
+            }
+
         }
     }
 }

@@ -234,6 +234,9 @@ namespace BeltsPack.Utils
 
         public void TensionsCalculation()
         {
+            // Trasformo la capacità richiesta in m3/h
+            this._nastro.capacityRequired = this._nastro.capacityRequiredTon / this._material.density;
+
             // Calcolo la lunghezza del tratto di carico del nastro e il carico extra
             this._nastro.SetLunghezzaTrattodiCarico();
 
@@ -247,7 +250,7 @@ namespace BeltsPack.Utils
             // Calcolo la forza periferica
             double G = 9.80665;
 
-            // Calcolo il peso al metro del prodotto
+            // Calcolo il peso al metro lineare del prodotto
             this._prodotto.PesoM2 = this._prodotto.PesoTotaleNastro / (this._nastro.Lunghezza*Math.Pow(10,-3) * this._nastro.Larghezza * Math.Pow(10, -3));
 
             // Calcoli il peso del rullo

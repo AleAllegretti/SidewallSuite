@@ -92,12 +92,20 @@ namespace BeltsPack.Models
 			set { larghezza = value; }
 		}
 
-		public void NumeroTazzeTotali(double lunghezzaNastro, int passo)
+		public void NumeroTazzeTotali(double lunghezzaNastro, int passo, bool nastroaperto)
         {
             // Calcolo il numero delle tazze totali
+            // Se il nastro è chiuso aggiungiamo una tazza di margine come suggerito a Novembre 2023
             try
             {
-                this.Numero = Convert.ToInt32(Math.Round(lunghezzaNastro / passo));
+                if (nastroaperto)
+                {
+                    this.Numero = Convert.ToInt32(Math.Round(lunghezzaNastro / passo));
+                }
+               else
+                {
+                    this.Numero = Convert.ToInt32(Math.Round(lunghezzaNastro / passo)) + 1;
+                }
             }
             catch
             {

@@ -485,7 +485,7 @@ namespace BeltsPack.Views
                 if (this.prodotto.Tipologia == "Solo tazze" | this.prodotto.Tipologia == "Bordi e tazze")
                 {
                     // Calcolo il numero e di tazze totali
-                    this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo);
+                    this.tazza.NumeroTazzeTotali(this.nastro.Lunghezza, this.tazza.Passo, this.nastro.Aperto);
                     // Lunghezza delle tazze
                     this.tazza.SetLunghezzaTotale(this.tazza.Lunghezza);
                     // Caratteristiche
@@ -680,24 +680,21 @@ namespace BeltsPack.Views
             { }   
         }
 
-        private async void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboClasseNastro_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Determino la classe
             this.nastro.Classe = Convert.ToInt32(this.ComboClasseNastro.SelectedValue);
             // Determino le caratteristiche del nastro
             this.nastro.SetCaratterisitche();
-            if(this.nastro.NumTele == 0)
-            {
-                ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il nome del nastro non può essere completato perchè mancano il numero di breaker e/o di tele. \nPer aggiungere: Impostazioni -> Nastri.", ConfirmDialog.ButtonConf.OK_ONLY);
-            }
-            else
-            {
+            //if(this.nastro.NumTele == 0)
+            //{
+            //    ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Il nome del nastro non può essere completato perchè mancano il numero di breaker e/o di tele. \nPer aggiungere: Impostazioni -> Nastri.", ConfirmDialog.ButtonConf.OK_ONLY);
+            //}
+            //else
                 // Vado a completare il nome finale del nastro
                 this.nastroSelezionato = this.nastro.Tipo + " " + this.nastro.Classe + "/" + this.nastro.NumTessuti + "+" + this.nastro.NumTele + "  " + this.nastro.SpessoreSup + "+" + this.nastro.SpessoreInf ;
                 // Mostro a schermo il nome intero del nastro selezionato
-                this.NastroSel.Text = "(" + this.nastroSelezionato + ")";
-            }         
-            
+                this.NastroSel.Text = "(" + this.nastroSelezionato + ")";          
         }
 
         private void ComboAltezzaTazze_SelectionChanged(object sender, SelectionChangedEventArgs e)

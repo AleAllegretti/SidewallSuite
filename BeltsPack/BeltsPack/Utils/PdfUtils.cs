@@ -23,6 +23,7 @@ namespace BeltsPack.Utils
         private static readonly string RESOURCE_NAME_TDS_BORDI_E_TAZZE = "Sidewalls_Cleats_";
         private static readonly string RESOURCE_NAME_TDS_BORDI = "Sidewalls";
         private static readonly string RESOURCE_NAME_TDS_TAZZE = "Cleats_";
+        private static readonly string RESOURCE_NAME_SIDEWALL_CALCULATIONS = "Sidewall_Calculations.pdf";
 
         public string SAVING_PATH;
         private static string GetFullPath(string localPdfName)
@@ -361,6 +362,309 @@ namespace BeltsPack.Utils
                 return "";
             }
         }
+
+        public string FillSidewallCalculations(Prodotto prodotto, string path, Nastro nastro, Bordo bordo, Tazza tazza, Materiale materiale, CalcoliImpianto calcoliImpianto, Motore motore, int i, string templateName)
+        {
+
+            // Carica il template
+            string pdfTemplate = "";
+            if (templateName == "")
+            {
+                pdfTemplate = @"Assets\Pdf\" + RESOURCE_NAME_SIDEWALL_CALCULATIONS;
+            }
+            else
+            {
+                pdfTemplate = templateName;
+            }
+
+            PdfLoadedDocument loadedDocument = new PdfLoadedDocument(pdfTemplate);
+            PdfLoadedForm loadedForm = loadedDocument.Form;
+            PdfLoadedFormFieldCollection fieldCollection = loadedForm.Fields as PdfLoadedFormFieldCollection;
+            PdfLoadedField loadedField = null;
+
+            // Cliente
+            if (fieldCollection.TryGetField("Customer", out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.Cliente;
+            }
+
+            //Commessa
+            if (fieldCollection.TryGetField("Offer" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.Codice;
+            }
+
+            // Mail
+            //if (fieldCollection.TryGetField("3", out loadedField))
+            //{
+            //    (loadedField as PdfLoadedTextBoxField).Text = prodotto.EmailCliente;
+            //}
+
+            // Quantità
+            if (fieldCollection.TryGetField("Quantity" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.Qty.ToString();
+            }
+
+            // Tipo nastro
+            if (fieldCollection.TryGetField("BeltRef" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Tipo + " " + nastro.Classe + "/" + nastro.NumTessuti + "+" +
+                        nastro.NumTele + " " + nastro.SpessoreSup + "+" + nastro.SpessoreInf;
+            }
+
+            // Aperto / Chiuso
+            if (fieldCollection.TryGetField("BeltType" + i, out loadedField))
+            {
+                if (nastro.Aperto)
+                {
+                    (loadedField as PdfLoadedTextBoxField).Text = "Open belt length";
+                }
+                {
+                    (loadedField as PdfLoadedTextBoxField).Text = "Endless belt length";
+                }
+            }
+
+            // Capacità richiesta
+            if (fieldCollection.TryGetField("ReqCapacityTon" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.capacityRequiredTon.ToString();
+            }
+
+            // Filling factor
+            if (fieldCollection.TryGetField("FillFact" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = materiale.fillFactor.ToString();
+            }
+
+            // Velocità nastro
+            if (fieldCollection.TryGetField("BeltSpeed" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.speed.ToString();
+            }
+
+            // Conveyor type
+            if (fieldCollection.TryGetField("ConvType" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.forma.ToString();
+            }
+
+            // Massima pendenza
+            if (fieldCollection.TryGetField("MaxSlope" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.inclinazione.ToString();
+            }
+
+            // Elevazione
+            if (fieldCollection.TryGetField("Elevation" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.elevazione.ToString();
+            }
+
+            // Center distance
+            if (fieldCollection.TryGetField("CentDist" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.centerDistance.ToString();
+            }
+
+            // Nome materiale
+            if (fieldCollection.TryGetField("MatHandled" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = materiale.Nome.ToString();
+            }
+
+            // Densità materiale
+            if (fieldCollection.TryGetField("BulkDens" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = materiale.density.ToString();
+            }
+
+            // Surcharghe angle
+            if (fieldCollection.TryGetField("SurAngle" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = materiale.surchAngle.ToString();
+            }
+
+            // Dimesnione lump
+            if (fieldCollection.TryGetField("LumpSize" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = materiale.DimSingolo.ToString();
+            }
+
+            // Larghezza nastro
+            if (fieldCollection.TryGetField("BeltWidth" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Larghezza.ToString();
+            }
+
+            // Tipo bordo
+            if (fieldCollection.TryGetField("SWType" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.SiglaTele + "-" + bordo.Altezza.ToString() + "/" + bordo.Larghezza.ToString();
+            }
+
+            // Tipo tazze
+            if (fieldCollection.TryGetField("CleatType" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = "HBF" + "-" + tazza.Forma + tazza.Altezza.ToString();
+            }
+
+            // Fix
+            if (prodotto.PresenzaFix == "Si")
+            {
+                if (fieldCollection.TryGetField("ScrewCleats" + i, out loadedField))
+                {
+                    (loadedField as PdfLoadedTextBoxField).Text = "Yes";
+                }
+            }
+            else
+            {
+                if (fieldCollection.TryGetField("ScrewCleats" + i, out loadedField))
+                {
+                    (loadedField as PdfLoadedTextBoxField).Text = "No";
+                }
+            }
+
+            // Passo
+            if (fieldCollection.TryGetField("CleatPitch" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = tazza.Passo.ToString();
+            }
+
+            // Piste laterali
+            if (fieldCollection.TryGetField("LatSpace" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = prodotto.PistaLaterale.ToString();
+            }
+
+            // Classe nastro
+            if (fieldCollection.TryGetField("BeltTens" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Classe.ToString();
+            }
+
+            // Edge
+            if (fieldCollection.TryGetField("EdgeWidth" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.edgetype.ToString();
+            }
+
+            // Qualità gomma
+            if (fieldCollection.TryGetField("RubQual" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.Trattamento;
+            }
+
+            // Capacità utile ton/h
+            if (fieldCollection.TryGetField("UsefulCapTon" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.Qteff.ToString();
+            }
+
+            // Capacità utile m3/h
+            if (fieldCollection.TryGetField("UsefulCapm3" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.Qeff.ToString();
+            }
+
+            // Larghezza utile
+            if (fieldCollection.TryGetField("UseBeltWidth" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = nastro.LarghezzaUtile.ToString();
+            }
+
+            // Larghezza bordo
+            if (fieldCollection.TryGetField("SWWidth" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.Larghezza.ToString();
+            }
+
+            // Peso nastro
+            if (fieldCollection.TryGetField("BeltWeight" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = Math.Round(prodotto.PesoM2,1).ToString();
+            }
+
+            // Pulley tension
+            if (fieldCollection.TryGetField("TensPulley" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.MaxWorkTens.ToString();
+            }
+
+            // Lateral tension
+            if (fieldCollection.TryGetField("LatTens" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.MaxWorkTensLat.ToString();
+            }
+
+            // Safety factor
+            if (fieldCollection.TryGetField("SF" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.Sfactor.ToString();
+            }
+
+            // Safety factor
+            if (fieldCollection.TryGetField("SFL" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.Sfactor_pista.ToString();
+            }
+
+            // tail take up
+            if (fieldCollection.TryGetField("Tail" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.TakeUpTail.ToString();
+            }
+
+            // Req power
+            if (fieldCollection.TryGetField("Pow" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = calcoliImpianto.Pa.ToString();
+            }
+
+            // mot power
+            if (fieldCollection.TryGetField("MotPow" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = motore.motorPower.ToString();
+            }
+
+            // Min pulley diam
+            if (fieldCollection.TryGetField("PulDiam" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.MinPulleyDiam.ToString();
+            }
+
+            // Min wheel diam
+            if (fieldCollection.TryGetField("WhDiam" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.MinWheelDiam.ToString();
+            }
+
+            // Wheel diam
+            if (fieldCollection.TryGetField("WhWidth" + i, out loadedField))
+            {
+                (loadedField as PdfLoadedTextBoxField).Text = bordo.MinWheelWidth.ToString();
+            }
+
+            try
+            {
+                // Impostazioni del saving dialog
+                string FileName;
+                // Nome del file
+                FileName = "Sidewall_Calculations" + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".pdf";
+                // Rende il documento read-only
+                loadedDocument.Form.Flatten = false;
+                // Salva il file
+                loadedDocument.Save(path + "\\" + FileName);
+                // Output
+                return path + "\\" + FileName;
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione del file. Verificare che non sia già aperto. \nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return "";
+            }
+        }
+
         public string FillSchedaPaladini(ProdottoSelezionato prodottoSelezionato, string selectedPath)
         {
             // Carica il template

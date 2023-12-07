@@ -108,7 +108,7 @@ namespace BeltsPack.Utils
             {
                 classeSt = classe.ToString().Substring(classe.ToString().Length - 3, 2);
             }
-            else
+            else if (classe != 0)
             {
                 classeSt = classe.ToString().Substring(classe.ToString().Length - 3, 3);
             }
@@ -472,7 +472,7 @@ namespace BeltsPack.Utils
                 "Configurazione,TipologiaTrasporto,Personalizzazione,NumeroCorrugati, NumeroSubbi, DiametroCorrugati," +
                 "DiametroSubbi, LunghezzaCorrugati,PresenzaIncroci,PresenzaGanci,PresenzaReteLaterale,CassaVerniciata," +
                 "PresenzaLamieraBase,PesoTotaleNastro, PresenzaFix, PresenzaBlinkers, TipoNastro, ClasseNastro, PassoTazze," +
-                " PistaLaterale, BaseBordo, FormaTazze, NumeroTazzexFila, SpazioFile, TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett FROM " + TABELLA_IMBALLI_TOTALI + " ORDER BY Cliente ASC");
+                " PistaLaterale, BaseBordo, FormaTazze, NumeroTazzexFila, SpazioFile, TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett FROM " + TABELLA_IMBALLI_TOTALI + " WHERE Versione IS NOT NULL ORDER BY Cliente ASC");
         }
 
         public SqlCommand CreateDbInputCalcoliCommand()
@@ -541,7 +541,7 @@ namespace BeltsPack.Utils
         public SqlCommand CreateSettingTazzeCommand()
         {
             return this.CreateCommand("SELECT ID,Altezza,FormaTC,FormaTCW,FormaT,FormaTW,FormaTB,FormaC,PesoTC,PesoTCW,PesoT,PesoTW,PesoTB,PesoC,LarghezzaTazzeTC,LarghezzaTazzeTCW," +
-                "LarghezzaTazzeT,LarghezzaTazzeTW,SezioneTC, SezioneC, SezioneT, SezioneTCW, SezioneTW, SezioneTB " +
+                "LarghezzaTazzeT,LarghezzaTazzeTW,SezioneTC, SezioneC, SezioneT, SezioneTCW, SezioneTW, SezioneTB, " +
                 "LarghezzaTazzeTB,LarghezzaTazzeC,DataUltimoAggiornamento," +
                 "SpessoreT, SpessoreTC, SpessoreC, SpessoreTCW, SpessoreTW, SpessoreTB FROM " + TABELLA_TAZZE + " ORDER BY Altezza ASC");
         }
@@ -697,7 +697,7 @@ namespace BeltsPack.Utils
             this._materiale = materiale;
 
             var cmd = this.CreateCommand("INSERT INTO InputCalcoli(Codice, Capacity, FillingFactor, VelocitaNastro, PendenzaMax, Elevazione, DistDalCentro, NomeMateriale, " +
-                "DensitaMateriale, AngoloCarico, DimensioneSingolo, Versione, Data, Forma, EdgeType) VALUES" +
+                "DensitaMateriale, AngoloCarico, DimensioneSingolo, Versione, Data, Forma, EdgeType, NumTele, NumTessuti, SpessoreSup, SpessoreInf) VALUES" +
                 "('" + prodotto.Codice + "_" + this._prodotto.VersioneCodice +
                 "', @Capacity" +
                 ",@FillingFactor" +
@@ -709,7 +709,7 @@ namespace BeltsPack.Utils
                  materiale.surchAngle +
                  ",@DimensioneSingolo," +
                  this._prodotto.VersioneCodice 
-                 + ",'" + DateTime.Now.ToString() + "','" + nastro.forma + "'," + nastro.edgetype + ")");
+                 + ",'" + DateTime.Now.ToString() + "','" + nastro.forma + "'," + nastro.edgetype + ",@NumTele, @NumTessuti, @SpessoreSup, @SpessoreInf" + ")");
 
             cmd.Parameters.AddWithValue("@FillingFactor", materiale.fillFactor);
             cmd.Parameters.AddWithValue("@VelocitaNastro", nastro.speed);
@@ -718,6 +718,10 @@ namespace BeltsPack.Utils
             cmd.Parameters.AddWithValue("@DistDalCentro", nastro.centerDistance);
             cmd.Parameters.AddWithValue("@DensitaMateriale", materiale.density);
             cmd.Parameters.AddWithValue("@DimensioneSingolo", materiale.DimSingolo);
+            cmd.Parameters.AddWithValue("@NumTele", nastro.NumTele);
+            cmd.Parameters.AddWithValue("@NumTessuti", nastro.NumTessuti);
+            cmd.Parameters.AddWithValue("@SpessoreSup", nastro.SpessoreSup);
+            cmd.Parameters.AddWithValue("@SpessoreInf", nastro.SpessoreInf);
             return cmd;
         }
         public SqlCommand UpdateDbCommandOutputCalcoli(Nastro nastro, Bordo bordo, Tazza tazza, Prodotto prodotto, Materiale materiale, CalcoliImpianto calcoliImpianto, Motore motore)
@@ -755,9 +759,12 @@ namespace BeltsPack.Utils
                 "ImballiTotali.ClasseNastro, ImballiTotali.PassoTazze, ImballiTotali.BaseBordo, ImballiTotali.FormaTazze, ImballiTotali.PresenzaFix, ImballiTotali.PresenzaBlinkers, ImballiTotali.TrattamentoNastro, ImballiTotali.TrattamentoBordo," +
                 "ImballiTotali.TrattamentoTazze, ImballiTotali.TazzeTelate, ImballiTotali.Qty, ImballiTotali.PistaLaterale, " +
                 "InputCalcoli.Capacity,InputCalcoli.FillingFactor,InputCalcoli.VelocitaNastro, InputCalcoli.PendenzaMax, InputCalcoli.Elevazione, InputCalcoli.DistDalCentro,InputCalcoli.NomeMateriale," +
-                "InputCalcoli.DensitaMateriale, InputCalcoli.AngoloCarico, InputCalcoli.Forma, InputCalcoli.EdgeType," +
-                "InputCalcoli.DimensioneSingolo, InputCalcoli.Versione, InputCalcoli.Forma FROM " + TABELLA_CALCOLI_INPUT +
-                " Inner join " + TABELLA_IMBALLI_TOTALI + " on InputCalcoli.Codice = ImballiTotali.Codice");
+                "InputCalcoli.DensitaMateriale, InputCalcoli.AngoloCarico, InputCalcoli.Forma, InputCalcoli.EdgeType, InputCalcoli.NumTele, InputCalcoli.NumTessuti, InputCalcoli.SpessoreSup, InputCalcoli.SpessoreInf," +
+                "InputCalcoli.DimensioneSingolo, InputCalcoli.Versione, InputCalcoli.Forma, ImballiTotali.BaseBordo, OutputCalcoli.PesoNastro, OutputCalcoli.LarghezzaUtile," +
+                "OutputCalcoli.CapacitaTonOra, OutputCalcoli.MaxTensPulley, OutputCalcoli.MaxTensLaterale, OutputCalcoli.FattSicurezza," +
+                "OutputCalcoli.FattSicurezzaPiste, OutputCalcoli.TailTakeUp, OutputCalcoli.PotRichiesta, OutputCalcoli.PotSuggerita, OutputCalcoli.MinPulleyDiameter," +
+                "OutputCalcoli.MinDeflectionWheel, OutputCalcoli.MinWheelWidth, ImballiTotali.TrattamentoNastro FROM " + TABELLA_CALCOLI_INPUT +
+                " Inner join " + TABELLA_IMBALLI_TOTALI + " on InputCalcoli.Codice = ImballiTotali.Codice Inner join OutputCalcoli on OutputCalcoli.Codice = InputCalcoli.Codice");
         }
         public SqlCommand DeleteRowImpostazioni(int ID, string nomeTabella)
         {

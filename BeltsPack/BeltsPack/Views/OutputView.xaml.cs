@@ -184,7 +184,7 @@ namespace BeltsPack.Views
                     if (this._prodotto.Tipologia == "Solo tazze" | this._prodotto.Tipologia == "Bordi e tazze")
                     {
                         // Calcolo il numero e di tazze totali
-                        this._tazza.NumeroTazzeTotali(this._nastro.Lunghezza, this._tazza.Passo);
+                        this._tazza.NumeroTazzeTotali(this._nastro.Lunghezza, this._tazza.Passo, this._nastro.Aperto);
 
                         // Lunghezza delle tazze
                         this._tazza.SetLunghezzaTotale(this._nastro.LarghezzaUtile);
