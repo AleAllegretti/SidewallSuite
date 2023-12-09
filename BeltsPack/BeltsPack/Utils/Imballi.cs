@@ -473,6 +473,7 @@ namespace BeltsPack.Models
 
             if (this._prodotto.AltezzaApplicazioni == 160 || 
                 this._prodotto.AltezzaApplicazioni == 120 ||
+                this._prodotto.AltezzaApplicazioni == 80 ||
                 this._prodotto.AltezzaApplicazioni == 140)
             {
                 // CONFGURAZIONE 7 - Configurazione principale               

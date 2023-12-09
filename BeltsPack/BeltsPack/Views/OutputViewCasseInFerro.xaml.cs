@@ -555,6 +555,7 @@ namespace BeltsPack.Views
             this.buttonSalvaDb.IsEnabled = true;
             this.CKCassa.IsEnabled = true;
             this.CKNastro.IsEnabled = true;
+            this.TBNote.Text = "";
 
             // Se presenti pannelli sandwich metto avviso
             if (this._cassaInFerro.PannelliSandwich)

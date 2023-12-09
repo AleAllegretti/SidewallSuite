@@ -241,7 +241,7 @@ namespace BeltsPack.Views
                     {
                         CodiceGabbia = "CASSA24RITTI";
                     }
-                    else if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.PresenzaSoloRitti[i] == "No")
+                    else if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.PresenzaSoloRitti[i] == null)
                     {
                         CodiceGabbia = "CASSA24SPALLE";
                     }
