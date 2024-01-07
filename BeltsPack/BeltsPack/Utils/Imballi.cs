@@ -1728,6 +1728,22 @@ namespace BeltsPack.Models
 
             }
             // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
+            // inoltre in questo caso il nastro è disposto su una fila
+            else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
+                        && altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto])
+                        && this.Numerofile == 1
+                        && (this._nastro.Larghezza * this.Numerofile + this.TolleranzaLarghezza) < this._cassainferro.LimiteLarghezza[this.itrasporto])
+            {
+                // La configurazione è valida su questo imballo
+                this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
+                this.cassaFattibile = 1;
+                altezzaNastroImballatoFinale = altezzanastroimballato;
+                this.CalcoloNumeroSubbiCorrugati();
+
+                // Inizializzo contatori
+                this.InizializzaContatori();
+            }
+            // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
             // inoltre in questo caso il nastro è disposto su due file
             else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
                         && altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto])
@@ -1744,22 +1760,7 @@ namespace BeltsPack.Models
                 // Inizializzo contatori
                 this.InizializzaContatori();
             }
-            // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
-            // inoltre in questo caso il nastro è disposto su una fila
-            else if ((this._cassainferro.LimiteLunghezza[this.itrasporto] >= this._cassainferro.LunghezzaIniziale + 100
-                        && altezzanastroimballato + tolleranza <= this._cassainferro.LimiteAltezza[this.itrasporto])
-                        && this.Numerofile == 1
-                        && (this._nastro.Larghezza * this.Numerofile + this.TolleranzaLarghezza) < this._cassainferro.LimiteLarghezza[this.itrasporto])
-            {
-                // La configurazione è valida su questo imballo
-                this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
-                this.cassaFattibile = 1;
-                altezzaNastroImballatoFinale = altezzanastroimballato;
-                this.CalcoloNumeroSubbiCorrugati();
-
-                // Inizializzo contatori
-                this.InizializzaContatori();
-            }
+            
             else
             {
                 // Su questo trasporto il nastro non ci sta

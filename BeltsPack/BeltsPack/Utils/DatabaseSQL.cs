@@ -112,16 +112,34 @@ namespace BeltsPack.Utils
             {
                 classeSt = classe.ToString().Substring(classe.ToString().Length - 3, 3);
             }
-            return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura,LarghezzaMKS," +
+
+            if (numTele == 0)
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura,LarghezzaMKS," +
                 "Cd_ARClasse1,Cd_ARClasse3,Cd_ARClasse3,Descrizione FROM " +
                 TABELLA_ARTICOLI +
                 " Where Cd_ARGruppo1 = " + "'" + famiglia +
                 "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
                 "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
                 "' AND  LarghezzaMKS >= " + larghezzaSt +
-                " AND  Cd_ARClasse1 = " + "'" + classe.ToString().Substring(classe.ToString().Length-3, 2) +
+                " AND  Cd_ARClasse1 = " + "'" + classe.ToString().Substring(classe.ToString().Length - 3, 2) +
+                "' AND  Cd_ARClasse2 = " + "'" + numTessuti +
+                "' AND  Cd_ARClasse3 = " + "'" + spessoreSup + "+" + spessoreInf + "'" + " ORDER BY Larghezza ASC");
+            }
+            else
+            {
+                return this.CreateCommand("SELECT Cd_AR,Descrizione,Cd_ARGruppo1,Cd_ARGruppo2,Cd_ARGruppo3,Cd_ARMisura,LarghezzaMKS," +
+                "Cd_ARClasse1,Cd_ARClasse3,Cd_ARClasse3,Descrizione FROM " +
+                TABELLA_ARTICOLI +
+                " Where Cd_ARGruppo1 = " + "'" + famiglia +
+                "' AND  Cd_ARGruppo2 = " + "'" + gruppo +
+                "' AND  Cd_ARGruppo3 = " + "'" + sottogruppo +
+                "' AND  LarghezzaMKS >= " + larghezzaSt +
+                " AND  Cd_ARClasse1 = " + "'" + classe.ToString().Substring(classe.ToString().Length - 3, 2) +
                 "' AND  Cd_ARClasse2 = " + "'" + numTessuti + "+" + numTele +
-                "' AND  Cd_ARClasse3 = " + "'" + spessoreSup + "+" + spessoreInf + "'");
+                "' AND  Cd_ARClasse3 = " + "'" + spessoreSup + "+" + spessoreInf + "'" + " ORDER BY Larghezza ASC");
+            }
+            
         }
 
         public SqlCommand RaspaturaBordoSearchCommand(string gruppo, int altezza, string trattamento)

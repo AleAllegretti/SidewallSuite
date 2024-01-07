@@ -245,6 +245,10 @@ namespace BeltsPack.Views
                     {
                         CodiceGabbia = "CASSA24SPALLE";
                     }
+                    else if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.PresenzaSoloRitti[i] == "No")
+                    {
+                        CodiceGabbia = "CASSA24SPALLE";
+                    }
                     else if (this._imballi.Lunghezza[i] > 4000 && this._imballi.Lunghezza[i] <= 6000)
                     {
                         CodiceGabbia = "CASSA46SPALLE";
@@ -259,7 +263,7 @@ namespace BeltsPack.Views
                     }
                     else
                     {
-                        ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa in ferro non rientra in nessuna categoria, contattare l'assistenza.", ConfirmDialog.ButtonConf.OK_ONLY);
+                        ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("La cassa in ferro non rientra in nessuna categoria, se inferiore a .", ConfirmDialog.ButtonConf.OK_ONLY);
                         break;
                     }
 

@@ -1189,7 +1189,7 @@ namespace BeltsPack.Utils
             }
             catch
             {
-                //System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del nastro.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("C'è stato un problema nella creazione delle note del nastro.\nSe il problema persiste contattare l'assistenza.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1200,6 +1200,12 @@ namespace BeltsPack.Utils
 
             path = path + "\\" + fileName;
             FileInfo fi = new FileInfo(path);
+
+            // Gestisce l'eccezione di casse fuori standard
+            if (this._cassaInFerro.TipologiaCassa[numeroConf] == null)
+            {
+                this._cassaInFerro.TipologiaCassa[numeroConf] = "Tipo 1";
+            }
 
             try
             {

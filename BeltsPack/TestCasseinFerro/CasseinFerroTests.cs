@@ -47,7 +47,7 @@ public void Test1()
             // CARATTERISTICHE NASTRO
             _nastro.Larghezza = 800;
             _nastro.Classe = 500;
-            _nastro.Tipo = "TEXRIGID";
+            _nastro.Tipo = "TEXTER";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
             _nastro.NumTele = 0;
