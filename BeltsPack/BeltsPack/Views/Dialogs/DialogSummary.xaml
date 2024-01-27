@@ -23,6 +23,7 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
         <!--Titolo-->
@@ -198,9 +199,30 @@
                 </StackPanel>
             </Border>
         </StackPanel>
-        
+
+        <!--Peso plastica-->
+        <StackPanel Margin="20,5,20,0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="11">
+            <Label FontSize="16" FontWeight="Light">
+                Peso plastica [kg]
+            </Label>
+
+            <Border BorderBrush="LightGray" Height="40"
+        BorderThickness="1"
+        VerticalAlignment="Center"
+        CornerRadius="5" Background="#F3F3F3">      
+
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="MeasuringTape" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                    <TextBox VerticalAlignment="Center" Margin="10,0,0,0" BorderThickness="0" BorderBrush="#F3F3F3" Background="#F3F3F3" Width="250" 
+                     Text="{Binding pesoPlastica, Mode=TwoWay}"  IsReadOnly="True">
+
+                    </TextBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
         <!--Conferma-->
-        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="11">
+        <StackPanel Margin="20" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="12">
             <Button Background="#40EE93" Content="Chiudi" x:Name="BtnClose" Click="BtnClose_Click" />
         </StackPanel>
     </Grid>

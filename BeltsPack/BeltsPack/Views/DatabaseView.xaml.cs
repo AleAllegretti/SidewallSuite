@@ -554,9 +554,10 @@ namespace BeltsPack.Views
                 int pesoImballo = Convert.ToInt32(dataRow["PesoImballo"].ToString());
                 double costoImballo = Convert.ToDouble(dataRow["CostoImballo"].ToString().Trim('€'));
                 int pesoTotaleNastro = Convert.ToInt32(dataRow["PesoTotaleNastro"].ToString());
+                double pesoPlastica = Convert.ToDouble(dataRow["PesoPlastica"].ToString());
 
                 // Apro il dialog
-                var view = new DialogSummary(cliente, codice, lunghezza, altezza, larghezza, pesoImballo, costoImballo, pesoTotaleNastro);
+                var view = new DialogSummary(cliente, codice, lunghezza, altezza, larghezza, pesoImballo, costoImballo, pesoTotaleNastro, pesoPlastica);
                 await DialogHost.Show(view);
             }
             else

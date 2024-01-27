@@ -18,7 +18,8 @@ namespace BeltsPack.Views.Dialogs
         public int pesoImballo { get; set; }
         public double costoImballo { get; set; }
         public int pesoNastro { get; set; }
-        public DialogSummary(string cliente, string commessa, int lunghezza, int altezza, int larghezza, int pesoImballo, double costoImballo, int pesoTotaleNastro)
+        public double pesoPlastica { get; set; }
+        public DialogSummary(string cliente, string commessa, int lunghezza, int altezza, int larghezza, int pesoImballo, double costoImballo, int pesoTotaleNastro, double pesoPlastica)
         {
             this.DataContext = this;
             this.cliente = cliente;
@@ -29,6 +30,7 @@ namespace BeltsPack.Views.Dialogs
             this.pesoImballo = pesoImballo;
             this.costoImballo = Math.Round(costoImballo,0);
             this.pesoNastro = pesoTotaleNastro + pesoImballo;
+            this.pesoPlastica = pesoPlastica;
 
             InitializeComponent();
         }

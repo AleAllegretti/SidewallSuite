@@ -490,7 +490,7 @@ namespace BeltsPack.Utils
                 "Configurazione,TipologiaTrasporto,Personalizzazione,NumeroCorrugati, NumeroSubbi, DiametroCorrugati," +
                 "DiametroSubbi, LunghezzaCorrugati,PresenzaIncroci,PresenzaGanci,PresenzaReteLaterale,CassaVerniciata," +
                 "PresenzaLamieraBase,PesoTotaleNastro, PresenzaFix, PresenzaBlinkers, TipoNastro, ClasseNastro, PassoTazze," +
-                " PistaLaterale, BaseBordo, FormaTazze, NumeroTazzexFila, SpazioFile, TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett FROM " + TABELLA_IMBALLI_TOTALI + " WHERE Versione IS NOT NULL ORDER BY Cliente ASC");
+                " PistaLaterale, BaseBordo, FormaTazze, NumeroTazzexFila, SpazioFile, TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett, PesoPlastica FROM " + TABELLA_IMBALLI_TOTALI + " WHERE Versione IS NOT NULL ORDER BY Cliente ASC");
         }
 
         public SqlCommand CreateDbInputCalcoliCommand()
@@ -656,7 +656,7 @@ namespace BeltsPack.Utils
                 "LunghezzaImballo, AltezzaImballo, Configurazione, Personalizzazione, Criticita, TipologiaTrasporto, Versione, NumeroCorrugati, NumeroSubbi, DiametroCorrugati," +
                 "DiametroSubbi, LunghezzaCorrugati, Note, NotePaladini, PresenzaIncroci, PresenzaGanci, PresenzaReteLaterale, CassaVerniciata, PresenzaLamieraBase, NomeUtente," +
                 "PesoTotaleNastro, PresenzaFix, PresenzaBlinkers, TipoNastro, ClasseNastro, PassoTazze, PistaLaterale, BaseBordo, FormaTazze, NumeroTazzexFila, SpazioFile," +
-                "TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett) VALUES" +
+                "TrattamentoNastro, TrattamentoBordo, TrattamentoTazze, TazzeTelate, Qty, TipologiaTrasportoDett, PesoPlastica) VALUES" +
                 "('" + prodotto.Codice + "', '" + prodotto.Cliente.ToString() + "' ,'" + cassaInFerro.Stato.ToString() + "','" + DateTime.Now.Date.ToString("d/M/yyyy") + "'," + nastro.Lunghezza + "," + nastro.Larghezza +
                 "," + bordo.Altezza + "," + tazza.Altezza + ", '" + nastro.TipologiaNastro() + "', '" + this._imballi.Tipologia + " ','" + cassaInFerro.PrezzoCassaFinale[i] + "€" + "'," +
                 Math.Round(cassaInFerro.PesoFinale[i],0) + "," + Math.Round(_imballi.Larghezza[i],0) + "," + Math.Round(_imballi.Lunghezza[i],0) + "," + Math.Round(_imballi.Altezza[i],0) + "," + cassaInFerro.Configurazione + ",'" + cassaInFerro.Personalizzazione.ToString() + "','" + 
@@ -666,7 +666,8 @@ namespace BeltsPack.Utils
                 "','" + presenzaretelaterale + "','" + cassaverniciata + "','" + presenzalamierabase + "','" + this._prodotto.Utente + "'," + Math.Round(this._prodotto.PesoTotaleNastro,0) +
                 ",'" + this._prodotto.PresenzaFix + "','" + this._prodotto.PresenzaBlinkers + "','" + this._nastro.Tipo + "'," + this._nastro.Classe + "," + this._tazza.Passo + "," + this._prodotto.PistaLaterale + 
                 "," + this._bordo.Larghezza + ",'" + this._tazza.Forma + "'," + this._tazza.NumeroFile + "," + this._tazza.SpazioFileMultiple + ",'" + this._nastro.Trattamento + "','" +
-                this._bordo.Trattamento + "','" + this._tazza.Trattamento + "','" + this._tazza.Telata + "'," + this._prodotto.Qty + ",'" + this._prodotto.tipologiaTrasportoDett + "')");
+                this._bordo.Trattamento + "','" + this._tazza.Trattamento + "','" + this._tazza.Telata + "'," + this._prodotto.Qty + ",'" + this._prodotto.tipologiaTrasportoDett +
+                "'," + Math.Round(cassaInFerro.PesoPlastica[i],0) + ")");
 
         }
 
