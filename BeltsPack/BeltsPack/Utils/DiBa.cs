@@ -1006,6 +1006,11 @@ namespace BeltsPack.Utils
                                 sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
                                     this._tazza.Lunghezza + " [mm] x " + this._tazza.NumeroFile + " rows");
                             }
+                            else if (this._tazza.NumeroFile == 1 && this._prodotto.PresenzaFix == null && this._prodotto.PresenzaBlinkers == null)
+                            {
+                                sw.WriteLine("Cleats Type: " + this._tazza.SiglaTele + "-" + this._tazza.Forma + this._tazza.Altezza + " x " +
+                                    this._tazza.Lunghezza + " [mm]");
+                            }
                         }
                         sw.WriteLine("Belt width: " + this._nastro.Larghezza + " [mm]");
                         sw.WriteLine("Free Lateral Space: " + this._prodotto.PistaLaterale + " [mm]");
