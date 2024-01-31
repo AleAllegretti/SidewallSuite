@@ -45,34 +45,34 @@ public void Test1()
             int k = 0;
 
             // CARATTERISTICHE NASTRO
-            _nastro.Larghezza = 800;
-            _nastro.Classe = 500;
-            _nastro.Tipo = "TEXTER";
+            _nastro.Larghezza = 1600;
+            _nastro.Classe = 1250;
+            _nastro.Tipo = "CROSSRIGID";
             _nastro.SpessoreInf = 0;
             _nastro.SpessoreSup = 0;
             _nastro.NumTele = 0;
             _nastro.NumTessuti = 0;
             _nastro.SiglaTrattamento = "AY";
             _nastro.Aperto = false;
-            _nastro.LarghezzaUtile = 540;
+            _nastro.LarghezzaUtile = 1010;
             _nastro.SetCaratterisitche();
-            _nastro.Lunghezza = 21400;
+            _nastro.Lunghezza = 72000;
 
             // CARATTERISTICHE BORDO
-            _bordo.Larghezza = 50;
-            _bordo.Altezza = 60;
+            _bordo.Larghezza = 75;
+            _bordo.Altezza = 300;
             _bordo.SiglaTrattamento = "AW";
             _bordo.GetInfoBordo();
 
             // CARATTERISTICHE TAZZA
-            _tazza.Altezza = 75;
-            _tazza.Forma = "T";
+            _tazza.Altezza = 280;
+            _tazza.Forma = "TC";
             _tazza.SiglaTrattamento = "AW";
             _tazza.SiglaTele = "HBL";
             _tazza.CarattersticheTazza();
             _tazza.NumeroFile = 1;
             _tazza.Lunghezza = _nastro.LarghezzaUtile;
-            _tazza.Passo = 500;
+            _tazza.Passo = 240;
             _tazza.NumeroFile = 1;
             _tazza.SpazioFileMultiple = 0;
 
@@ -83,7 +83,7 @@ public void Test1()
             _prodotto.AltezzaApplicazioni = Math.Max(_tazza.Altezza, _bordo.Altezza);
             _prodotto.PresenzaFix = "No";
             _prodotto.PresenzaBlinkers = "No";
-            _prodotto.PistaLaterale = 50;
+            _prodotto.PistaLaterale = 220;
 
             // Per il display dei risultati
             List<string> TestResults = new List<string>();

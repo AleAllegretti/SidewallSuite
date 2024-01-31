@@ -132,15 +132,15 @@ namespace BeltsPack.Models
             this._cassainferro.PesoSubbiPolistirolo = new double[10];
             this._cassainferro.PrezzoSubbiPolistirolo = new double[10];
             this._cassainferro.NumeroTraversiniBase = new int[10];
-            this._cassainferro.LimiteAltezza = new double[10];
-            this._cassainferro.LimiteLarghezza = new double[10];
-            this._cassainferro.LimiteLunghezza = new double[10];
+            this._cassainferro.LimiteAltezza = new double[8];
+            this._cassainferro.LimiteLarghezza = new double[8];
+            this._cassainferro.LimiteLunghezza = new double[8];
             this._cassainferro.PrezzoGestioneCassa = new double[10];
-            this._cassainferro.TipoTrasporto = new string[10];
-            this._cassainferro.FattibilitaTrasporto = new bool[10];
-            this._cassainferro.FattibilitaCamion = new bool[10];
-            this._cassainferro.FattibilitaNave = new bool[10];
-            this._cassainferro.TrasportoDefault = new string[10];
+            this._cassainferro.TipoTrasporto = new string[8];
+            this._cassainferro.FattibilitaTrasporto = new bool[8];
+            this._cassainferro.FattibilitaCamion = new bool[8];
+            this._cassainferro.FattibilitaNave = new bool[8];
+            this._cassainferro.TrasportoDefault = new string[8];
             this._cassainferro.TipologiaCassa = new string[10];
             this._cassainferro.PresenzaGanci = new string[10];
             this._cassainferro.IncrociSpalle = new string[10];
@@ -1349,7 +1349,7 @@ namespace BeltsPack.Models
             // PER NASTRI SOLO BORDI E SOLO TAZZE
 
             // Scorro le varie tipologie di trasporto x vedere qual'è la migliore per questo imballo
-            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length-1; counter++)
+            for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
             {
                 // Inizializza variabili
                 this.InizializzaVariabili(counter);
@@ -1805,7 +1805,7 @@ namespace BeltsPack.Models
                     if(this.AvvisoImballoCritico == false)
                     {
                         // Faccio comparire l'avviso che l'imballo è critico perchè non c'è il margine di sicurezza
-                        //System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        System.Windows.MessageBox.Show("ATTENZIONE! Imballo critico, non ci sono i 30cm di margine.", "Avviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                         this.AvvisoImballoCritico = true;
                     }                 
                 }
