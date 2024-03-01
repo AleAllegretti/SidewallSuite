@@ -869,7 +869,7 @@ namespace BeltsPack.Models
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length - 1; counter++)
             {
                 // Inizializza variabili
-                this.InizializzaVariabili(counter);
+                this.InizializzaVariabili(counter, 1);
 
                 while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[counter] == true)
                 {
@@ -1352,7 +1352,7 @@ namespace BeltsPack.Models
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length; counter++)
             {
                 // Inizializza variabili
-                this.InizializzaVariabili(counter);
+                this.InizializzaVariabili(counter, 1);
 
                 while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[counter] == true)
                 {
@@ -1490,8 +1490,7 @@ namespace BeltsPack.Models
             for (int counter = 0; counter < this._cassainferro.TipoTrasporto.Length - 1; counter++)
             {
                 // Inizializza variabili
-                this.InizializzaVariabili(counter);
-                this.Numerofile = 1;
+                this.InizializzaVariabili(counter, 1);
 
                 while (this._nastro.LunghezzaImballato < this._nastro.Lunghezza && this._cassainferro.FattibilitaTrasporto[counter] == true)
                 {
@@ -1720,12 +1719,11 @@ namespace BeltsPack.Models
                         (this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[this.itrasporto] ||
                          this._nastro.LunghezzaImballato < this._nastro.Lunghezza))
             {
-                // Stabilisco il numero di file
-                this.Numerofile = 2;
                 this.CalcoloNumeroSubbiCorrugati();
 
                 // Inizializzo contatori
-                this.InizializzaVariabili(this.itrasporto);
+                // Stabilisco il numero di file a 2
+                this.InizializzaVariabili(this.itrasporto, 2);
 
             }
             // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
@@ -1775,7 +1773,7 @@ namespace BeltsPack.Models
             }
 
         }
-        private void InizializzaVariabili(int counter)
+        private void InizializzaVariabili(int counter, int numeroFile)
         {
             this._cassainferro.FattibilitaTrasporto[counter] = true;
             this._nastro.LunghezzaImballato = 0;
@@ -1786,6 +1784,7 @@ namespace BeltsPack.Models
             altezzacorrugati = 0;
             altezzapolistirolo = 0;
             this._cassainferro.LunghezzaIniziale = 3000;
+            this.Numerofile = numeroFile;
         }
         private void AssegnaDimensioni()
         {
