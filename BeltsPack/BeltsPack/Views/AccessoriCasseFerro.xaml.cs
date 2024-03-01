@@ -1,22 +1,12 @@
 ﻿using BeltsPack.Models;
 using BeltsPack.Utils;
 using BeltsPack.Views.Dialogs;
-using Syncfusion.XlsIO.Parser.Biff_Records;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BeltsPack.Views
 {
@@ -56,8 +46,8 @@ namespace BeltsPack.Views
                 this.SoloRitti.IsEnabled = true;
             }
 
-                // Se la SIG seleziono il logo della SIG
-                if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
+            // Se la SIG seleziono il logo della SIG
+            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
             {
                 this.RadioSig.IsChecked = true;
             }
@@ -75,7 +65,7 @@ namespace BeltsPack.Views
 
             // Calcolo il prezzo delle etichette da mettere su ogni gancio
             prezzoetichetteganci = this.InterrogaListinoAccessori("ETICHETTEGANCI", true);
-            
+
             while (i < this._cassaInFerro.IncrociSpalle.Length)
             {
                 if (this._cassaInFerro.IncrociSpalle[i] == "Si")
@@ -101,7 +91,7 @@ namespace BeltsPack.Views
             {
                 prezzotamponatura = 0;
                 i = 0;
-                while(i < this._cassaInFerro.PrezzoReteTamponatura.Length)
+                while (i < this._cassaInFerro.PrezzoReteTamponatura.Length)
                 {
                     this._cassaInFerro.PrezzoReteTamponatura[i] = 0;
                     this._cassaInFerro.PesoReteTamponatura[i] = 0;
@@ -111,24 +101,19 @@ namespace BeltsPack.Views
             }
 
             // Verniciatura
-            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma") & this._imballi.Lunghezza[0] <= 9000)
+            if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma"))
             {
-                i= 0;
-                while (this._imballi.Lunghezza[i] != 0)
+                for (int index = 0; index < this._imballi.Lunghezza.Length; index++)
                 {
-                    this._cassaInFerro.PrezzoVerniciatura[i] = this.InterrogaListinoPaladini("VERNICIATURAFINO9", true);
+                    double lunghezza = this._imballi.Lunghezza[index];
+                    if (lunghezza == 0)
+                        continue;
+
                     this._cassaInFerro.Verniciatura = true;
-                    i += 1;
-                }
-            }
-            else if (this._prodotto.Cliente.ToString().ToLower().Contains("italiana gomma") & this._imballi.Lunghezza[0] > 9000)
-            {
-                i = 0;
-                while (this._imballi.Lunghezza[i] != 0)
-                {
-                    this._cassaInFerro.PrezzoVerniciatura[i] = this.InterrogaListinoPaladini("VERNICIATURAOLTRE9", true);
-                    this._cassaInFerro.Verniciatura = true;
-                    i += 1;
+                    if (lunghezza <= 9000)
+                        this._cassaInFerro.PrezzoVerniciatura[index] = this.InterrogaListinoPaladini("VERNICIATURAFINO9", true);
+                    else
+                        this._cassaInFerro.PrezzoVerniciatura[index] = this.InterrogaListinoPaladini("VERNICIATURAOLTRE9", true);
                 }
             }
             else
@@ -140,20 +125,20 @@ namespace BeltsPack.Views
             if (this.PannelliSandwich.IsChecked == true)
             {
                 this._cassaInFerro.PannelliSandwich = true;
- 
+
                 // Calcolo il prezzo ed il peso
                 i = 0;
                 while (this._imballi.Lunghezza.Length - 1 >= i)
                 {
                     // Prezzo
-                    this._cassaInFerro.PrezzoPannelliSandwich[i] = 
-                        Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", true) * ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1) +
-                        Math.Round((this.InterrogaListinoPaladini("PANSANDWICH", true) * (this._imballi.Lunghezza[i] * 3 +  this._imballi.Larghezza[i] * 2) * Math.Pow(10, -3)),1) +
+                    this._cassaInFerro.PrezzoPannelliSandwich[i] =
+                        Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", true) * ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)), 1) +
+                        Math.Round((this.InterrogaListinoPaladini("PANSANDWICH", true) * (this._imballi.Lunghezza[i] * 3 + this._imballi.Larghezza[i] * 2) * Math.Pow(10, -3)), 1) +
                         this.InterrogaListinoCostiGestione("PANSANDWICH", true);
 
                     // Peso
-                    this._cassaInFerro.PesoPannelliSandwich[i] = Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", false) * 
-                        ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)),1);
+                    this._cassaInFerro.PesoPannelliSandwich[i] = Math.Round(this.InterrogaListinoAccessori("PANNSANDWICH", false) *
+                        ((this._imballi.Lunghezza[i] * this._imballi.Altezza[i] * 2 + this._imballi.Larghezza[i] * this._imballi.Altezza[i] * 2) * Math.Pow(10, -6)), 1);
                     i += 1;
                 }
             }
@@ -177,19 +162,19 @@ namespace BeltsPack.Views
             bool checkcompletamento = false;
 
             // Determino il tipo di personalizzazione
-            if(this.RadioSidewall.IsChecked.Value == true)
+            if (this.RadioSidewall.IsChecked.Value == true)
             {
                 // Assegna la personalizzazione
                 this._cassaInFerro.Personalizzazione = "Sidewall";
                 checkcompletamento = true;
             }
-            else if(this.RadioSig.IsChecked.Value == true)
+            else if (this.RadioSig.IsChecked.Value == true)
             {
                 // Assegna la personalizzazione
                 this._cassaInFerro.Personalizzazione = "SIG";
                 checkcompletamento = true;
             }
-            else if(this.RadioPersonalizzato.IsChecked.Value == true)
+            else if (this.RadioPersonalizzato.IsChecked.Value == true)
             {
                 // Assegna la personalizzazione
                 this._cassaInFerro.Personalizzazione = "Personalizzato";
@@ -201,7 +186,7 @@ namespace BeltsPack.Views
                 this._cassaInFerro.Personalizzazione = "Anonimo";
                 checkcompletamento = true;
             }
-            else 
+            else
             {
                 ConfirmDialogResult confirmed = await DialogsHelper.ShowConfirmDialog("Assicurati di aver inserito il tipo di personalizazione", ConfirmDialog.ButtonConf.OK_ONLY);
                 checkcompletamento = false;
@@ -222,7 +207,7 @@ namespace BeltsPack.Views
                 // Naviga alla finestra di output
                 this.NavigationService.Navigate(new OutputViewCasseInFerro(this._imballi, this._cassaInFerro, this._inputView, this._nastro, this._bordo, this._tazza, this._prodotto));
             }
-            
+
         }
 
         private async void CalcoloPrezzoFinale(double prezzoincrocio, double prezzotamponatura, double prezzoverniciatura, double prezzoetichetteganci,
@@ -234,7 +219,7 @@ namespace BeltsPack.Views
 
             for (int i = 0; i < this._imballi.Lunghezza.Length; i++)
             {
-                if(this._imballi.Lunghezza[i] != 0)
+                if (this._imballi.Lunghezza[i] != 0)
                 {
                     // Definisco il codice della cassa
                     if (this._imballi.Lunghezza[i] <= 4000 && this._cassaInFerro.PresenzaSoloRitti[i] == "Si")
@@ -290,7 +275,7 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PrezzoGestioneCassa[i] +
                             this._cassaInFerro.PrezzoManodoperaIncroci[i] +     // Manodopera x incrocio
                             prezzotamponatura +                                 // Manodopera x tamponatura
-                            this._cassaInFerro.PrezzoVerniciatura[0] +          // Manodopera x verniciatura
+                            this._cassaInFerro.PrezzoVerniciatura[i] +          // Manodopera x verniciatura
                             this._cassaInFerro.PrezzoGanci +                    // Prezzo x 4 ganci
                             this._cassaInFerro.PrezzoEtichetteGanci +           // Prezzo x 4 etichette ganci
                             this._cassaInFerro.PrezzoManodoperaDiagonali[i] +   // Manodopera x diagonali
@@ -335,10 +320,10 @@ namespace BeltsPack.Views
                             this._cassaInFerro.PesoSubbiPolistirolo[i] +
                             this._cassaInFerro.PesoPannelliSandwich[i];
                     }
-                }                  
+                }
             }
             // Trovo la configurazione con peso minore
-           this.GetConfigurazioneConveniente();
+            this.GetConfigurazioneConveniente();
         }
 
         private void GetConfigurazioneConveniente()
@@ -346,17 +331,17 @@ namespace BeltsPack.Views
             double min = this._cassaInFerro.PrezzoCassaFinale.Max();
 
             for (int i = 0; i < this._cassaInFerro.PrezzoCassaFinale.Length; i++)
-            { 
-                if(this._cassaInFerro.PrezzoCassaFinale[i] != 0 & this._cassaInFerro.PrezzoCassaFinale[i] <= min)
+            {
+                if (this._cassaInFerro.PrezzoCassaFinale[i] != 0 & this._cassaInFerro.PrezzoCassaFinale[i] <= min)
                 {
                     this._cassaInFerro.IndiceConfConveniente = i;
                     min = this._cassaInFerro.PrezzoCassaFinale[i];
                 }
             }
 
-           
+
         }
-        private double  InterrogaListinoPaladini(string CodiceAccessorio, bool PresenzaPrezzo)
+        private double InterrogaListinoPaladini(string CodiceAccessorio, bool PresenzaPrezzo)
         {
             double Output = 0;
 

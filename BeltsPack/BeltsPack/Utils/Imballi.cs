@@ -1647,7 +1647,7 @@ namespace BeltsPack.Models
                     this._cassainferro.Configurazione = 7;
 
                     // Calcolo numero subbi e corrugati
-                    this.CalcoloNumeroSubbiCorrugati();
+                    // this.CalcoloNumeroSubbiCorrugati(counter);
 
                     // Calcola la criticità dell'imballo
                     this.CalcoloCriticitaImballo();
@@ -1719,12 +1719,11 @@ namespace BeltsPack.Models
                         (this._cassainferro.LunghezzaIniziale >= this._cassainferro.LimiteLunghezza[this.itrasporto] ||
                          this._nastro.LunghezzaImballato < this._nastro.Lunghezza))
             {
-                this.CalcoloNumeroSubbiCorrugati();
+                this.CalcoloNumeroSubbiCorrugati(contTrasporto);
 
                 // Inizializzo contatori
                 // Stabilisco il numero di file a 2
                 this.InizializzaVariabili(this.itrasporto, 2);
-
             }
             // Se entro qui significa l'altezza è nei limiti e anche la lunghezza è nei limiti dell'imballo, quindi la disposizione è valida
             // inoltre in questo caso il nastro è disposto su una fila
@@ -1737,7 +1736,7 @@ namespace BeltsPack.Models
                 this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
                 this.cassaFattibile = 1;
                 altezzaNastroImballatoFinale = altezzanastroimballato;
-                this.CalcoloNumeroSubbiCorrugati();
+                this.CalcoloNumeroSubbiCorrugati(contTrasporto);
 
                 // Inizializzo contatori
                 this.InizializzaContatori();
@@ -1754,12 +1753,11 @@ namespace BeltsPack.Models
                 this._cassainferro.FattibilitaTrasporto[this.itrasporto] = true;
                 this.cassaFattibile = 1;
                 altezzaNastroImballatoFinale = altezzanastroimballato;
-                this.CalcoloNumeroSubbiCorrugati();
+                this.CalcoloNumeroSubbiCorrugati(contTrasporto);
 
                 // Inizializzo contatori
                 this.InizializzaContatori();
             }
-
             else
             {
                 // Su questo trasporto il nastro non ci sta
@@ -1934,12 +1932,12 @@ namespace BeltsPack.Models
                 this.Criticita[ContatoreConfigurazioni] = "Media";
             }
         }
-        private void CalcoloNumeroSubbiCorrugati()
+        private void CalcoloNumeroSubbiCorrugati(int counter)
         {
             // Ci dice quanti strati di polistirolo ha l'imballo
-            this.NumeroCurveCorrugati[ContatoreConfigurazioni + 1] = (contatorestrati - 1) / 2;
+            this.NumeroCurveCorrugati[counter] = ((contatorestrati - 1) / 2) * this.Numerofile;
             // Ci dice quanti strati di polistirolo ha l'imballo
-            this.NumeroCurvePolistirolo[ContatoreConfigurazioni + 1] = contatorestrati / 2;
+            this.NumeroCurvePolistirolo[counter] = contatorestrati * this.Numerofile;
         }
         private void PossibilitaCassaDoppia()
         {
